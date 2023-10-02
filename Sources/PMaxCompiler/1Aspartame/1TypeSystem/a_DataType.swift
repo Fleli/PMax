@@ -16,7 +16,7 @@ indirect enum DataType {
         case .basic(let type):
             
             guard let structType = aspartame.structTypes[type] else {
-                // TODO: Submit an error since the given type does not exist.
+                aspartame.submitError(.typeDoesNotExist(typeName: type))
                 return nil
             }
             

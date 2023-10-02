@@ -17,7 +17,7 @@ class StructType: Hashable {
     func generateMemoryLayoutIfMissing(_ aspartame: Aspartame, _ dependances: Set<StructType>) {
         
         if dependances.contains(self) {
-            // TODO: Submit an error
+            aspartame.submitError(.circularStructDefinition(typeName: name))
             return
         }
         
@@ -33,13 +33,11 @@ class StructType: Hashable {
             let fieldName = declaration.name
             
             guard let fieldType = DataType(declaration.type, aspartame) else {
-                // TODO: The `DataType` initializer will submit an error if needed.
                 // TODO: Consider adding a special `.errorType` case to the `DataType` so that _some_ further work can be done (somewhat like Xcode/Swift's <<<error type>>>)
                 continue
             }
             
             let fieldSize = fieldType.size(aspartame, newDependances)
-            
             memoryLayout.addMember(fieldName, fieldType, fieldSize)
             
         }

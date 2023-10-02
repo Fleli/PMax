@@ -17,6 +17,10 @@ public class Aspartame {
     
     
     
+    func submitError(_ newError: PMaxError) {
+        
+    }
+    
     
     
 }
