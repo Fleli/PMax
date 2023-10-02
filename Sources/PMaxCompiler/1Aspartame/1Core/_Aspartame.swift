@@ -1,6 +1,8 @@
 
 public class Aspartame {
     
+    private(set) var structs: [Struct] = []
+    private(set) var functions: [Function] = []
     
     var structTypes: [String : StructType] = [:]
     
@@ -12,7 +14,14 @@ public class Aspartame {
     
     
     public func convert(_ program: TopLevelStatements) {
-        generateTopLevelStructTypes(program)
+        
+        prepare(program)
+        
+        generateTopLevelStructTypes()
+        completeTopLevelStructTypes()
+        
+        
+        
     }
     
     
@@ -21,6 +30,15 @@ public class Aspartame {
         
     }
     
-    
+    private func prepare(_ program: TopLevelStatements) {
+        for statement in program {
+            switch statement {
+            case .struct(let `struct`):
+                structs.append(`struct`)
+            case .function(let function):
+                functions.append(function)
+            }
+        }
+    }
     
 }

@@ -25,7 +25,8 @@ class StructType: Hashable {
             return
         }
         
-        let memoryLayout = MemoryLayout()
+        layout = MemoryLayout()
+        
         let newDependances = dependances.union([self])
         
         for declaration in underlyingStructDeclaration.statements {
@@ -38,7 +39,7 @@ class StructType: Hashable {
             }
             
             let fieldSize = fieldType.size(aspartame, newDependances)
-            memoryLayout.addMember(fieldName, fieldType, fieldSize)
+            layout!.addMember(fieldName, fieldType, fieldSize)
             
         }
         

@@ -1,22 +1,33 @@
 extension Aspartame {
     
     /// Check the global scope for `struct` declarations and use these to generate `StructType` instances.
-    internal func generateTopLevelStructTypes(_ program: TopLevelStatements) {
+    internal func generateTopLevelStructTypes() {
         
-        for statement in program {
+        structs.forEach { `struct` in
             
-            if case .struct(let `struct`) = statement {
-                
-                let structType = StructType(`struct`)
-                
-                if structTypes[structType.name] != nil {
-                    // TODO: Generate an error ...
-                    continue
-                }
-                
-                structTypes[structType.name] = structType
-                
+            let structType = StructType(`struct`)
+            
+            if structTypes[structType.name] != nil {
+                submitError(.invalidRedeclarationOfStruct(typeName: structType.name))
+                return
             }
+            
+            structTypes[structType.name] = structType
+            
+        }
+        
+    }
+    
+    /// Go through the global scope and find all `struct` declarations again. Now that they are all located and we have set them up, we complete them by finding their memory layouts.
+    internal func completeTopLevelStructTypes() {
+        
+        structs.forEach { `struct` in
+            
+            guard let structType = structTypes[`struct`.name] else {
+                fatalError("Struct type \(`struct`.name) should be defined.")
+            }
+            
+            structType.generateMemoryLayoutIfMissing(self, [])
             
         }
         
