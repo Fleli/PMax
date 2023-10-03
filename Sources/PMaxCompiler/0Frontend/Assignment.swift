@@ -5,16 +5,16 @@
 
 public class Assignment: CustomStringConvertible {
 	
-	let reference: Reference
-	let value: Expression
+	let lhs: String
+	let rhs: Expression
 	
-	init(_ reference: Reference, _ value: Expression) {
-		self.reference = reference
-		self.value = value
+	init(_ lhs: String, _ rhs: Expression) {
+		self.lhs = lhs
+		self.rhs = rhs
 	}
 
 	public var description: String {
-		"assign " + reference.description + " " + "= " + value.description + " " + "; "
+		lhs.description + " " + "= " + rhs.description + " " + "; "
 	}
 	
 }

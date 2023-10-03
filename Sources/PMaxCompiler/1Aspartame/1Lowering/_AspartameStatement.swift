@@ -25,6 +25,9 @@ enum AspartameStatement {
     /// Unconditionally jump back `n` `AspartameStatement`s in the enclosing sequence.
     case jumpBack(n: Int)
     
+    /// The `return` case is used for representing `return` statements. Its `value` is either a `string` (if it returns the value of an identifier) or `nil` if the statement is simply `return;`.
+    case `return`(value: String?)
+    
     
     func _print(indent: Int) {
         
@@ -52,6 +55,8 @@ enum AspartameStatement {
             print("Ignore next \(n) if \(check) == 0")
         case .jumpBack(let n):
             print("Jump back \(n)")
+        case .return(let value):
+            print("return \(value ?? ";")")
         }
         
     }

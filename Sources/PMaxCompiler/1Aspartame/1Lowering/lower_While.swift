@@ -14,7 +14,6 @@ extension Aspartame {
         let wrapped = AspartameStatement.block(statements: loweredBody)
         
         // We want to jump back to before loweredConditionStatements. The exact semantics of `n` will depend on implementation in the next step.
-        // TODO: Check if this is correct with the chosen implementation.
         // TODO: Consider adding some sort of automatic tracking instead of a predefined number of statements to jump back. That way, optimizations in the condition evaluation won't really affect the jumping mechanism.
         let n = loweredConditionStatements.count + 2
         let jumpBackToCondition = AspartameStatement.jumpBack(n: n)
