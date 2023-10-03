@@ -1,7 +1,6 @@
 extension Aspartame {
     
-    internal func lower(_ expression: Expression) -> IntermediateResult {
-        
+    internal func lower(_ expression: Expression) -> LoweredExpression {
         
         switch expression {
         case .infixOperator(let `operator`, let x, let y):  // x OP y

@@ -1,9 +1,9 @@
 extension Aspartame {
     
-    internal func lower(_ while: While, within functionLabel: FunctionLabel) -> ConditionResult {
+    internal func lower(_ while: While) -> [AspartameStatement] {
         
-        // TODO: -
-        return .init(.init(), [])
+        // TODO
+        return []
         
     }
     

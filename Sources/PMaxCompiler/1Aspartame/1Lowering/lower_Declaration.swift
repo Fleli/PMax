@@ -18,12 +18,12 @@ extension Aspartame {
         }
         
         // Since the declaration is given an initial value, we must compute it. We delegate the computation to the expression itself, and use its final intermediate variable to assign a new value.
-        let computationResult = lower(initialValue)
+        let loweredExpression = lower(initialValue)
         
-        let resultVariable = computationResult.resultName
-        let finalAssignment = AspartameStatement.assignment(lhs: name, rhs: resultVariable)
+        let result = loweredExpression.result
+        let assignment = AspartameStatement.assignment(lhs: name, rhs: result)
         
-        return [loweredDeclaration] + computationResult.statements + [finalAssignment]
+        return [loweredDeclaration] + loweredExpression.statements + [assignment]
         
     }
     
