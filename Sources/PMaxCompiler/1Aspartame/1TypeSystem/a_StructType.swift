@@ -14,9 +14,9 @@ class StructType: Hashable {
         self.underlyingStructDeclaration = structDeclaration
     }
     
-    func generateMemoryLayoutIfMissing(_ aspartame: Aspartame, _ dependances: Set<StructType>) {
+    func generateMemoryLayoutIfMissing(_ aspartame: Aspartame, _ dependancies: Set<StructType>) {
         
-        if dependances.contains(self) {
+        if dependancies.contains(self) {
             aspartame.submitError(.circularStructDefinition(typeName: name))
             return
         }
@@ -27,7 +27,7 @@ class StructType: Hashable {
         
         layout = MemoryLayout()
         
-        let newDependances = dependances.union([self])
+        let newDependances = dependancies.union([self])
         
         for declaration in underlyingStructDeclaration.statements {
             // TODO: Update the grammar so that declarations within structs cannot have default values.
