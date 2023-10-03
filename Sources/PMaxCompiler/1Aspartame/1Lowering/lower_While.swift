@@ -7,7 +7,8 @@ extension Aspartame {
         let loweredResult = loweredCondition.result
         let loweredConditionStatements = loweredCondition.statements
         
-        let skipIfZero = AspartameStatement.ignoreNextIfZero(check: loweredResult)
+        // We want to skip both the block for the while loop _and_ the jump afterwards that normally takes us back to calculating the condition.
+        let skipIfZero = AspartameStatement.ignoreNextIfZero(check: loweredResult, n: 2)
         
         let loweredBody = lower(`while`.body)
         let wrapped = AspartameStatement.block(statements: loweredBody)

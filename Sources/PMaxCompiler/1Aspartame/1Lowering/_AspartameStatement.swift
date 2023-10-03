@@ -19,8 +19,8 @@ enum AspartameStatement {
     /// Introduce a new block whenever we enter a body of statements, for example an `if` or `while`.
     case block(statements: [AspartameStatement])
     
-    /// If the `check` variable stores a bitpattern equal to `0`, we skip the next `AspartameStatement` in the enclosing sequence. This is essentially a branch.
-    case ignoreNextIfZero(check: String)
+    /// If the `check` variable stores a bitpattern equal to `0`, we skip the next `n` `AspartameStatement`s in the enclosing sequence. This is essentially a branch.
+    case ignoreNextIfZero(check: String, n: Int)
     
     /// Unconditionally jump back `n` `AspartameStatement`s in the enclosing sequence.
     case jumpBack(n: Int)
@@ -48,8 +48,8 @@ enum AspartameStatement {
                 statement._print(indent: indent + 1)
             }
             print(prefix + "}")
-        case .ignoreNextIfZero(let check):
-            print("Ignore next if \(check) == 0")
+        case .ignoreNextIfZero(let check, let n):
+            print("Ignore next \(n) if \(check) == 0")
         case .jumpBack(let n):
             print("Jump back \(n)")
         }

@@ -7,7 +7,7 @@ extension Aspartame {
         let loweredResult = loweredCondition.result
         let loweredConditionStatements = loweredCondition.statements
         
-        let skipIfZero = AspartameStatement.ignoreNextIfZero(check: loweredResult)
+        let skipIfZero = AspartameStatement.ignoreNextIfZero(check: loweredResult, n: 1)
         
         let loweredBody = lower(`if`.body)
         let wrapped = AspartameStatement.block(statements: loweredBody)
