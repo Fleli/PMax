@@ -5,7 +5,8 @@ extension FunctionLabel {
         // TODO: Go through parameters
         
         let statements = underlyingFunctionDeclaration.body
-        let loweredBody = aspartame.lower(statements, within: self)
+        
+        self.loweredBody = aspartame.lower(statements)
         
     }
     

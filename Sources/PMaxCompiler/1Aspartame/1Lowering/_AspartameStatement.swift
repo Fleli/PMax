@@ -1,6 +1,9 @@
 enum AspartameStatement {
     
+    /// Declare that the variable `name` of type `type` should be recognized and exist within the current block.
     case declaration(name: String, type: DataType)
+    
+    /// Assign the value of `rhs` to `lhs`
     case assignment(lhs: String, rhs: String)
     
     // TODO: Follow this up.
@@ -9,6 +12,18 @@ enum AspartameStatement {
     
     /// Used if we have a reference `r` and want to access a member `m`, and store this in `s` using dot syntax `s = r.m`.
     case accessMember(lhs: String, rhs: String, member: String)
+    
+    /// Assign the returned value from calling `function` to `lhs`. The call's `argmuents` are all references to variables that may be the result of a computation.
+    case assignFromCall(lhs: String, function: String, arguments: [String])
+    
+    /// Introduce a new block whenever we enter a body of statements, for example an `if` or `while`.
+    case block(statements: [AspartameStatement])
+    
+    /// If the `check` variable stores a bitpattern equal to `0`, we skip the next `AspartameStatement` in the enclosing sequence. This is essentially a branch.
+    case ignoreNextIfZero(check: String)
+    
+    /// Unconditionally jump back `n` `AspartameStatement`s in the enclosing sequence.
+    case jumpBack(n: Int)
     
 }
 
