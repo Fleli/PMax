@@ -15,6 +15,8 @@ public class Aspartame {
     
     public init() {
         
+        print("init aspartame")
+        
     }
     
     
@@ -34,6 +36,13 @@ public class Aspartame {
         
         // Now, we can begin lowering most of the grammatical statements to their corresponding Aspartame representation. During this process, we type check expressions and generate their equivalent three-address code-like (Aspartame form) representation, introducing temprorary variables along the way. Since some of these may be pruned away later by optimizations, we do _not_ bind names or calculate frame pointer offsets at this stage.
         lowerToAspartame()
+        
+        for function in functionLabels.values {
+            print("Function \(function.name)")
+            function.loweredBody.forEach {
+                $0._print(indent: 1)
+            }
+        }
         
     }
     

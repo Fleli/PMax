@@ -25,5 +25,37 @@ enum AspartameStatement {
     /// Unconditionally jump back `n` `AspartameStatement`s in the enclosing sequence.
     case jumpBack(n: Int)
     
+    
+    func _print(indent: Int) {
+        
+        let prefix = String(repeating: "|   ", count: indent)
+        print(prefix, terminator: "")
+        
+        switch self {
+        case .declaration(let name, let type):
+            print(type.description + " " + name)
+        case .assignment(let lhs, let rhs):
+            print(lhs + " = " + rhs)
+        case .assignIntegerLiteral(let lhs, let literal):
+            print(lhs + " = " + literal)
+        case .accessMember(let lhs, let rhs, let member):
+            print(lhs + " = " + rhs + "." + member)
+        case .assignFromCall(let lhs, let function, let arguments):
+            print(lhs + " = " + function + "(\(arguments.description.dropFirst().dropLast()))")
+        case .block(let statements):
+            print("{")
+            for statement in statements {
+                statement._print(indent: indent + 1)
+            }
+            print(prefix + "}")
+        case .ignoreNextIfZero(let check):
+            print("Ignore next if \(check) == 0")
+        case .jumpBack(let n):
+            print("Jump back \(n)")
+        }
+        
+    }
+    
+    
 }
 

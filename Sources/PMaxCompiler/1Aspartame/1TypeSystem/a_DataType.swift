@@ -1,4 +1,4 @@
-indirect enum DataType {
+indirect enum DataType: CustomStringConvertible {
     
     case void
     case __word
@@ -9,6 +9,21 @@ indirect enum DataType {
     // TODO: The fact that we have a single unknown value here together with several actual available cases, indicates that a single `DataType` enum may not be the way to go. We might have to raise the level of abstraction to separate between known types (void, __word, pointer, struct) and unknown types.
     /// A special, intermediate type whose actual type data must be inferred from context. This is not done during lowering, but rather during name binding.
     case mustBeInferred
+    
+    var description: String {
+        switch self {
+        case .void:
+            return "void"
+        case .__word:
+            return "__word"
+        case .pointer(let dataType):
+            return dataType.description + "*"
+        case .struct(let structType):
+            return structType.name
+        case .mustBeInferred:
+            return "[?]"
+        }
+    }
     
     /// Convert a grammatical `struct` to a semantic `DataType`.
     init?(_ type: `Type`, _ aspartame: Aspartame) {
