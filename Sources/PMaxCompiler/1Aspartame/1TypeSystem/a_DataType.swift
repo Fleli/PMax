@@ -6,9 +6,9 @@ indirect enum DataType {
     case `struct`(StructType)
     
     // TODO: The semantics described here may require not only synthesizing attributes (types), but also inheriting them. Investigate this further ...
-    // TODO: The fact that we have a single unknown value here together with several actual available cases, indicates that a single `DataType` enum is not the way to go. We might have to raise the level of abstraction to separate between known types (void, __word, pointer, struct) and constrained, but unknown types (integerLiteral).
+    // TODO: The fact that we have a single unknown value here together with several actual available cases, indicates that a single `DataType` enum may not be the way to go. We might have to raise the level of abstraction to separate between known types (void, __word, pointer, struct) and unknown types.
     /// A special, intermediate type whose actual type data must be inferred from context. This is not done during lowering, but rather during name binding.
-    case integerLiteral
+    case mustBeInferred
     
     /// Convert a grammatical `struct` to a semantic `DataType`.
     init?(_ type: `Type`, _ aspartame: Aspartame) {
@@ -53,8 +53,8 @@ indirect enum DataType {
             // We assume that the result we get is meaningful. Otherwise, the `structType` will submit an error itself.
             structType.generateMemoryLayoutIfMissing(aspartame, dependances)
             return structType.sizeInMemory
-        case .integerLiteral:
-            fatalError("The size of an integer literal should never be requested, since its type is actually unknown.")
+        case .mustBeInferred:
+            fatalError("The size of a type who still is not inferred should never be requested.")
         }
         
     }

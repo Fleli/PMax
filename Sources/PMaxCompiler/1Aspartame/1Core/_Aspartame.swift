@@ -53,16 +53,19 @@ public class Aspartame {
         }
     }
     
-    /// Create a new internal variable that is guaranteed to not have a name conflict with any other variable in the program. To enforce this assumption, all internally generated variables come directly from the shared `Aspartame` object.
-    internal func newInternalVariable(_ type: DataType) -> [AspartameStatement] {
+    /// Create a new internal variable that is guaranteed to not have a name conflict with any other variable in the program. To enforce this assumption, all internally generated variables come directly from the shared `Aspartame` object. All internally generated variables have the initial type `.mustBeInferred`.
+    internal func newInternalVariable() -> (statement: AspartameStatement, name: String) {
+        
+        // We don't know the type of internally generated variables yet. It will have to be up to the inferencer and type checker to verify that inferring a type makes sense.
+        let type = DataType.mustBeInferred
         
         // $(n) is not an available name for the programmer, so we're certain to aviod naming conflicts.
         let name = "$(\(internalVariableCounter))"
         internalVariableCounter += 1
         
-        let declaration = AspartameStatement.declaration(name: name, type: type)
+        let statement = AspartameStatement.declaration(name: name, type: type)
         
-        return [declaration]
+        return (statement, name)
         
     }
     

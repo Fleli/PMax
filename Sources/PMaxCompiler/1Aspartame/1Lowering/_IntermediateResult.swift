@@ -8,4 +8,9 @@ struct IntermediateResult {
     /// The statements produced by lowering.
     let statements: [AspartameStatement]
     
+    init(_ resultName: String, _ statements: [AspartameStatement]) {
+        self.resultName = resultName
+        self.statements = statements
+    }
+    
 }
