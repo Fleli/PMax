@@ -1,5 +1,9 @@
 class Label {
     
-    var statements: [AspartameStatement] = []
+    private(set) var statements: [AspartameStatement] = []
+    
+    func includeCode(_ newStatements: [AspartameStatement]) {
+        statements += newStatements
+    }
     
 }

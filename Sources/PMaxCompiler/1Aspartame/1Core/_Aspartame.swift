@@ -30,7 +30,7 @@ public class Aspartame {
         // Generate `FunctionLabel` objects from each of the grammatical `Function`s. During initialization of a `FunctionLabel`, the function's return type and parameter types are checked (it is verified that those types exist). Also, errors are submitted if function names collide.
         generateFunctionLabels()
         
-        // Now, we can begin lowering most of the grammatical statements to their corresponding Aspartame representation. During this process, we type check expressions and generate their equivalent three-address code-like (Aspartame form) representation, introducing temprorary variables along the way. Since some of these may be pruned away later by optimizations, we do _not_ calculate frame pointer offsets yet.
+        // Now, we can begin lowering most of the grammatical statements to their corresponding Aspartame representation. During this process, we type check expressions and generate their equivalent three-address code-like (Aspartame form) representation, introducing temprorary variables along the way. Since some of these may be pruned away later by optimizations, we do _not_ bind names or calculate frame pointer offsets at this stage.
         lowerToAspartame()
         
     }
