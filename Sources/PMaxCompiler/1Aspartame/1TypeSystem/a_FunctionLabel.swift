@@ -13,6 +13,7 @@ class FunctionLabel {
     /// The `underlyingFunctionDeclaration` property is used for conversion from grammatical statements to `Aspartame`-form statements.
     let underlyingFunctionDeclaration: Function
     
+    // TODO: Undersøk om dette gir Reference Cycle: `Aspartame`-objektet lagrer tross alt også referanser til alle `FunctionLabel`-objekter ...
     /// The `Aspartame` object that this `FunctionLabel` belongs to. Used for error submission and global scope information (functions and types).
     let aspartame: Aspartame
     

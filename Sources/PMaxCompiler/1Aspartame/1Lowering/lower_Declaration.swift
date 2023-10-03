@@ -17,10 +17,13 @@ extension Aspartame {
             return [loweredDeclaration]
         }
         
-        // Since the declaration is given an initial value, we must compute it. We delegate this to the expression itself.
-        // TODO: Convert the initial value to Aspartame statements and return that code, plus an assignment to actually set the value of the declared variable.
+        // Since the declaration is given an initial value, we must compute it. We delegate the computation to the expression itself, and use its final intermediate variable to assign a new value.
+        let computationResult = lower(initialValue)
         
-        fatalError("Initial value lowering not implemented yet.")
+        let resultVariable = computationResult.resultName
+        let finalAssignment = AspartameStatement.assignment(lhs: name, rhs: resultVariable)
+        
+        return [loweredDeclaration] + computationResult.statements + [finalAssignment]
         
     }
     
