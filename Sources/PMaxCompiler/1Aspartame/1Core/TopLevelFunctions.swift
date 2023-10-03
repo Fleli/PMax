@@ -5,7 +5,19 @@ extension Aspartame {
         
         functions.forEach { function in
             
+            let functionName = function.name
             
+            guard let functionLabel = FunctionLabel(function, self) else {
+                // An error has already been submitted by the initializer in the attempt to verify the existence of types.
+                return
+            }
+            
+            if functionLabels[functionName] != nil {
+                submitError(.invalidRedeclarationOfFunction(functionName: functionName))
+                return
+            }
+            
+            functionLabels[functionName] = functionLabel
             
         }
         
