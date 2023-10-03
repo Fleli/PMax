@@ -1,6 +1,8 @@
 
 public class Aspartame {
     
+    private var internalVariableCounter = 0
+    
     private(set) var structs: [Struct] = []
     private(set) var functions: [Function] = []
     
@@ -49,6 +51,19 @@ public class Aspartame {
                 functions.append(function)
             }
         }
+    }
+    
+    /// Create a new internal variable that is guaranteed to not have a name conflict with any other variable in the program. To enforce this assumption, all internally generated variables come directly from the shared `Aspartame` object.
+    internal func newInternalVariable(_ type: DataType) -> [AspartameStatement] {
+        
+        // $(n) is not an available name for the programmer, so we're certain to aviod naming conflicts.
+        let name = "$(\(internalVariableCounter))"
+        internalVariableCounter += 1
+        
+        let declaration = AspartameStatement.declaration(name: name, type: type)
+        
+        return [declaration]
+        
     }
     
 }

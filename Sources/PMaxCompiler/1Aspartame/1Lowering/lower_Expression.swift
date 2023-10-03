@@ -12,13 +12,12 @@ extension Aspartame {
             break
         case .TerminalExpressionTerminal(_, let e, _):  // ( E )
             return lower(e)
-        case .Reference(let reference):
-            // TODO: Find the last assigned variable in the reference. Return the name of that, so that the caller knows what value to fetch when assigning.
-            break
+        case .Reference(let reference):  // If we have a deep reference, we break it up so it never consists of more than one level of indirection.
+            return lower(reference)
         }
         
         // TODO: Remove once `break` statements are removed.
-        return .init(resultName: "NIL", statements: [])
+        fatalError()
         
     }
     
