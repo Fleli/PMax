@@ -8,9 +8,12 @@ extension Aspartame {
         if let value = `return`.expression {
             
             let loweredExpression = lower(value)
+            
             let internalVar = newInternalVariable()
             
-            statements = loweredExpression.statements + [internalVar.statement]
+            let assignment = AspartameStatement.assignment(lhs: internalVar.name, rhs: loweredExpression.result)
+            
+            statements = loweredExpression.statements + [internalVar.statement, assignment]
             
             internalVariable = internalVar.name
             
