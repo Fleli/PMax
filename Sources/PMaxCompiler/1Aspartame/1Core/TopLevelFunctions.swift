@@ -23,4 +23,9 @@ extension Aspartame {
         
     }
     
+    /// Use all the `FunctionLabel`s' underlying `Function` objects to lower the whole code to Aspartame form.
+    internal func lowerToAspartame() {
+        functionLabels.values.forEach { $0.lowerToAspartame() }
+    }
+    
 }

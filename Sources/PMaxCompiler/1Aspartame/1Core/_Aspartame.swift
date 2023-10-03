@@ -7,10 +7,13 @@ public class Aspartame {
     var structTypes: [String : StructType] = [:]
     var functionLabels: [String : FunctionLabel] = [:]
     
+    // TODO: Introduce an `operators` array or dictionary that stores all available operators.
+    // This will be used whenever an operator occurs in a grammatical `Expression`.
+    // private(set) var operators: [Operator : ]
+    
     public init() {
         
     }
-    
     
     
     public func convert(_ program: TopLevelStatements) {
@@ -27,13 +30,13 @@ public class Aspartame {
         // Generate `FunctionLabel` objects from each of the grammatical `Function`s. During initialization of a `FunctionLabel`, the function's return type and parameter types are checked (it is verified that those types exist). Also, errors are submitted if function names collide.
         generateFunctionLabels()
         
-        // Now, we can begin converting most of the grammatical statements to their corresponding Aspartame representation. During this process, we also annotate and check the code with different 
+        // Now, we can begin lowering most of the grammatical statements to their corresponding Aspartame representation. During this process, we type check expressions and generate their equivalent three-address code-like (Aspartame form) representation, introducing temprorary variables along the way. Since some of these may be pruned away later by optimizations, we do _not_ calculate frame pointer offsets yet.
+        lowerToAspartame()
         
     }
     
     
-    
-    func submitError(_ newError: PMaxError) {
+    internal func submitError(_ newError: PMaxError) {
         
     }
     
