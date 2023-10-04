@@ -27,6 +27,9 @@ public class Compiler {
         let aspartame = Aspartame()
         aspartame.convert(converted)
         
+        let decarbonator = Decarbonator(aspartame)
+        decarbonator.decarbonate()
+        
     }
     
 }

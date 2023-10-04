@@ -2,6 +2,13 @@ extension FunctionLabel {
     
     internal func lowerToAspartame() {
         
+        loweredBody = lowerParametersToAspartame()
+        loweredBody += aspartame.lower(underlyingFunctionDeclaration.body)
+        
+    }
+    
+    private func lowerParametersToAspartame() -> [AspartameStatement] {
+        
         var statements: [AspartameStatement] = []
         
         // TODO: Check that this is in line with the calling convention: Parameters must be available (and not overwritten) when execution begins.
@@ -20,11 +27,8 @@ extension FunctionLabel {
             
         }
         
-        statements += aspartame.lower(underlyingFunctionDeclaration.body)
-        
-        self.loweredBody = statements
+        return statements
         
     }
-    
     
 }
