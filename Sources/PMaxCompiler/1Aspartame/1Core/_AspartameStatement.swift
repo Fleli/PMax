@@ -10,7 +10,7 @@ enum AspartameStatement {
     /// Integer literals are still stored as strings because further semantic checks (bounds etc.) are checked later
     case assignIntegerLiteral(lhs: String, literal: String)
     
-    /// Used if we have a reference `r` and want to access a member `m`, and store this in `s` using dot syntax `s = r.m`.
+    /// Used if we have a reference `rhs` and want to access a member `member`, and store this in `lhs` using dot syntax `lhs = rhs.member`.
     case accessMember(lhs: String, rhs: String, member: String)
     
     /// Assign the returned value from calling `function` to `lhs`. The call's `argmuents` are all references to variables that may be the result of a computation.

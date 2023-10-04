@@ -4,20 +4,19 @@ extension FunctionLabel {
         
         let environment: Environment = decarbonator.environment
         
-        let label = environment.labelFor(self)
+        var label = environment.label(name)
         
         for statement in loweredBody {
             
             switch statement {
             case .declaration(let name, let type):
-                // If an error is present, the scope will submit it. Nothing needed here.
-                environment.active().declare(name, type)
+                environment.active().declareSemantics(name, type)
             case .assignment(let lhs, let rhs):
-                if let result = environment.active().verifyAssignmentSemantics(lhs, rhs) {
-                    
-                }
+                let statements = DecarbonatedStatement.memCopy(result.lhsOffset, result.rhsOffset)
+                label.addStatements(assignStatements)
             case .assignIntegerLiteral(let lhs, let literal):
-                <#code#>
+                let statements = environment.active().literalAssignmentSemantics(lhs, literal)
+                label.addStatements(statements)
             case .accessMember(let lhs, let rhs, let member):
                 <#code#>
             case .assignFromCall(let lhs, let function, let arguments):
