@@ -1,10 +1,14 @@
-class Label: Hashable {
+class Label: Hashable, CustomStringConvertible {
     
     private static var counter = 0
     
     private var statements: [DecarbonatedStatement] = []
     
     private let identifier: String
+    
+    var description: String {
+        return "\(identifier):" + statements.reduce("", {$0 + "\n\t" + $1.description})
+    }
     
     init(_ identifier: String) {
         self.identifier = "_\(identifier)$\(Self.counter)"

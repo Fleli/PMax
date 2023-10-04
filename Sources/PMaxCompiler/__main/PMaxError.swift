@@ -31,7 +31,7 @@ enum PMaxError {
         case .doesNotHaveMember(let variable, let type, let member):
             return "The variable '\(variable)' of type '\(type)' has no member '\(member)'."
         case .attemptedNonStructMember(let variable, let type):
-            return "Cannot access members of '\(variable)' of non-struct type '\(type)'."
+            return "Cannot access members of '\(variable)', which is of non-struct type '\(type)'."
         case .assignmentTypeMismatch(let lhs, let lhsType, let rhsType):
             return "Cannot assign value of type '\(rhsType)' to '\(lhs)' of type '\(lhsType)'."
         }

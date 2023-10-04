@@ -37,6 +37,7 @@ class Scope {
         }
         
         declarations[lhs] = DecarbonatedDeclaration(type, lhsOffset)
+        framePointerOffset += type.size(aspartame, [])
         
     }
     

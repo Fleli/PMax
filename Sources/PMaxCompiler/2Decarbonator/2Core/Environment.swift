@@ -6,6 +6,7 @@ class Environment {
     var scopes: [Scope] = []
     
     let aspartame: Aspartame
+    let decarbonator: Decarbonator
     
     private(set) var labels: Set<Label> = []
     
@@ -15,11 +16,18 @@ class Environment {
         self.functionLabels = decarbonator.functionLabels
         
         self.aspartame = aspartame
+        self.decarbonator = decarbonator
         
+    }
+    
+    func prepareForNewFunction() {
+        scopes.removeAll()
+        setUpFunctionScope()
+    }
+    
+    private func setUpFunctionScope() {
         let functionScope = Scope(decarbonator, aspartame)
-        
         scopes.append(functionScope)
-        
     }
     
     func pushScope() {

@@ -27,6 +27,11 @@ extension Scope {
             lhsType = rhsType
         }
         
+        if lhsType != rhsType {
+            decarbonator.submitError(.assignmentTypeMismatch(lhs: lhs, lhsType: lhsType.description, rhsType: rhsType.description))
+            return []
+        }
+        
         guard let lhsOffset = framePointerOffset(lhs), let rhsOffset = framePointerOffset(rhs) else {
             fatalError("Should never fail since types are already found.")
         }

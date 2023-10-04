@@ -3,6 +3,7 @@ extension FunctionLabel {
     func decarbonate(_ decarbonator: Decarbonator) {
         
         let environment: Environment = decarbonator.environment
+        environment.prepareForNewFunction()
         
         var label = environment.label(name)
         
@@ -33,6 +34,8 @@ extension FunctionLabel {
             }
             
         }
+        
+        print(label)
         
     }
     

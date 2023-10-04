@@ -6,6 +6,8 @@ class Decarbonator {
     
     var environment: Environment!
     
+    var errors: [PMaxError] = []
+    
     init(_ aspartame: Aspartame) {
         
         self.structTypes = aspartame.structTypes
@@ -23,11 +25,16 @@ class Decarbonator {
             function.decarbonate(self)
         }
         
+        print("\nErrors:")
+        for error in errors {
+            print("\t\(error.description)")
+        }
+        
     }
     
     
     func submitError(_ newError: PMaxError) {
-        
+        errors.append(newError)
     }
     
     
