@@ -14,9 +14,7 @@ public class Aspartame {
     // private(set) var operators: [Operator : ]
     
     public init() {
-        
-        print("init aspartame")
-        
+        print("init Aspartame")
     }
     
     
