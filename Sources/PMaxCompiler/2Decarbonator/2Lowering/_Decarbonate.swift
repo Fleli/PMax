@@ -12,7 +12,7 @@ extension FunctionLabel {
             case .declaration(let name, let type):
                 environment.active().declareSemantics(name, type)
             case .assignment(let lhs, let rhs):
-                let statements = DecarbonatedStatement.memCopy(result.lhsOffset, result.rhsOffset)
+                let statements = environment.active().assignmentSemantics(lhs, rhs)
                 label.addStatements(statements)
             case .assignIntegerLiteral(let lhs, let literal):
                 let statements = environment.active().literalAssignmentSemantics(lhs, literal)
@@ -21,15 +21,15 @@ extension FunctionLabel {
                 let statements = environment.active().accessMemberSemantics(lhs, rhs, member)
                 label.addStatements(statements)
             case .assignFromCall(let lhs, let function, let arguments):
-                <#code#>
+                break
             case .block(let statements):
-                <#code#>
+                break
             case .ignoreNextIfZero(let check, let n):
-                <#code#>
+                break
             case .jumpBack(let n):
-                <#code#>
+                break
             case .return(let value):
-                <#code#>
+                break
             }
             
         }

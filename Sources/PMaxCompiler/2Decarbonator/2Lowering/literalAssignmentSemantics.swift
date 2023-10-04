@@ -14,13 +14,9 @@ extension Scope {
             lhsType = .__word
         }
         
-        guard let int = Int(intLiteral) else {
-            // TODO: Check this assumption.
-            fatalError("Should never happen.")
-        }
-        
-        guard (0 <= int) && (int <= Builtin.intLiteralInclusiveBound) else {
+        guard let int = Int(intLiteral), (0 <= int) && (int <= Builtin.intLiteralInclusiveBound) else {
             decarbonator.submitError(.intLiteralNotWithinBounds(literal: intLiteral))
+            return []
         }
         
         let assignment = DecarbonatedStatement.storeImm(lhsOffset, int)
