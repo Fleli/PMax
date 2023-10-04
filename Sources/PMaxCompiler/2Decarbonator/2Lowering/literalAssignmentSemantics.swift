@@ -9,7 +9,7 @@ extension Scope {
         }
         
         if case .mustBeInferred = lhsType {
-            // TODO: In the first version of the compiler, and integer literal is always inferred to `__word`. This will change in future versions, but requires context to flow downwards (instead of only synthesizing types upwards).
+            // TODO: In the first version of the compiler, an integer literal is always inferred to `__word`. This will change in future versions, but requires context to flow downwards (instead of only synthesizing types upwards).
             inferType(of: lhs, to: .__word)
             lhsType = .__word
         }

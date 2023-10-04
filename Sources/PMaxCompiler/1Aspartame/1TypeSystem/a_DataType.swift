@@ -1,4 +1,4 @@
-indirect enum DataType: CustomStringConvertible {
+indirect enum DataType: CustomStringConvertible, Equatable {
     
     case void
     case __word
@@ -70,6 +70,23 @@ indirect enum DataType: CustomStringConvertible {
             return structType.sizeInMemory
         case .mustBeInferred:
             fatalError("The size of a type who still is not inferred should never be requested.")
+        }
+        
+    }
+    
+    static
+    func == (lhs: DataType, rhs: DataType) -> Bool {
+        
+        switch (lhs, rhs) {
+            
+        case (.void, .void), (.__word, .__word), (.mustBeInferred, .mustBeInferred):
+            return true
+        case (.pointer(let wrapped1), .pointer(let wrapped2)):
+            return wrapped1 == wrapped2
+        case (.struct(let t1), .struct(let t2)):
+            return t1 == t2
+        default:
+            return false
         }
         
     }

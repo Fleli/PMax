@@ -40,6 +40,17 @@ class Scope {
         
     }
     
+    func fetchVariable(_ name: String) -> DecarbonatedDeclaration? {
+        
+        guard let variable = declarations[name] else {
+            decarbonator.submitError(.variableDoesNotExist(name: name))
+            return nil
+        }
+        
+        return variable
+        
+    }
+    
 }
 
 struct DecarbonatedDeclaration {
