@@ -22,13 +22,8 @@ public class Compiler {
         
         print(converted.description)
         
-        print("Will now start lowering\n")
-        
-        let aspartame = Aspartame()
-        aspartame.convert(converted)
-        
-        let decarbonator = Decarbonator(aspartame)
-        decarbonator.decarbonate()
+        let pilLowerer = PILLowerer(converted)
+        pilLowerer.lower()
         
     }
     
