@@ -2,7 +2,6 @@ indirect enum PILType: CustomStringConvertible {
     
     case word
     case void
-    case error
     case `struct`(name: String)
     case pointer(pointee: PILType)
     
@@ -12,8 +11,6 @@ indirect enum PILType: CustomStringConvertible {
             return Builtin.native
         case .void:
             return Builtin.void
-        case .error:
-            return "<<error>>"
         case .struct(let name):
             return name
         case .pointer(let pointee):

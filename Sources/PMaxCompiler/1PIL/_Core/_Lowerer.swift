@@ -3,7 +3,7 @@ class PILLowerer {
     
     private let topLevelStatements: TopLevelStatements
     
-    private var functions: [PILFunction] = []
+    private var functions: [String : PILFunction] = [:]
     
     
     init(_ topLevelStatements: TopLevelStatements) {
@@ -14,7 +14,6 @@ class PILLowerer {
     func lower() {
         prepare()
         findOperatorDeclarations()
-        lowerToPIL()
     }
     
     private func prepare() {
@@ -25,9 +24,10 @@ class PILLowerer {
             case .struct(_):
                 continue
             case .function(let function):
-                let f = PILFunction(function, self)
-                print(f)
-                functions.append(f)
+                let name = function.name
+                let pilFunction = PILFunction(function, self)
+                functions[name] = pilFunction
+                print(pilFunction)
             }
             
         }
@@ -36,10 +36,6 @@ class PILLowerer {
     
     private func findOperatorDeclarations() {
         // TODO: Include operator declarations in the compiler's first version.
-    }
-    
-    private func lowerToPIL() {
-        
     }
     
 }

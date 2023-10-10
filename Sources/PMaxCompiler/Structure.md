@@ -18,8 +18,12 @@ Raw syntactic types are converted to corresponding `PILType` instances. `.struct
 
 ### PMax Intermediate Language (PIL) lowering
 
-The first step in semantic analysis is converting the `TopLevelStatements` tree into a `PIL` tree. This includes annotating all expressions with types, either fetched directly from variables or inferred from expressions. 
+As part of PIL Function initialization, function bodies are lowered into their corresponding PIL. This includes annotating all expressions with types, either fetched directly from variables or inferred from expressions. 
 
 Inferring types from expressions requires clear knowledge about operators (and their input- and output types). Thus, we must search through operator declarations before lowering to PIL. In the compiler's first version, operator declarations are not allowed. Therefore, this step is ignored in the first deployment.
+
+### PIL Statements
+
+PIL is _not_ built around protocol conformance, but rather as `enum` statements. Each type of `PIL` statement is its own case, with an associated value pointing to the actual statement (so the `.while` case points to a `PILWhile` statement).
 
 

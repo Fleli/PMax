@@ -2,27 +2,41 @@ class PILFunction: CustomStringConvertible {
     
     let name: String
     let type: PILType
-    let parameters: [PILParameter]
+    var parameters: [PILParameter] = []
+    
+    var body: [PILStatement] = []
     
     var description: String {
         "PILFunction \(name):  \t\(parameters.map {$0.type}) -> \(type)"
     }
     
+    /// Initialize a `PILFunction` from an underlying (syntactical) `Function` object. This includes lowering all statements within the function to their `PIL` equivalent.
     init(_ underlyingFunction: Function, _ lowerer: PILLowerer) {
         
         self.name = underlyingFunction.name
         self.type = PILType(underlyingFunction.returnType, lowerer)
         
-        var params: [PILParameter] = []
+        appendParameters(underlyingFunction, lowerer)
+        
+        lowerToPIL(underlyingFunction, lowerer)
+        
+    }
+    
+    private func appendParameters(_ underlyingFunction: Function, _ lowerer: PILLowerer) {
         
         for parameter in underlyingFunction.parameters {
-            let label = parameter.name
             let type = PILType(parameter.type, lowerer)
-            let pilParamerer = PILParameter(type, label)
-            params.append(pilParamerer)
+            let newParameter = PILParameter(type, parameter.name)
+            self.parameters.append(newParameter)
         }
         
-        self.parameters = params
+    }
+    
+    private func lowerToPIL(_ underlyingFunction: Function, _ lowerer: PILLowerer) {
+        
+        for statement in underlyingFunction.body {
+            
+        }
         
     }
     
