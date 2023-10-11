@@ -14,6 +14,10 @@ The _syntactic frontend_ of the compiler takes a `String`, lexes into `[Token]`,
 
 **Note: Consider auto-inserting type casting for literals.**
 
+### Literals
+
+While lowering from syntactic statements to PIL, each reference to literals notify the lowerer's `LiteralPool` instance. The literal pool includes all literals in the program and makes them accessible as global variables. References to them are then replaced by an identifier that refers to that variable. Each such variable has a specific type. This type is decided by running through the program before lowering to decide which type a literal is automatically stored as.
+
 ### Preparation
 
 First, we simply prepare an array of _functions_, (later) _structs_ and (later) _operator declarations_.

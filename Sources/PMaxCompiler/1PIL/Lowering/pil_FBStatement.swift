@@ -9,7 +9,7 @@ extension FunctionBodyStatement {
             // TODO: Add assignment
         case .assignment(let assignment):
             
-            let lhs = assignment.lhs.lowerToPIL(lowerer)
+            let lhs = assignment.lhs.flattenReference()
             let rhs = assignment.rhs.lowerToPIL(lowerer)
             
             return PILStatement.assignment(lhs: lhs, rhs: rhs)

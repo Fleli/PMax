@@ -26,12 +26,18 @@ extension Expression {
             
         case .Reference(let reference):
             
-            // TODO: Implement reference lowering
-            fatalError()
+            let pilOperation = reference.lowerToPIL(lowerer)
+            // TODO: Her må vi finne typen til operasjonen
+            return PILExpression(pilOperation)
             
         case .identifierTerminalArgumentsTerminal(let functionName, _, let arguments, _):
             
             // TODO: Implement function call lowering
+            fatalError()
+            
+        case .integer(let literal):
+            
+            // TODO: Implement literal lowering
             fatalError()
             
         }

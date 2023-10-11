@@ -30,22 +30,22 @@ public extension SLRNode {
 }
 public extension SLRNode {
     
-    func convertToStructBodyStatements() -> StructBodyStatements {
+    func convertToFunctionBodyStatements() -> FunctionBodyStatements {
         
         if children.count == 0 {
             return []
         }
         
         if children.count == 1 {
-            return [children[0].convertToDeclaration()]
+            return [children[0].convertToFunctionBodyStatement()]
         }
         
         if children.count == 2 {
-            return children[0].convertToStructBodyStatements() + [children[1].convertToDeclaration()]
+            return children[0].convertToFunctionBodyStatements() + [children[1].convertToFunctionBodyStatement()]
         }
         
         if children.count == 3 {
-            return children[0].convertToStructBodyStatements() + [children[2].convertToDeclaration()]
+            return children[0].convertToFunctionBodyStatements() + [children[2].convertToFunctionBodyStatement()]
         }
         
         fatalError()
@@ -105,22 +105,22 @@ public extension SLRNode {
 }
 public extension SLRNode {
     
-    func convertToFunctionBodyStatements() -> FunctionBodyStatements {
+    func convertToStructBodyStatements() -> StructBodyStatements {
         
         if children.count == 0 {
             return []
         }
         
         if children.count == 1 {
-            return [children[0].convertToFunctionBodyStatement()]
+            return [children[0].convertToDeclaration()]
         }
         
         if children.count == 2 {
-            return children[0].convertToFunctionBodyStatements() + [children[1].convertToFunctionBodyStatement()]
+            return children[0].convertToStructBodyStatements() + [children[1].convertToDeclaration()]
         }
         
         if children.count == 3 {
-            return children[0].convertToFunctionBodyStatements() + [children[2].convertToFunctionBodyStatement()]
+            return children[0].convertToStructBodyStatements() + [children[2].convertToDeclaration()]
         }
         
         fatalError()
@@ -662,6 +662,13 @@ public extension SLRNode {
 			
 		}
 		
+		if type == "CASELExpression" && children.count == 1 && children[0].type == "integer" {
+			
+			let arg0 = children[0].convertToTerminal()
+			return .integer(arg0)
+			
+		}
+		
 		if type == "CASELExpression" && children.count == 4 && children[0].type == "identifier" && children[1].type == "(" && children[2].type == "Arguments" && children[3].type == ")" {
 			
 			let arg0 = children[0].convertToTerminal()
@@ -716,11 +723,6 @@ public extension SLRNode {
 		if type == "Reference" && children.count == 1 && children[0].type == "identifier" {
 			let arg0 = children[0].convertToTerminal()
 			return Reference.identifier(arg0)
-		}
-	
-		if type == "Reference" && children.count == 1 && children[0].type == "integer" {
-			let arg0 = children[0].convertToTerminal()
-			return Reference.intLiteral(arg0)
 		}
 	
 		if type == "Reference" && children.count == 3 && children[0].type == "Reference" && children[1].type == "." && children[2].type == "identifier" {

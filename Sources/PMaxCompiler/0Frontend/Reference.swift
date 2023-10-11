@@ -6,13 +6,11 @@
 public indirect enum Reference: CustomStringConvertible {
 	
 	case identifier(_ identifier: String)
-	case intLiteral(_ integer: String)
 	case member(_ reference: Reference, _ _underscore_terminal: String, _ identifier: String)
 	
 	public var description: String {
 		switch self {
 		case .identifier(let identifier): return identifier 
-		case .intLiteral(let integer): return integer 
 		case .member(let reference, let _underscore_terminal, let identifier): return reference.description + _underscore_terminal + identifier 
 		}
 	}

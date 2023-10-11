@@ -97,34 +97,28 @@ class SLRParser {
 
 	private func state_0() throws {
 
+        if topOfStackIsNonTerminal("Function") {
+            pushState(state_135)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Type") {
+            pushState(state_3)
+            return
+        }
+        
         if topOfStackIsNonTerminal("TopLevelStatement") {
             pushState(state_143)
             return
         }
         
         if topOfStackIsNonTerminal("TopLevelStatements") {
-            pushState(state_133)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Type") {
-            pushState(state_2)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Function") {
-            pushState(state_134)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Struct") {
             pushState(state_1)
             return
         }
         
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_11)
+        if topOfStackIsNonTerminal("Struct") {
+            pushState(state_134)
             return
         }
         
@@ -134,8 +128,14 @@ class SLRParser {
             return
         }
         
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_72)
+            return
+        }
         
-        if topOfStackIsAmong([Optional("struct"), nil, Optional("identifier")]) {
+        
+        if topOfStackIsAmong([nil, Optional("struct"), Optional("identifier")]) {
             reduce(0, to: "TopLevelStatements")
             return
         }
@@ -144,84 +144,42 @@ class SLRParser {
 	
 	private func state_1() throws {
 
-        
-        if topOfStackIsAmong([nil, Optional("identifier"), Optional("struct")]) {
-            reduce(1, to: "TopLevelStatement")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("TopLevelStatement", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("TopLevelStatement", "reduction")
-        }
-        
-	}
-	
-	private func state_2() throws {
-
-        if topOfStackIsToken("identifier") {
-            shift()
+        if topOfStackIsNonTerminal("Type") {
             pushState(state_3)
             return
         }
         
-        if topOfStackIsToken("*") {
+        if topOfStackIsNonTerminal("Struct") {
+            pushState(state_134)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Function") {
+            pushState(state_135)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("TopLevelStatement") {
+            pushState(state_2)
+            return
+        }
+        
+        if topOfStackIsToken("struct") {
             shift()
-            pushState(state_9)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("Type", input[index].content, "*")
-        } else {
-            throw ParseError.abruptEnd("Type", "*")
-        }
-        
-	}
-	
-	private func state_3() throws {
-
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_4)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("Function", input[index].content, "(")
-        } else {
-            throw ParseError.abruptEnd("Function", "(")
-        }
-        
-	}
-	
-	private func state_4() throws {
-
-        if topOfStackIsNonTerminal("Parameter") {
-            pushState(state_132)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Parameters") {
-            pushState(state_5)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Type") {
-            pushState(state_7)
+            pushState(state_136)
             return
         }
         
         if topOfStackIsToken("identifier") {
             shift()
-            pushState(state_11)
+            pushState(state_72)
             return
         }
         
         
-        if topOfStackIsAmong([Optional(","), Optional(")")]) {
-            reduce(0, to: "Parameters")
+        if topOfStackIsAmong([nil]) {
+            reduce(1, to: "SwiftSLRMain")
+			accepted = true
             return
         }
         
@@ -233,145 +191,124 @@ class SLRParser {
         
 	}
 	
-	private func state_5() throws {
+	private func state_2() throws {
 
-        if topOfStackIsToken(")") {
-            shift()
-            pushState(state_12)
-            return
-        }
         
-        if topOfStackIsToken(",") {
-            shift()
-            pushState(state_6)
+        if topOfStackIsAmong([nil, Optional("struct"), Optional("identifier")]) {
+            reduce(2, to: "TopLevelStatements")
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("Function", input[index].content, ")")
+            throw ParseError.unexpected("TopLevelStatements", input[index].content, "reduction")
         } else {
-            throw ParseError.abruptEnd("Function", ")")
+            throw ParseError.abruptEnd("TopLevelStatements", "reduction")
+        }
+        
+	}
+	
+	private func state_3() throws {
+
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_4)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_15)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("Type", input[index].content, "*")
+        } else {
+            throw ParseError.abruptEnd("Type", "*")
+        }
+        
+	}
+	
+	private func state_4() throws {
+
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_5)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("Function", input[index].content, "(")
+        } else {
+            throw ParseError.abruptEnd("Function", "(")
+        }
+        
+	}
+	
+	private func state_5() throws {
+
+        if topOfStackIsNonTerminal("Parameters") {
+            pushState(state_6)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Type") {
+            pushState(state_130)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Parameter") {
+            pushState(state_133)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_72)
+            return
+        }
+        
+        
+        if topOfStackIsAmong([Optional(")"), Optional(",")]) {
+            reduce(0, to: "Parameters")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("Parameters", input[index].content, "Parameters")
+        } else {
+            throw ParseError.abruptEnd("Parameters", "Parameters")
         }
         
 	}
 	
 	private func state_6() throws {
 
-        if topOfStackIsNonTerminal("Parameter") {
-            pushState(state_10)
+        if topOfStackIsToken(",") {
+            shift()
+            pushState(state_129)
             return
         }
         
-        if topOfStackIsNonTerminal("Type") {
+        if topOfStackIsToken(")") {
+            shift()
             pushState(state_7)
             return
         }
         
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_11)
-            return
-        }
-        
         if index < input.count {
-            throw ParseError.unexpected("Parameters", input[index].content, "Parameter")
+            throw ParseError.unexpected("Parameters", input[index].content, ",")
         } else {
-            throw ParseError.abruptEnd("Parameters", "Parameter")
+            throw ParseError.abruptEnd("Parameters", ",")
         }
         
 	}
 	
 	private func state_7() throws {
 
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_9)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_8)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("Parameter", input[index].content, "identifier")
-        } else {
-            throw ParseError.abruptEnd("Parameter", "identifier")
-        }
-        
-	}
-	
-	private func state_8() throws {
-
-        
-        if topOfStackIsAmong([Optional(","), Optional(")")]) {
-            reduce(2, to: "Parameter")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("Parameter", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("Parameter", "reduction")
-        }
-        
-	}
-	
-	private func state_9() throws {
-
-        
-        if topOfStackIsAmong([Optional("*"), Optional(")"), Optional("identifier")]) {
-            reduce(2, to: "Type")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("Type", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("Type", "reduction")
-        }
-        
-	}
-	
-	private func state_10() throws {
-
-        
-        if topOfStackIsAmong([Optional(","), Optional(")")]) {
-            reduce(3, to: "Parameters")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("Parameters", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("Parameters", "reduction")
-        }
-        
-	}
-	
-	private func state_11() throws {
-
-        
-        if topOfStackIsAmong([Optional("*"), Optional(")"), Optional("identifier")]) {
-            reduce(1, to: "Type")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("Type", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("Type", "reduction")
-        }
-        
-	}
-	
-	private func state_12() throws {
-
         if topOfStackIsToken("{") {
             shift()
-            pushState(state_13)
+            pushState(state_8)
             return
         }
         
@@ -383,96 +320,96 @@ class SLRParser {
         
 	}
 	
-	private func state_13() throws {
+	private func state_8() throws {
 
-        if topOfStackIsNonTerminal("FunctionBodyStatements") {
-            pushState(state_104)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("If") {
-            pushState(state_102)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Assignment") {
-            pushState(state_107)
+        if topOfStackIsNonTerminal("Declaration") {
+            pushState(state_13)
             return
         }
         
         if topOfStackIsNonTerminal("FunctionBodyStatement") {
-            pushState(state_121)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Type") {
-            pushState(state_15)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Declaration") {
-            pushState(state_103)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("While") {
-            pushState(state_14)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Return") {
-            pushState(state_105)
-            return
-        }
-        
-        if topOfStackIsToken("return") {
-            shift()
-            pushState(state_114)
-            return
-        }
-        
-        if topOfStackIsToken("assign") {
-            shift()
             pushState(state_108)
             return
         }
         
-        if topOfStackIsToken("identifier") {
-            shift()
+        if topOfStackIsNonTerminal("FunctionBodyStatements") {
+            pushState(state_10)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("If") {
+            pushState(state_9)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Return") {
             pushState(state_11)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Assignment") {
+            pushState(state_12)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Type") {
+            pushState(state_14)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("While") {
+            pushState(state_103)
             return
         }
         
         if topOfStackIsToken("if") {
             shift()
-            pushState(state_124)
+            pushState(state_105)
+            return
+        }
+        
+        if topOfStackIsToken("assign") {
+            shift()
+            pushState(state_119)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_72)
+            return
+        }
+        
+        if topOfStackIsToken("return") {
+            shift()
+            pushState(state_115)
             return
         }
         
         if topOfStackIsToken("while") {
             shift()
-            pushState(state_118)
+            pushState(state_110)
             return
         }
         
         
-        if topOfStackIsAmong([Optional("while"), Optional("assign"), Optional("return"), Optional("}"), Optional("identifier"), Optional("if")]) {
+        if topOfStackIsAmong([Optional("}"), Optional("while"), Optional("if"), Optional("assign"), Optional("return"), Optional("identifier")]) {
             reduce(0, to: "FunctionBodyStatements")
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("If", input[index].content, "if")
+            throw ParseError.unexpected("FunctionBodyStatements", input[index].content, "FunctionBodyStatements")
         } else {
-            throw ParseError.abruptEnd("If", "if")
+            throw ParseError.abruptEnd("FunctionBodyStatements", "FunctionBodyStatements")
         }
         
 	}
 	
-	private func state_14() throws {
+	private func state_9() throws {
 
         
-        if topOfStackIsAmong([Optional("while"), Optional("}"), Optional("identifier"), Optional("if"), Optional("return"), Optional("assign")]) {
+        if topOfStackIsAmong([Optional("while"), Optional("return"), Optional("if"), Optional("identifier"), Optional("assign"), Optional("}")]) {
             reduce(1, to: "FunctionBodyStatement")
             return
         }
@@ -485,7 +422,136 @@ class SLRParser {
         
 	}
 	
-	private func state_15() throws {
+	private func state_10() throws {
+
+        if topOfStackIsNonTerminal("If") {
+            pushState(state_9)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Declaration") {
+            pushState(state_13)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Assignment") {
+            pushState(state_12)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Type") {
+            pushState(state_14)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Return") {
+            pushState(state_11)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("FunctionBodyStatement") {
+            pushState(state_104)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("While") {
+            pushState(state_103)
+            return
+        }
+        
+        if topOfStackIsToken("assign") {
+            shift()
+            pushState(state_119)
+            return
+        }
+        
+        if topOfStackIsToken("}") {
+            shift()
+            pushState(state_128)
+            return
+        }
+        
+        if topOfStackIsToken("return") {
+            shift()
+            pushState(state_115)
+            return
+        }
+        
+        if topOfStackIsToken("while") {
+            shift()
+            pushState(state_110)
+            return
+        }
+        
+        if topOfStackIsToken("if") {
+            shift()
+            pushState(state_105)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_72)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("Declaration", input[index].content, "Type")
+        } else {
+            throw ParseError.abruptEnd("Declaration", "Type")
+        }
+        
+	}
+	
+	private func state_11() throws {
+
+        
+        if topOfStackIsAmong([Optional("while"), Optional("return"), Optional("if"), Optional("identifier"), Optional("assign"), Optional("}")]) {
+            reduce(1, to: "FunctionBodyStatement")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("FunctionBodyStatement", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("FunctionBodyStatement", "reduction")
+        }
+        
+	}
+	
+	private func state_12() throws {
+
+        
+        if topOfStackIsAmong([Optional("while"), Optional("return"), Optional("if"), Optional("identifier"), Optional("assign"), Optional("}")]) {
+            reduce(1, to: "FunctionBodyStatement")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("FunctionBodyStatement", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("FunctionBodyStatement", "reduction")
+        }
+        
+	}
+	
+	private func state_13() throws {
+
+        
+        if topOfStackIsAmong([Optional("while"), Optional("return"), Optional("if"), Optional("identifier"), Optional("assign"), Optional("}")]) {
+            reduce(1, to: "FunctionBodyStatement")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("FunctionBodyStatement", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("FunctionBodyStatement", "reduction")
+        }
+        
+	}
+	
+	private func state_14() throws {
 
         if topOfStackIsToken("identifier") {
             shift()
@@ -495,7 +561,7 @@ class SLRParser {
         
         if topOfStackIsToken("*") {
             shift()
-            pushState(state_9)
+            pushState(state_15)
             return
         }
         
@@ -503,6 +569,22 @@ class SLRParser {
             throw ParseError.unexpected("Type", input[index].content, "*")
         } else {
             throw ParseError.abruptEnd("Type", "*")
+        }
+        
+	}
+	
+	private func state_15() throws {
+
+        
+        if topOfStackIsAmong([Optional("identifier"), Optional("*"), Optional(")")]) {
+            reduce(2, to: "Type")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("Type", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("Type", "reduction")
         }
         
 	}
@@ -517,57 +599,22 @@ class SLRParser {
         
         if topOfStackIsToken(";") {
             shift()
-            pushState(state_101)
+            pushState(state_102)
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("Declaration", input[index].content, "=")
+            throw ParseError.unexpected("Declaration", input[index].content, ";")
         } else {
-            throw ParseError.abruptEnd("Declaration", "=")
+            throw ParseError.abruptEnd("Declaration", ";")
         }
         
 	}
 	
 	private func state_17() throws {
 
-        if topOfStackIsNonTerminal("CASEIExpression") {
-            pushState(state_35)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASECExpression") {
-            pushState(state_79)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEDExpression") {
-            pushState(state_33)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEHExpression") {
-            pushState(state_78)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEBExpression") {
-            pushState(state_62)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
             return
         }
         
@@ -576,83 +623,118 @@ class SLRParser {
             return
         }
         
-        if topOfStackIsNonTerminal("CASEFExpression") {
-            pushState(state_44)
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_38)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEBExpression") {
+            pushState(state_68)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEIExpression") {
+            pushState(state_29)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEDExpression") {
+            pushState(state_51)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEHExpression") {
+            pushState(state_39)
             return
         }
         
         if topOfStackIsNonTerminal("CASEJExpression") {
-            pushState(state_22)
+            pushState(state_41)
             return
         }
         
-        if topOfStackIsNonTerminal("CASEGExpression") {
-            pushState(state_64)
+        if topOfStackIsNonTerminal("CASEFExpression") {
+            pushState(state_36)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASECExpression") {
+            pushState(state_67)
             return
         }
         
         if topOfStackIsNonTerminal("Expression") {
-            pushState(state_99)
+            pushState(state_100)
             return
         }
         
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
             return
         }
         
-        if topOfStackIsToken("!") {
-            shift()
-            pushState(state_69)
+        if topOfStackIsNonTerminal("CASEGExpression") {
+            pushState(state_26)
             return
         }
         
         if topOfStackIsToken("~") {
             shift()
-            pushState(state_55)
+            pushState(state_60)
             return
         }
         
         if topOfStackIsToken("identifier") {
             shift()
-            pushState(state_30)
-            return
-        }
-        
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_61)
-            return
-        }
-        
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_57)
+            pushState(state_34)
             return
         }
         
         if topOfStackIsToken("integer") {
             shift()
-            pushState(state_42)
+            pushState(state_46)
             return
         }
         
         if topOfStackIsToken("sizeof") {
             shift()
-            pushState(state_40)
+            pushState(state_58)
+            return
+        }
+        
+        if topOfStackIsToken("!") {
+            shift()
+            pushState(state_56)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_47)
             return
         }
         
         if topOfStackIsToken("-") {
             shift()
-            pushState(state_59)
+            pushState(state_44)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_54)
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("Reference", input[index].content, "identifier")
+            throw ParseError.unexpected("CASECExpression", input[index].content, "CASECExpression")
         } else {
-            throw ParseError.abruptEnd("Reference", "identifier")
+            throw ParseError.abruptEnd("CASECExpression", "CASECExpression")
         }
         
 	}
@@ -666,7 +748,7 @@ class SLRParser {
         }
         
         
-        if topOfStackIsAmong([Optional("{"), Optional("||"), Optional("^"), Optional("|"), Optional(")"), Optional(";"), Optional(","), Optional("&&")]) {
+        if topOfStackIsAmong([Optional("||"), Optional("{"), Optional("^"), Optional("&&"), Optional(")"), Optional(","), Optional(";"), Optional("|")]) {
             reduce(1, to: "CASEDExpression")
             return
         }
@@ -681,341 +763,195 @@ class SLRParser {
 	
 	private func state_19() throws {
 
-        if topOfStackIsNonTerminal("CASEIExpression") {
-            pushState(state_35)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEGExpression") {
-            pushState(state_64)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
             return
         }
         
         if topOfStackIsNonTerminal("CASEFExpression") {
-            pushState(state_20)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEHExpression") {
-            pushState(state_78)
+            pushState(state_99)
             return
         }
         
         if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
+            pushState(state_38)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEGExpression") {
+            pushState(state_26)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEHExpression") {
+            pushState(state_39)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEIExpression") {
+            pushState(state_29)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
             return
         }
         
         if topOfStackIsNonTerminal("CASEJExpression") {
-            pushState(state_22)
+            pushState(state_41)
             return
         }
         
-        if topOfStackIsToken("sizeof") {
-            shift()
-            pushState(state_40)
-            return
-        }
-        
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
             return
         }
         
         if topOfStackIsToken("*") {
             shift()
-            pushState(state_57)
-            return
-        }
-        
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_59)
+            pushState(state_54)
             return
         }
         
         if topOfStackIsToken("~") {
             shift()
-            pushState(state_55)
-            return
-        }
-        
-        if topOfStackIsToken("!") {
-            shift()
-            pushState(state_69)
+            pushState(state_60)
             return
         }
         
         if topOfStackIsToken("(") {
             shift()
-            pushState(state_61)
+            pushState(state_47)
+            return
+        }
+        
+        if topOfStackIsToken("-") {
+            shift()
+            pushState(state_44)
+            return
+        }
+        
+        if topOfStackIsToken("sizeof") {
+            shift()
+            pushState(state_58)
+            return
+        }
+        
+        if topOfStackIsToken("!") {
+            shift()
+            pushState(state_56)
             return
         }
         
         if topOfStackIsToken("identifier") {
             shift()
-            pushState(state_30)
+            pushState(state_34)
+            return
+        }
+        
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("CASEKExpression", input[index].content, "TypeCast")
+            throw ParseError.unexpected("CASEIExpression", input[index].content, "CASEIExpression")
         } else {
-            throw ParseError.abruptEnd("CASEKExpression", "TypeCast")
+            throw ParseError.abruptEnd("CASEIExpression", "CASEIExpression")
         }
         
 	}
 	
 	private func state_20() throws {
 
-        if topOfStackIsToken("==") {
-            shift()
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_24)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Reference") {
             pushState(state_21)
             return
         }
         
-        if topOfStackIsToken("!=") {
+        if topOfStackIsToken("(") {
             shift()
-            pushState(state_45)
+            pushState(state_25)
             return
         }
         
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
+            return
+        }
         
-        if topOfStackIsAmong([Optional("||"), Optional("^"), Optional("{"), Optional("|"), Optional("&"), Optional(";"), Optional(")"), Optional(","), Optional("&&")]) {
-            reduce(3, to: "CASEEExpression")
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_34)
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("CASEFExpression", input[index].content, "==")
+            throw ParseError.unexpected("Reference", input[index].content, "identifier")
         } else {
-            throw ParseError.abruptEnd("CASEFExpression", "==")
+            throw ParseError.abruptEnd("Reference", "identifier")
         }
         
 	}
 	
 	private func state_21() throws {
 
-        if topOfStackIsNonTerminal("CASEIExpression") {
-            pushState(state_35)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEGExpression") {
-            pushState(state_98)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEHExpression") {
-            pushState(state_78)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEJExpression") {
+        if topOfStackIsToken(".") {
+            shift()
             pushState(state_22)
             return
         }
         
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_61)
-            return
-        }
         
-        if topOfStackIsToken("~") {
-            shift()
-            pushState(state_55)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_30)
-            return
-        }
-        
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_57)
-            return
-        }
-        
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_59)
-            return
-        }
-        
-        if topOfStackIsToken("!") {
-            shift()
-            pushState(state_69)
-            return
-        }
-        
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
-            return
-        }
-        
-        if topOfStackIsToken("sizeof") {
-            shift()
-            pushState(state_40)
+        if topOfStackIsAmong([Optional(")"), Optional(";"), Optional("*"), Optional("!="), Optional("<"), Optional("<<"), Optional("{"), Optional(","), Optional("||"), Optional("/"), Optional("&"), Optional("+"), Optional(">"), Optional("-"), Optional("|"), Optional(">="), Optional("&&"), Optional("%"), Optional("<="), Optional(">>"), Optional("=="), Optional("^")]) {
+            reduce(1, to: "CASELExpression")
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("CASEJExpression", input[index].content, "CASEJExpression")
+            throw ParseError.unexpected("CASELExpression", input[index].content, "reduction")
         } else {
-            throw ParseError.abruptEnd("CASEJExpression", "CASEJExpression")
+            throw ParseError.abruptEnd("CASELExpression", "reduction")
         }
         
 	}
 	
 	private func state_22() throws {
 
-        if topOfStackIsToken("%") {
+        if topOfStackIsToken("identifier") {
             shift()
             pushState(state_23)
             return
         }
         
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_53)
-            return
-        }
-        
-        if topOfStackIsToken("/") {
-            shift()
-            pushState(state_38)
-            return
-        }
-        
-        
-        if topOfStackIsAmong([Optional("<<"), Optional(">="), Optional("!="), Optional(">>"), Optional("-"), Optional(">"), Optional("+"), Optional("^"), Optional("<"), Optional(","), Optional("=="), Optional("|"), Optional("&&"), Optional("<="), Optional("&"), Optional("||"), Optional("{"), Optional(";"), Optional(")")]) {
-            reduce(1, to: "CASEIExpression")
-            return
-        }
-        
         if index < input.count {
-            throw ParseError.unexpected("CASEIExpression", input[index].content, "reduction")
+            throw ParseError.unexpected("Reference", input[index].content, "identifier")
         } else {
-            throw ParseError.abruptEnd("CASEIExpression", "reduction")
+            throw ParseError.abruptEnd("Reference", "identifier")
         }
         
 	}
 	
 	private func state_23() throws {
 
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
-            return
-        }
         
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_97)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
-            return
-        }
-        
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_59)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_30)
-            return
-        }
-        
-        if topOfStackIsToken("sizeof") {
-            shift()
-            pushState(state_40)
-            return
-        }
-        
-        if topOfStackIsToken("~") {
-            shift()
-            pushState(state_55)
-            return
-        }
-        
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_57)
-            return
-        }
-        
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
-            return
-        }
-        
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_61)
-            return
-        }
-        
-        if topOfStackIsToken("!") {
-            shift()
-            pushState(state_69)
+        if topOfStackIsAmong([Optional("-"), Optional("|"), Optional("<="), Optional(">>"), Optional("=="), Optional(">="), Optional("%"), Optional(","), Optional("{"), Optional("^"), Optional(">"), Optional(";"), Optional("<"), Optional("*"), Optional("<<"), Optional("!="), Optional("/"), Optional("&&"), Optional("."), Optional(")"), Optional("&"), Optional("||"), Optional("="), Optional("+")]) {
+            reduce(3, to: "Reference")
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("CASEKExpression", input[index].content, "TypeCast")
+            throw ParseError.unexpected("Reference", input[index].content, "reduction")
         } else {
-            throw ParseError.abruptEnd("CASEKExpression", "TypeCast")
+            throw ParseError.abruptEnd("Reference", "reduction")
         }
         
 	}
@@ -1023,8 +959,8 @@ class SLRParser {
 	private func state_24() throws {
 
         
-        if topOfStackIsAmong([Optional("+"), Optional("%"), Optional("/"), Optional(")"), Optional(">"), Optional("&&"), Optional("!="), Optional("<<"), Optional("*"), Optional(">>"), Optional(">="), Optional("|"), Optional("-"), Optional("=="), Optional("<="), Optional("<"), Optional("{"), Optional("&"), Optional("||"), Optional("^"), Optional(";"), Optional(",")]) {
-            reduce(1, to: "CASEKExpression")
+        if topOfStackIsAmong([Optional("|"), Optional(")"), Optional("*"), Optional("-"), Optional(">="), Optional("{"), Optional("+"), Optional("||"), Optional("!="), Optional("<="), Optional("/"), Optional(">"), Optional("&"), Optional("&&"), Optional("%"), Optional(">>"), Optional(";"), Optional("<"), Optional("=="), Optional("^"), Optional(","), Optional("<<")]) {
+            reduce(2, to: "CASEKExpression")
             return
         }
         
@@ -1038,69 +974,254 @@ class SLRParser {
 	
 	private func state_25() throws {
 
-        if topOfStackIsNonTerminal("Reference") {
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEBExpression") {
+            pushState(state_68)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_38)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEEExpression") {
+            pushState(state_18)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEGExpression") {
             pushState(state_26)
             return
         }
         
+        if topOfStackIsNonTerminal("Expression") {
+            pushState(state_48)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEDExpression") {
+            pushState(state_51)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASECExpression") {
+            pushState(state_67)
+            return
+        }
+        
         if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEFExpression") {
+            pushState(state_36)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEHExpression") {
+            pushState(state_39)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEIExpression") {
             pushState(state_29)
             return
         }
         
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_30)
+        if topOfStackIsNonTerminal("CASEJExpression") {
+            pushState(state_41)
             return
         }
         
         if topOfStackIsToken("integer") {
             shift()
-            pushState(state_42)
+            pushState(state_46)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_34)
+            return
+        }
+        
+        if topOfStackIsToken("~") {
+            shift()
+            pushState(state_60)
+            return
+        }
+        
+        if topOfStackIsToken("-") {
+            shift()
+            pushState(state_44)
+            return
+        }
+        
+        if topOfStackIsToken("!") {
+            shift()
+            pushState(state_56)
             return
         }
         
         if topOfStackIsToken("(") {
             shift()
-            pushState(state_43)
+            pushState(state_47)
+            return
+        }
+        
+        if topOfStackIsToken("sizeof") {
+            shift()
+            pushState(state_58)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_54)
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("CASELExpression", input[index].content, "identifier")
+            throw ParseError.unexpected("CASEKExpression", input[index].content, "!")
         } else {
-            throw ParseError.abruptEnd("CASELExpression", "identifier")
+            throw ParseError.abruptEnd("CASEKExpression", "!")
         }
         
 	}
 	
 	private func state_26() throws {
 
-        if topOfStackIsToken(".") {
+        if topOfStackIsToken(">=") {
+            shift()
+            pushState(state_83)
+            return
+        }
+        
+        if topOfStackIsToken("<") {
+            shift()
+            pushState(state_81)
+            return
+        }
+        
+        if topOfStackIsToken("<=") {
             shift()
             pushState(state_27)
             return
         }
         
+        if topOfStackIsToken(">") {
+            shift()
+            pushState(state_85)
+            return
+        }
         
-        if topOfStackIsAmong([Optional("!="), Optional("<<"), Optional("&&"), Optional(">="), Optional("<="), Optional("=="), Optional("^"), Optional(">"), Optional(">>"), Optional("<"), Optional("&"), Optional("*"), Optional("||"), Optional(";"), Optional("+"), Optional(")"), Optional("%"), Optional("{"), Optional(","), Optional("|"), Optional("-"), Optional("/")]) {
-            reduce(1, to: "CASELExpression")
+        
+        if topOfStackIsAmong([Optional("^"), Optional("|"), Optional("=="), Optional(","), Optional("!="), Optional("&&"), Optional(";"), Optional("{"), Optional("||"), Optional(")"), Optional("&")]) {
+            reduce(1, to: "CASEFExpression")
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("CASELExpression", input[index].content, "reduction")
+            throw ParseError.unexpected("CASEGExpression", input[index].content, "<")
         } else {
-            throw ParseError.abruptEnd("CASELExpression", "reduction")
+            throw ParseError.abruptEnd("CASEGExpression", "<")
         }
         
 	}
 	
 	private func state_27() throws {
 
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEJExpression") {
+            pushState(state_41)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEIExpression") {
+            pushState(state_29)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEHExpression") {
+            pushState(state_98)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_38)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
+            return
+        }
+        
+        if topOfStackIsToken("!") {
+            shift()
+            pushState(state_56)
+            return
+        }
+        
         if topOfStackIsToken("identifier") {
             shift()
-            pushState(state_28)
+            pushState(state_34)
+            return
+        }
+        
+        if topOfStackIsToken("~") {
+            shift()
+            pushState(state_60)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_47)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_54)
+            return
+        }
+        
+        if topOfStackIsToken("sizeof") {
+            shift()
+            pushState(state_58)
+            return
+        }
+        
+        if topOfStackIsToken("-") {
+            shift()
+            pushState(state_44)
+            return
+        }
+        
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
             return
         }
         
@@ -1115,24 +1236,8 @@ class SLRParser {
 	private func state_28() throws {
 
         
-        if topOfStackIsAmong([Optional("="), Optional("<<"), Optional("{"), Optional("."), Optional("!="), Optional("^"), Optional("+"), Optional("%"), Optional("&"), Optional(">="), Optional("<="), Optional("*"), Optional("||"), Optional("&&"), Optional("<"), Optional("|"), Optional("=="), Optional("-"), Optional("/"), Optional(","), Optional(")"), Optional(">>"), Optional(";"), Optional(">")]) {
-            reduce(3, to: "Reference")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("Reference", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("Reference", "reduction")
-        }
-        
-	}
-	
-	private func state_29() throws {
-
-        
-        if topOfStackIsAmong([Optional("+"), Optional("%"), Optional("/"), Optional(")"), Optional(">"), Optional("&&"), Optional("!="), Optional("<<"), Optional("*"), Optional(">>"), Optional(">="), Optional("|"), Optional("-"), Optional("=="), Optional("<="), Optional("<"), Optional("{"), Optional("&"), Optional("||"), Optional("^"), Optional(";"), Optional(",")]) {
-            reduce(2, to: "CASEKExpression")
+        if topOfStackIsAmong([Optional("|"), Optional(")"), Optional("*"), Optional("-"), Optional(">="), Optional("{"), Optional("+"), Optional("||"), Optional("!="), Optional("<="), Optional("/"), Optional(">"), Optional("&"), Optional("&&"), Optional("%"), Optional(">>"), Optional(";"), Optional("<"), Optional("=="), Optional("^"), Optional(","), Optional("<<")]) {
+            reduce(1, to: "CASEKExpression")
             return
         }
         
@@ -1144,17 +1249,218 @@ class SLRParser {
         
 	}
 	
-	private func state_30() throws {
+	private func state_29() throws {
 
-        if topOfStackIsToken("(") {
+        if topOfStackIsToken("-") {
             shift()
-            pushState(state_31)
+            pushState(state_76)
+            return
+        }
+        
+        if topOfStackIsToken("+") {
+            shift()
+            pushState(state_30)
             return
         }
         
         
-        if topOfStackIsAmong([Optional("="), Optional("<<"), Optional("{"), Optional("."), Optional("!="), Optional("^"), Optional("+"), Optional("%"), Optional("&"), Optional(">="), Optional("<="), Optional("*"), Optional("||"), Optional("&&"), Optional("<"), Optional("|"), Optional("=="), Optional("-"), Optional("/"), Optional(","), Optional(")"), Optional(">>"), Optional(";"), Optional(">")]) {
-            reduce(1, to: "Reference")
+        if topOfStackIsAmong([Optional(">>"), Optional("&&"), Optional(","), Optional(">"), Optional(")"), Optional(">="), Optional("|"), Optional("^"), Optional(";"), Optional("{"), Optional("<"), Optional("!="), Optional("&"), Optional("<="), Optional("||"), Optional("=="), Optional("<<")]) {
+            reduce(1, to: "CASEHExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEIExpression", input[index].content, "+")
+        } else {
+            throw ParseError.abruptEnd("CASEIExpression", "+")
+        }
+        
+	}
+	
+	private func state_30() throws {
+
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEJExpression") {
+            pushState(state_31)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_38)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
+            return
+        }
+        
+        if topOfStackIsToken("-") {
+            shift()
+            pushState(state_44)
+            return
+        }
+        
+        if topOfStackIsToken("sizeof") {
+            shift()
+            pushState(state_58)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_54)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_34)
+            return
+        }
+        
+        if topOfStackIsToken("~") {
+            shift()
+            pushState(state_60)
+            return
+        }
+        
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
+            return
+        }
+        
+        if topOfStackIsToken("!") {
+            shift()
+            pushState(state_56)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_47)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("TypeCast", input[index].content, "(")
+        } else {
+            throw ParseError.abruptEnd("TypeCast", "(")
+        }
+        
+	}
+	
+	private func state_31() throws {
+
+        if topOfStackIsToken("/") {
+            shift()
+            pushState(state_32)
+            return
+        }
+        
+        if topOfStackIsToken("%") {
+            shift()
+            pushState(state_42)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_73)
+            return
+        }
+        
+        
+        if topOfStackIsAmong([Optional("<="), Optional("<<"), Optional(">="), Optional("^"), Optional("&"), Optional("=="), Optional(","), Optional(">"), Optional(">>"), Optional("-"), Optional("!="), Optional("|"), Optional(")"), Optional("{"), Optional("&&"), Optional(";"), Optional("+"), Optional("||"), Optional("<")]) {
+            reduce(3, to: "CASEIExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEJExpression", input[index].content, "%")
+        } else {
+            throw ParseError.abruptEnd("CASEJExpression", "%")
+        }
+        
+	}
+	
+	private func state_32() throws {
+
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_33)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_54)
+            return
+        }
+        
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
+            return
+        }
+        
+        if topOfStackIsToken("sizeof") {
+            shift()
+            pushState(state_58)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_47)
+            return
+        }
+        
+        if topOfStackIsToken("-") {
+            shift()
+            pushState(state_44)
+            return
+        }
+        
+        if topOfStackIsToken("!") {
+            shift()
+            pushState(state_56)
+            return
+        }
+        
+        if topOfStackIsToken("~") {
+            shift()
+            pushState(state_60)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_34)
             return
         }
         
@@ -1166,35 +1472,83 @@ class SLRParser {
         
 	}
 	
-	private func state_31() throws {
+	private func state_33() throws {
 
+        
+        if topOfStackIsAmong([Optional("<<"), Optional("<"), Optional("+"), Optional("&&"), Optional("&"), Optional("||"), Optional("/"), Optional(")"), Optional("{"), Optional(">="), Optional("-"), Optional("%"), Optional("^"), Optional(">"), Optional("*"), Optional(">>"), Optional("|"), Optional(","), Optional(";"), Optional("=="), Optional("<="), Optional("!=")]) {
+            reduce(3, to: "CASEJExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEJExpression", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("CASEJExpression", "reduction")
+        }
+        
+	}
+	
+	private func state_34() throws {
+
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_35)
+            return
+        }
+        
+        
+        if topOfStackIsAmong([Optional("-"), Optional("|"), Optional("<="), Optional(">>"), Optional("=="), Optional(">="), Optional("%"), Optional(","), Optional("{"), Optional("^"), Optional(">"), Optional(";"), Optional("<"), Optional("*"), Optional("<<"), Optional("!="), Optional("/"), Optional("&&"), Optional("."), Optional(")"), Optional("&"), Optional("||"), Optional("="), Optional("+")]) {
+            reduce(1, to: "Reference")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("Reference", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("Reference", "reduction")
+        }
+        
+	}
+	
+	private func state_35() throws {
+
+        if topOfStackIsNonTerminal("Argument") {
+            pushState(state_97)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
+            return
+        }
+        
         if topOfStackIsNonTerminal("CASEEExpression") {
             pushState(state_18)
             return
         }
         
-        if topOfStackIsNonTerminal("CASEIExpression") {
-            pushState(state_35)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
-            return
-        }
-        
         if topOfStackIsNonTerminal("CASEFExpression") {
-            pushState(state_44)
+            pushState(state_36)
             return
         }
         
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
+        if topOfStackIsNonTerminal("CASEIExpression") {
+            pushState(state_29)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEBExpression") {
+            pushState(state_68)
             return
         }
         
         if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
+            pushState(state_21)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEJExpression") {
+            pushState(state_41)
             return
         }
         
@@ -1203,96 +1557,86 @@ class SLRParser {
             return
         }
         
-        if topOfStackIsNonTerminal("CASEBExpression") {
-            pushState(state_62)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Expression") {
-            pushState(state_88)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASECExpression") {
-            pushState(state_79)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Argument") {
-            pushState(state_96)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEHExpression") {
-            pushState(state_78)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEJExpression") {
-            pushState(state_22)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEGExpression") {
-            pushState(state_64)
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
             return
         }
         
         if topOfStackIsNonTerminal("CASEDExpression") {
-            pushState(state_33)
+            pushState(state_51)
             return
         }
         
         if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
+            pushState(state_38)
             return
         }
         
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_61)
+        if topOfStackIsNonTerminal("CASECExpression") {
+            pushState(state_67)
             return
         }
         
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
+        if topOfStackIsNonTerminal("CASEGExpression") {
+            pushState(state_26)
             return
         }
         
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_57)
+        if topOfStackIsNonTerminal("CASEHExpression") {
+            pushState(state_39)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Expression") {
+            pushState(state_92)
             return
         }
         
         if topOfStackIsToken("!") {
             shift()
-            pushState(state_69)
+            pushState(state_56)
             return
         }
         
         if topOfStackIsToken("sizeof") {
             shift()
-            pushState(state_40)
+            pushState(state_58)
             return
         }
         
-        if topOfStackIsToken("~") {
+        if topOfStackIsToken("integer") {
             shift()
-            pushState(state_55)
+            pushState(state_46)
             return
         }
         
         if topOfStackIsToken("-") {
             shift()
-            pushState(state_59)
+            pushState(state_44)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_47)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_54)
             return
         }
         
         if topOfStackIsToken("identifier") {
             shift()
-            pushState(state_92)
+            pushState(state_94)
+            return
+        }
+        
+        if topOfStackIsToken("~") {
+            shift()
+            pushState(state_60)
             return
         }
         
@@ -1303,17 +1647,143 @@ class SLRParser {
         }
         
         if index < input.count {
-            throw ParseError.unexpected("CASEKExpression", input[index].content, "*")
+            throw ParseError.unexpected("CASEBExpression", input[index].content, "CASECExpression")
         } else {
-            throw ParseError.abruptEnd("CASEKExpression", "*")
+            throw ParseError.abruptEnd("CASEBExpression", "CASECExpression")
         }
         
 	}
 	
-	private func state_32() throws {
+	private func state_36() throws {
+
+        if topOfStackIsToken("==") {
+            shift()
+            pushState(state_87)
+            return
+        }
+        
+        if topOfStackIsToken("!=") {
+            shift()
+            pushState(state_37)
+            return
+        }
+        
+        
+        if topOfStackIsAmong([Optional(")"), Optional("^"), Optional(","), Optional("{"), Optional("&"), Optional(";"), Optional("&&"), Optional("|"), Optional("||")]) {
+            reduce(1, to: "CASEEExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEFExpression", input[index].content, "==")
+        } else {
+            throw ParseError.abruptEnd("CASEFExpression", "==")
+        }
+        
+	}
+	
+	private func state_37() throws {
+
+        if topOfStackIsNonTerminal("CASEJExpression") {
+            pushState(state_41)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_38)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEIExpression") {
+            pushState(state_29)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEHExpression") {
+            pushState(state_39)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEGExpression") {
+            pushState(state_80)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_34)
+            return
+        }
+        
+        if topOfStackIsToken("!") {
+            shift()
+            pushState(state_56)
+            return
+        }
+        
+        if topOfStackIsToken("~") {
+            shift()
+            pushState(state_60)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_54)
+            return
+        }
+        
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
+            return
+        }
+        
+        if topOfStackIsToken("-") {
+            shift()
+            pushState(state_44)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_47)
+            return
+        }
+        
+        if topOfStackIsToken("sizeof") {
+            shift()
+            pushState(state_58)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEKExpression", input[index].content, "sizeof")
+        } else {
+            throw ParseError.abruptEnd("CASEKExpression", "sizeof")
+        }
+        
+	}
+	
+	private func state_38() throws {
 
         
-        if topOfStackIsAmong([Optional("<="), Optional("=="), Optional(")"), Optional("^"), Optional("<"), Optional("!="), Optional("|"), Optional("<<"), Optional(">="), Optional("-"), Optional(","), Optional("*"), Optional("%"), Optional(">>"), Optional(">"), Optional("&&"), Optional("{"), Optional("+"), Optional("&"), Optional("/"), Optional("||"), Optional(";")]) {
+        if topOfStackIsAmong([Optional("<<"), Optional("<"), Optional("+"), Optional("&&"), Optional("&"), Optional("||"), Optional("/"), Optional(")"), Optional("{"), Optional(">="), Optional("-"), Optional("%"), Optional("^"), Optional(">"), Optional("*"), Optional(">>"), Optional("|"), Optional(","), Optional(";"), Optional("=="), Optional("<="), Optional("!=")]) {
             reduce(1, to: "CASEJExpression")
             return
         }
@@ -1326,16 +1796,625 @@ class SLRParser {
         
 	}
 	
-	private func state_33() throws {
+	private func state_39() throws {
 
-        if topOfStackIsToken("^") {
+        if topOfStackIsToken("<<") {
+            shift()
+            pushState(state_40)
+            return
+        }
+        
+        if topOfStackIsToken(">>") {
+            shift()
+            pushState(state_78)
+            return
+        }
+        
+        
+        if topOfStackIsAmong([Optional("&"), Optional("=="), Optional(";"), Optional(","), Optional("{"), Optional("&&"), Optional("<"), Optional("!="), Optional(")"), Optional("|"), Optional("<="), Optional("^"), Optional(">"), Optional("||"), Optional(">=")]) {
+            reduce(1, to: "CASEGExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEHExpression", input[index].content, ">>")
+        } else {
+            throw ParseError.abruptEnd("CASEHExpression", ">>")
+        }
+        
+	}
+	
+	private func state_40() throws {
+
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_38)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEJExpression") {
+            pushState(state_41)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEIExpression") {
+            pushState(state_75)
+            return
+        }
+        
+        if topOfStackIsToken("!") {
+            shift()
+            pushState(state_56)
+            return
+        }
+        
+        if topOfStackIsToken("sizeof") {
+            shift()
+            pushState(state_58)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
             shift()
             pushState(state_34)
             return
         }
         
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
+            return
+        }
         
-        if topOfStackIsAmong([Optional("{"), Optional("||"), Optional(","), Optional("|"), Optional(";"), Optional("&&"), Optional(")")]) {
+        if topOfStackIsToken("-") {
+            shift()
+            pushState(state_44)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_47)
+            return
+        }
+        
+        if topOfStackIsToken("~") {
+            shift()
+            pushState(state_60)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_54)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEJExpression", input[index].content, "CASEJExpression")
+        } else {
+            throw ParseError.abruptEnd("CASEJExpression", "CASEJExpression")
+        }
+        
+	}
+	
+	private func state_41() throws {
+
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_73)
+            return
+        }
+        
+        if topOfStackIsToken("/") {
+            shift()
+            pushState(state_32)
+            return
+        }
+        
+        if topOfStackIsToken("%") {
+            shift()
+            pushState(state_42)
+            return
+        }
+        
+        
+        if topOfStackIsAmong([Optional("<="), Optional("<<"), Optional(">="), Optional("^"), Optional("&"), Optional("=="), Optional(","), Optional(">"), Optional(">>"), Optional("-"), Optional("!="), Optional("|"), Optional(")"), Optional("{"), Optional("&&"), Optional(";"), Optional("+"), Optional("||"), Optional("<")]) {
+            reduce(1, to: "CASEIExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEJExpression", input[index].content, "*")
+        } else {
+            throw ParseError.abruptEnd("CASEJExpression", "*")
+        }
+        
+	}
+	
+	private func state_42() throws {
+
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_43)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
+            return
+        }
+        
+        if topOfStackIsToken("sizeof") {
+            shift()
+            pushState(state_58)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_54)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_47)
+            return
+        }
+        
+        if topOfStackIsToken("~") {
+            shift()
+            pushState(state_60)
+            return
+        }
+        
+        if topOfStackIsToken("-") {
+            shift()
+            pushState(state_44)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_34)
+            return
+        }
+        
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
+            return
+        }
+        
+        if topOfStackIsToken("!") {
+            shift()
+            pushState(state_56)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEKExpression", input[index].content, "sizeof")
+        } else {
+            throw ParseError.abruptEnd("CASEKExpression", "sizeof")
+        }
+        
+	}
+	
+	private func state_43() throws {
+
+        
+        if topOfStackIsAmong([Optional("<<"), Optional("<"), Optional("+"), Optional("&&"), Optional("&"), Optional("||"), Optional("/"), Optional(")"), Optional("{"), Optional(">="), Optional("-"), Optional("%"), Optional("^"), Optional(">"), Optional("*"), Optional(">>"), Optional("|"), Optional(","), Optional(";"), Optional("=="), Optional("<="), Optional("!=")]) {
+            reduce(3, to: "CASEJExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEJExpression", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("CASEJExpression", "reduction")
+        }
+        
+	}
+	
+	private func state_44() throws {
+
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_45)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_34)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_25)
+            return
+        }
+        
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASELExpression", input[index].content, "identifier")
+        } else {
+            throw ParseError.abruptEnd("CASELExpression", "identifier")
+        }
+        
+	}
+	
+	private func state_45() throws {
+
+        
+        if topOfStackIsAmong([Optional("|"), Optional(")"), Optional("*"), Optional("-"), Optional(">="), Optional("{"), Optional("+"), Optional("||"), Optional("!="), Optional("<="), Optional("/"), Optional(">"), Optional("&"), Optional("&&"), Optional("%"), Optional(">>"), Optional(";"), Optional("<"), Optional("=="), Optional("^"), Optional(","), Optional("<<")]) {
+            reduce(2, to: "CASEKExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEKExpression", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("CASEKExpression", "reduction")
+        }
+        
+	}
+	
+	private func state_46() throws {
+
+        
+        if topOfStackIsAmong([Optional(")"), Optional(";"), Optional("*"), Optional("!="), Optional("<"), Optional("<<"), Optional("{"), Optional(","), Optional("||"), Optional("/"), Optional("&"), Optional("+"), Optional(">"), Optional("-"), Optional("|"), Optional(">="), Optional("&&"), Optional("%"), Optional("<="), Optional(">>"), Optional("=="), Optional("^")]) {
+            reduce(1, to: "CASELExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASELExpression", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("CASELExpression", "reduction")
+        }
+        
+	}
+	
+	private func state_47() throws {
+
+        if topOfStackIsNonTerminal("CASEJExpression") {
+            pushState(state_41)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Expression") {
+            pushState(state_48)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEEExpression") {
+            pushState(state_18)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEBExpression") {
+            pushState(state_68)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_38)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEGExpression") {
+            pushState(state_26)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEIExpression") {
+            pushState(state_29)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEHExpression") {
+            pushState(state_39)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEDExpression") {
+            pushState(state_51)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASECExpression") {
+            pushState(state_67)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEFExpression") {
+            pushState(state_36)
+            return
+        }
+        
+        if topOfStackIsToken("!") {
+            shift()
+            pushState(state_56)
+            return
+        }
+        
+        if topOfStackIsToken("as") {
+            shift()
+            pushState(state_69)
+            return
+        }
+        
+        if topOfStackIsToken("sizeof") {
+            shift()
+            pushState(state_58)
+            return
+        }
+        
+        if topOfStackIsToken("-") {
+            shift()
+            pushState(state_44)
+            return
+        }
+        
+        if topOfStackIsToken("~") {
+            shift()
+            pushState(state_60)
+            return
+        }
+        
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_47)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_54)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_34)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEEExpression", input[index].content, "CASEEExpression")
+        } else {
+            throw ParseError.abruptEnd("CASEEExpression", "CASEEExpression")
+        }
+        
+	}
+	
+	private func state_48() throws {
+
+        if topOfStackIsToken(")") {
+            shift()
+            pushState(state_49)
+            return
+        }
+        
+        if topOfStackIsToken("||") {
+            shift()
+            pushState(state_50)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASELExpression", input[index].content, ")")
+        } else {
+            throw ParseError.abruptEnd("CASELExpression", ")")
+        }
+        
+	}
+	
+	private func state_49() throws {
+
+        
+        if topOfStackIsAmong([Optional(")"), Optional(";"), Optional("*"), Optional("!="), Optional("<"), Optional("<<"), Optional("{"), Optional(","), Optional("||"), Optional("/"), Optional("&"), Optional("+"), Optional(">"), Optional("-"), Optional("|"), Optional(">="), Optional("&&"), Optional("%"), Optional("<="), Optional(">>"), Optional("=="), Optional("^")]) {
+            reduce(3, to: "CASELExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASELExpression", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("CASELExpression", "reduction")
+        }
+        
+	}
+	
+	private func state_50() throws {
+
+        if topOfStackIsNonTerminal("CASEIExpression") {
+            pushState(state_29)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEGExpression") {
+            pushState(state_26)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEDExpression") {
+            pushState(state_51)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASECExpression") {
+            pushState(state_67)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_38)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEBExpression") {
+            pushState(state_62)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEHExpression") {
+            pushState(state_39)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEFExpression") {
+            pushState(state_36)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEEExpression") {
+            pushState(state_18)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEJExpression") {
+            pushState(state_41)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_47)
+            return
+        }
+        
+        if topOfStackIsToken("-") {
+            shift()
+            pushState(state_44)
+            return
+        }
+        
+        if topOfStackIsToken("sizeof") {
+            shift()
+            pushState(state_58)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_54)
+            return
+        }
+        
+        if topOfStackIsToken("~") {
+            shift()
+            pushState(state_60)
+            return
+        }
+        
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_34)
+            return
+        }
+        
+        if topOfStackIsToken("!") {
+            shift()
+            pushState(state_56)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEFExpression", input[index].content, "CASEGExpression")
+        } else {
+            throw ParseError.abruptEnd("CASEFExpression", "CASEGExpression")
+        }
+        
+	}
+	
+	private func state_51() throws {
+
+        if topOfStackIsToken("^") {
+            shift()
+            pushState(state_52)
+            return
+        }
+        
+        
+        if topOfStackIsAmong([Optional(","), Optional("&&"), Optional(")"), Optional("{"), Optional("||"), Optional(";"), Optional("|")]) {
             reduce(1, to: "CASECExpression")
             return
         }
@@ -1348,1192 +2427,163 @@ class SLRParser {
         
 	}
 	
-	private func state_34() throws {
+	private func state_52() throws {
 
-        if topOfStackIsNonTerminal("CASEHExpression") {
-            pushState(state_78)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEEExpression") {
-            pushState(state_87)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEFExpression") {
-            pushState(state_44)
-            return
-        }
-        
         if topOfStackIsNonTerminal("CASEGExpression") {
-            pushState(state_64)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
+            pushState(state_26)
             return
         }
         
         if topOfStackIsNonTerminal("CASEIExpression") {
-            pushState(state_35)
+            pushState(state_29)
             return
         }
         
         if topOfStackIsNonTerminal("CASEJExpression") {
-            pushState(state_22)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
-            return
-        }
-        
-        if topOfStackIsToken("~") {
-            shift()
-            pushState(state_55)
-            return
-        }
-        
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_59)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_30)
-            return
-        }
-        
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
-            return
-        }
-        
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_57)
-            return
-        }
-        
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_61)
-            return
-        }
-        
-        if topOfStackIsToken("!") {
-            shift()
-            pushState(state_69)
-            return
-        }
-        
-        if topOfStackIsToken("sizeof") {
-            shift()
-            pushState(state_40)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEDExpression", input[index].content, "CASEEExpression")
-        } else {
-            throw ParseError.abruptEnd("CASEDExpression", "CASEEExpression")
-        }
-        
-	}
-	
-	private func state_35() throws {
-
-        if topOfStackIsToken("+") {
-            shift()
-            pushState(state_36)
-            return
-        }
-        
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_51)
-            return
-        }
-        
-        
-        if topOfStackIsAmong([Optional(">="), Optional(")"), Optional("=="), Optional("^"), Optional("<"), Optional("{"), Optional("&"), Optional("&&"), Optional("<<"), Optional("|"), Optional("<="), Optional(">"), Optional(">>"), Optional(";"), Optional("||"), Optional(","), Optional("!=")]) {
-            reduce(1, to: "CASEHExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEHExpression", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("CASEHExpression", "reduction")
-        }
-        
-	}
-	
-	private func state_36() throws {
-
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEJExpression") {
-            pushState(state_37)
-            return
-        }
-        
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
-            return
-        }
-        
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_61)
-            return
-        }
-        
-        if topOfStackIsToken("~") {
-            shift()
-            pushState(state_55)
-            return
-        }
-        
-        if topOfStackIsToken("!") {
-            shift()
-            pushState(state_69)
-            return
-        }
-        
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_59)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_30)
-            return
-        }
-        
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_57)
-            return
-        }
-        
-        if topOfStackIsToken("sizeof") {
-            shift()
-            pushState(state_40)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("Reference", input[index].content, "integer")
-        } else {
-            throw ParseError.abruptEnd("Reference", "integer")
-        }
-        
-	}
-	
-	private func state_37() throws {
-
-        if topOfStackIsToken("/") {
-            shift()
-            pushState(state_38)
-            return
-        }
-        
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_53)
-            return
-        }
-        
-        if topOfStackIsToken("%") {
-            shift()
-            pushState(state_23)
-            return
-        }
-        
-        
-        if topOfStackIsAmong([Optional("<<"), Optional(">="), Optional("!="), Optional(">>"), Optional("-"), Optional(">"), Optional("+"), Optional("^"), Optional("<"), Optional(","), Optional("=="), Optional("|"), Optional("&&"), Optional("<="), Optional("&"), Optional("||"), Optional("{"), Optional(";"), Optional(")")]) {
-            reduce(3, to: "CASEIExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEJExpression", input[index].content, "*")
-        } else {
-            throw ParseError.abruptEnd("CASEJExpression", "*")
-        }
-        
-	}
-	
-	private func state_38() throws {
-
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_39)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
-            return
-        }
-        
-        if topOfStackIsToken("!") {
-            shift()
-            pushState(state_69)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_30)
-            return
-        }
-        
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_57)
-            return
-        }
-        
-        if topOfStackIsToken("~") {
-            shift()
-            pushState(state_55)
-            return
-        }
-        
-        if topOfStackIsToken("sizeof") {
-            shift()
-            pushState(state_40)
-            return
-        }
-        
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_61)
-            return
-        }
-        
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
-            return
-        }
-        
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_59)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEKExpression", input[index].content, "~")
-        } else {
-            throw ParseError.abruptEnd("CASEKExpression", "~")
-        }
-        
-	}
-	
-	private func state_39() throws {
-
-        
-        if topOfStackIsAmong([Optional("<="), Optional("=="), Optional(")"), Optional("^"), Optional("<"), Optional("!="), Optional("|"), Optional("<<"), Optional(">="), Optional("-"), Optional(","), Optional("*"), Optional("%"), Optional(">>"), Optional(">"), Optional("&&"), Optional("{"), Optional("+"), Optional("&"), Optional("/"), Optional("||"), Optional(";")]) {
-            reduce(3, to: "CASEJExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEJExpression", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("CASEJExpression", "reduction")
-        }
-        
-	}
-	
-	private func state_40() throws {
-
-        if topOfStackIsNonTerminal("CASELExpression") {
             pushState(state_41)
             return
         }
         
         if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
-            return
-        }
-        
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_30)
-            return
-        }
-        
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_43)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASELExpression", input[index].content, "identifier")
-        } else {
-            throw ParseError.abruptEnd("CASELExpression", "identifier")
-        }
-        
-	}
-	
-	private func state_41() throws {
-
-        
-        if topOfStackIsAmong([Optional("+"), Optional("%"), Optional("/"), Optional(")"), Optional(">"), Optional("&&"), Optional("!="), Optional("<<"), Optional("*"), Optional(">>"), Optional(">="), Optional("|"), Optional("-"), Optional("=="), Optional("<="), Optional("<"), Optional("{"), Optional("&"), Optional("||"), Optional("^"), Optional(";"), Optional(",")]) {
-            reduce(2, to: "CASEKExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEKExpression", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("CASEKExpression", "reduction")
-        }
-        
-	}
-	
-	private func state_42() throws {
-
-        
-        if topOfStackIsAmong([Optional("="), Optional("<<"), Optional("{"), Optional("."), Optional("!="), Optional("^"), Optional("+"), Optional("%"), Optional("&"), Optional(">="), Optional("<="), Optional("*"), Optional("||"), Optional("&&"), Optional("<"), Optional("|"), Optional("=="), Optional("-"), Optional("/"), Optional(","), Optional(")"), Optional(">>"), Optional(";"), Optional(">")]) {
-            reduce(1, to: "Reference")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("Reference", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("Reference", "reduction")
-        }
-        
-	}
-	
-	private func state_43() throws {
-
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASECExpression") {
-            pushState(state_79)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEGExpression") {
-            pushState(state_64)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEJExpression") {
-            pushState(state_22)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEIExpression") {
-            pushState(state_35)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEDExpression") {
-            pushState(state_33)
+            pushState(state_21)
             return
         }
         
         if topOfStackIsNonTerminal("CASEFExpression") {
-            pushState(state_44)
+            pushState(state_36)
             return
         }
         
-        if topOfStackIsNonTerminal("CASEHExpression") {
-            pushState(state_78)
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_38)
             return
         }
         
         if topOfStackIsNonTerminal("CASEEExpression") {
-            pushState(state_18)
+            pushState(state_53)
             return
         }
         
-        if topOfStackIsNonTerminal("CASEBExpression") {
-            pushState(state_62)
+        if topOfStackIsNonTerminal("CASEHExpression") {
+            pushState(state_39)
             return
         }
         
         if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
+            pushState(state_20)
             return
         }
         
-        if topOfStackIsNonTerminal("Expression") {
-            pushState(state_80)
-            return
-        }
-        
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_61)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_30)
-            return
-        }
-        
-        if topOfStackIsToken("sizeof") {
-            shift()
-            pushState(state_40)
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
             return
         }
         
         if topOfStackIsToken("~") {
             shift()
-            pushState(state_55)
-            return
-        }
-        
-        if topOfStackIsToken("!") {
-            shift()
-            pushState(state_69)
-            return
-        }
-        
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_57)
-            return
-        }
-        
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
+            pushState(state_60)
             return
         }
         
         if topOfStackIsToken("-") {
             shift()
-            pushState(state_59)
+            pushState(state_44)
             return
         }
         
-        if index < input.count {
-            throw ParseError.unexpected("CASEJExpression", input[index].content, "CASEJExpression")
-        } else {
-            throw ParseError.abruptEnd("CASEJExpression", "CASEJExpression")
-        }
-        
-	}
-	
-	private func state_44() throws {
-
-        if topOfStackIsToken("==") {
+        if topOfStackIsToken("integer") {
             shift()
-            pushState(state_21)
-            return
-        }
-        
-        if topOfStackIsToken("!=") {
-            shift()
-            pushState(state_45)
-            return
-        }
-        
-        
-        if topOfStackIsAmong([Optional("||"), Optional("^"), Optional("{"), Optional("|"), Optional("&"), Optional(";"), Optional(")"), Optional(","), Optional("&&")]) {
-            reduce(1, to: "CASEEExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEFExpression", input[index].content, "!=")
-        } else {
-            throw ParseError.abruptEnd("CASEFExpression", "!=")
-        }
-        
-	}
-	
-	private func state_45() throws {
-
-        if topOfStackIsNonTerminal("CASEHExpression") {
-            pushState(state_78)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEJExpression") {
-            pushState(state_22)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEIExpression") {
-            pushState(state_35)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEGExpression") {
             pushState(state_46)
             return
         }
         
         if topOfStackIsToken("sizeof") {
             shift()
-            pushState(state_40)
-            return
-        }
-        
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_57)
-            return
-        }
-        
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_59)
+            pushState(state_58)
             return
         }
         
         if topOfStackIsToken("identifier") {
             shift()
-            pushState(state_30)
-            return
-        }
-        
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_61)
+            pushState(state_34)
             return
         }
         
         if topOfStackIsToken("!") {
             shift()
-            pushState(state_69)
+            pushState(state_56)
             return
         }
         
-        if topOfStackIsToken("~") {
-            shift()
-            pushState(state_55)
-            return
-        }
-        
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("TypeCast", input[index].content, "(")
-        } else {
-            throw ParseError.abruptEnd("TypeCast", "(")
-        }
-        
-	}
-	
-	private func state_46() throws {
-
-        if topOfStackIsToken("<") {
+        if topOfStackIsToken("(") {
             shift()
             pushState(state_47)
             return
         }
         
-        if topOfStackIsToken("<=") {
-            shift()
-            pushState(state_71)
-            return
-        }
-        
-        if topOfStackIsToken(">=") {
-            shift()
-            pushState(state_65)
-            return
-        }
-        
-        if topOfStackIsToken(">") {
-            shift()
-            pushState(state_73)
-            return
-        }
-        
-        
-        if topOfStackIsAmong([Optional("&"), Optional("|"), Optional("=="), Optional("!="), Optional("{"), Optional(","), Optional(")"), Optional("^"), Optional("&&"), Optional("||"), Optional(";")]) {
-            reduce(3, to: "CASEFExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEGExpression", input[index].content, ">")
-        } else {
-            throw ParseError.abruptEnd("CASEGExpression", ">")
-        }
-        
-	}
-	
-	private func state_47() throws {
-
-        if topOfStackIsNonTerminal("CASEJExpression") {
-            pushState(state_22)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEIExpression") {
-            pushState(state_35)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEHExpression") {
-            pushState(state_48)
-            return
-        }
-        
-        if topOfStackIsToken("!") {
-            shift()
-            pushState(state_69)
-            return
-        }
-        
-        if topOfStackIsToken("~") {
-            shift()
-            pushState(state_55)
-            return
-        }
-        
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
-            return
-        }
-        
-        if topOfStackIsToken("sizeof") {
-            shift()
-            pushState(state_40)
-            return
-        }
-        
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_61)
-            return
-        }
-        
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_59)
-            return
-        }
-        
         if topOfStackIsToken("*") {
             shift()
-            pushState(state_57)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_30)
+            pushState(state_54)
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("CASEHExpression", input[index].content, "CASEIExpression")
+            throw ParseError.unexpected("CASEGExpression", input[index].content, "CASEGExpression")
         } else {
-            throw ParseError.abruptEnd("CASEHExpression", "CASEIExpression")
-        }
-        
-	}
-	
-	private func state_48() throws {
-
-        if topOfStackIsToken("<<") {
-            shift()
-            pushState(state_49)
-            return
-        }
-        
-        if topOfStackIsToken(">>") {
-            shift()
-            pushState(state_67)
-            return
-        }
-        
-        
-        if topOfStackIsAmong([Optional("|"), Optional(","), Optional("{"), Optional(">="), Optional(";"), Optional("=="), Optional("<="), Optional("||"), Optional(")"), Optional(">"), Optional("&"), Optional("<"), Optional("!="), Optional("&&"), Optional("^")]) {
-            reduce(3, to: "CASEGExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEHExpression", input[index].content, ">>")
-        } else {
-            throw ParseError.abruptEnd("CASEHExpression", ">>")
-        }
-        
-	}
-	
-	private func state_49() throws {
-
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEIExpression") {
-            pushState(state_50)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEJExpression") {
-            pushState(state_22)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_30)
-            return
-        }
-        
-        if topOfStackIsToken("~") {
-            shift()
-            pushState(state_55)
-            return
-        }
-        
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_59)
-            return
-        }
-        
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_61)
-            return
-        }
-        
-        if topOfStackIsToken("!") {
-            shift()
-            pushState(state_69)
-            return
-        }
-        
-        if topOfStackIsToken("sizeof") {
-            shift()
-            pushState(state_40)
-            return
-        }
-        
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
-            return
-        }
-        
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_57)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEKExpression", input[index].content, "sizeof")
-        } else {
-            throw ParseError.abruptEnd("CASEKExpression", "sizeof")
-        }
-        
-	}
-	
-	private func state_50() throws {
-
-        if topOfStackIsToken("+") {
-            shift()
-            pushState(state_36)
-            return
-        }
-        
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_51)
-            return
-        }
-        
-        
-        if topOfStackIsAmong([Optional(">="), Optional(")"), Optional("=="), Optional("^"), Optional("<"), Optional("{"), Optional("&"), Optional("&&"), Optional("<<"), Optional("|"), Optional("<="), Optional(">"), Optional(">>"), Optional(";"), Optional("||"), Optional(","), Optional("!=")]) {
-            reduce(3, to: "CASEHExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEIExpression", input[index].content, "-")
-        } else {
-            throw ParseError.abruptEnd("CASEIExpression", "-")
-        }
-        
-	}
-	
-	private func state_51() throws {
-
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEJExpression") {
-            pushState(state_52)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_30)
-            return
-        }
-        
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_59)
-            return
-        }
-        
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_61)
-            return
-        }
-        
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
-            return
-        }
-        
-        if topOfStackIsToken("!") {
-            shift()
-            pushState(state_69)
-            return
-        }
-        
-        if topOfStackIsToken("sizeof") {
-            shift()
-            pushState(state_40)
-            return
-        }
-        
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_57)
-            return
-        }
-        
-        if topOfStackIsToken("~") {
-            shift()
-            pushState(state_55)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEJExpression", input[index].content, "CASEJExpression")
-        } else {
-            throw ParseError.abruptEnd("CASEJExpression", "CASEJExpression")
-        }
-        
-	}
-	
-	private func state_52() throws {
-
-        if topOfStackIsToken("%") {
-            shift()
-            pushState(state_23)
-            return
-        }
-        
-        if topOfStackIsToken("/") {
-            shift()
-            pushState(state_38)
-            return
-        }
-        
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_53)
-            return
-        }
-        
-        
-        if topOfStackIsAmong([Optional("<<"), Optional(">="), Optional("!="), Optional(">>"), Optional("-"), Optional(">"), Optional("+"), Optional("^"), Optional("<"), Optional(","), Optional("=="), Optional("|"), Optional("&&"), Optional("<="), Optional("&"), Optional("||"), Optional("{"), Optional(";"), Optional(")")]) {
-            reduce(3, to: "CASEIExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEIExpression", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("CASEIExpression", "reduction")
+            throw ParseError.abruptEnd("CASEGExpression", "CASEGExpression")
         }
         
 	}
 	
 	private func state_53() throws {
 
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_54)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
-            return
-        }
-        
-        if topOfStackIsToken("sizeof") {
+        if topOfStackIsToken("&") {
             shift()
-            pushState(state_40)
+            pushState(state_19)
             return
         }
         
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_61)
-            return
-        }
         
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_59)
-            return
-        }
-        
-        if topOfStackIsToken("~") {
-            shift()
-            pushState(state_55)
-            return
-        }
-        
-        if topOfStackIsToken("!") {
-            shift()
-            pushState(state_69)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_30)
-            return
-        }
-        
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_57)
-            return
-        }
-        
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
+        if topOfStackIsAmong([Optional("||"), Optional("{"), Optional("^"), Optional("&&"), Optional(")"), Optional(","), Optional(";"), Optional("|")]) {
+            reduce(3, to: "CASEDExpression")
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("CASEKExpression", input[index].content, "*")
+            throw ParseError.unexpected("CASEDExpression", input[index].content, "reduction")
         } else {
-            throw ParseError.abruptEnd("CASEKExpression", "*")
+            throw ParseError.abruptEnd("CASEDExpression", "reduction")
         }
         
 	}
 	
 	private func state_54() throws {
 
-        
-        if topOfStackIsAmong([Optional("<="), Optional("=="), Optional(")"), Optional("^"), Optional("<"), Optional("!="), Optional("|"), Optional("<<"), Optional(">="), Optional("-"), Optional(","), Optional("*"), Optional("%"), Optional(">>"), Optional(">"), Optional("&&"), Optional("{"), Optional("+"), Optional("&"), Optional("/"), Optional("||"), Optional(";")]) {
-            reduce(3, to: "CASEJExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEJExpression", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("CASEJExpression", "reduction")
-        }
-        
-	}
-	
-	private func state_55() throws {
-
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_56)
-            return
-        }
-        
         if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
+            pushState(state_21)
             return
         }
         
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
-            return
-        }
-        
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_43)
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_55)
             return
         }
         
         if topOfStackIsToken("identifier") {
             shift()
-            pushState(state_30)
+            pushState(state_34)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_25)
+            return
+        }
+        
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
             return
         }
         
@@ -2545,260 +2595,180 @@ class SLRParser {
         
 	}
 	
+	private func state_55() throws {
+
+        
+        if topOfStackIsAmong([Optional("|"), Optional(")"), Optional("*"), Optional("-"), Optional(">="), Optional("{"), Optional("+"), Optional("||"), Optional("!="), Optional("<="), Optional("/"), Optional(">"), Optional("&"), Optional("&&"), Optional("%"), Optional(">>"), Optional(";"), Optional("<"), Optional("=="), Optional("^"), Optional(","), Optional("<<")]) {
+            reduce(2, to: "CASEKExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEKExpression", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("CASEKExpression", "reduction")
+        }
+        
+	}
+	
 	private func state_56() throws {
 
-        
-        if topOfStackIsAmong([Optional("+"), Optional("%"), Optional("/"), Optional(")"), Optional(">"), Optional("&&"), Optional("!="), Optional("<<"), Optional("*"), Optional(">>"), Optional(">="), Optional("|"), Optional("-"), Optional("=="), Optional("<="), Optional("<"), Optional("{"), Optional("&"), Optional("||"), Optional("^"), Optional(";"), Optional(",")]) {
-            reduce(2, to: "CASEKExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEKExpression", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("CASEKExpression", "reduction")
-        }
-        
-	}
-	
-	private func state_57() throws {
-
         if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
+            pushState(state_21)
             return
         }
         
         if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_58)
-            return
-        }
-        
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
-            return
-        }
-        
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_43)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_30)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASELExpression", input[index].content, "Reference")
-        } else {
-            throw ParseError.abruptEnd("CASELExpression", "Reference")
-        }
-        
-	}
-	
-	private func state_58() throws {
-
-        
-        if topOfStackIsAmong([Optional("+"), Optional("%"), Optional("/"), Optional(")"), Optional(">"), Optional("&&"), Optional("!="), Optional("<<"), Optional("*"), Optional(">>"), Optional(">="), Optional("|"), Optional("-"), Optional("=="), Optional("<="), Optional("<"), Optional("{"), Optional("&"), Optional("||"), Optional("^"), Optional(";"), Optional(",")]) {
-            reduce(2, to: "CASEKExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEKExpression", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("CASEKExpression", "reduction")
-        }
-        
-	}
-	
-	private func state_59() throws {
-
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_60)
-            return
-        }
-        
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_43)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_30)
-            return
-        }
-        
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("Reference", input[index].content, "integer")
-        } else {
-            throw ParseError.abruptEnd("Reference", "integer")
-        }
-        
-	}
-	
-	private func state_60() throws {
-
-        
-        if topOfStackIsAmong([Optional("+"), Optional("%"), Optional("/"), Optional(")"), Optional(">"), Optional("&&"), Optional("!="), Optional("<<"), Optional("*"), Optional(">>"), Optional(">="), Optional("|"), Optional("-"), Optional("=="), Optional("<="), Optional("<"), Optional("{"), Optional("&"), Optional("||"), Optional("^"), Optional(";"), Optional(",")]) {
-            reduce(2, to: "CASEKExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEKExpression", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("CASEKExpression", "reduction")
-        }
-        
-	}
-	
-	private func state_61() throws {
-
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEEExpression") {
-            pushState(state_18)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEHExpression") {
-            pushState(state_78)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEFExpression") {
-            pushState(state_44)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEIExpression") {
-            pushState(state_35)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Expression") {
-            pushState(state_80)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEJExpression") {
-            pushState(state_22)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEGExpression") {
-            pushState(state_64)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEDExpression") {
-            pushState(state_33)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASECExpression") {
-            pushState(state_79)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEBExpression") {
-            pushState(state_62)
-            return
-        }
-        
-        if topOfStackIsToken("*") {
-            shift()
             pushState(state_57)
             return
         }
         
         if topOfStackIsToken("identifier") {
             shift()
-            pushState(state_30)
-            return
-        }
-        
-        if topOfStackIsToken("!") {
-            shift()
-            pushState(state_69)
-            return
-        }
-        
-        if topOfStackIsToken("as") {
-            shift()
-            pushState(state_84)
-            return
-        }
-        
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_59)
-            return
-        }
-        
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
-            return
-        }
-        
-        if topOfStackIsToken("sizeof") {
-            shift()
-            pushState(state_40)
+            pushState(state_34)
             return
         }
         
         if topOfStackIsToken("(") {
             shift()
-            pushState(state_61)
+            pushState(state_25)
             return
         }
         
-        if topOfStackIsToken("~") {
+        if topOfStackIsToken("integer") {
             shift()
-            pushState(state_55)
+            pushState(state_46)
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("Reference", input[index].content, "integer")
+            throw ParseError.unexpected("Reference", input[index].content, "identifier")
         } else {
-            throw ParseError.abruptEnd("Reference", "integer")
+            throw ParseError.abruptEnd("Reference", "identifier")
+        }
+        
+	}
+	
+	private func state_57() throws {
+
+        
+        if topOfStackIsAmong([Optional("|"), Optional(")"), Optional("*"), Optional("-"), Optional(">="), Optional("{"), Optional("+"), Optional("||"), Optional("!="), Optional("<="), Optional("/"), Optional(">"), Optional("&"), Optional("&&"), Optional("%"), Optional(">>"), Optional(";"), Optional("<"), Optional("=="), Optional("^"), Optional(","), Optional("<<")]) {
+            reduce(2, to: "CASEKExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEKExpression", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("CASEKExpression", "reduction")
+        }
+        
+	}
+	
+	private func state_58() throws {
+
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_59)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_25)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_34)
+            return
+        }
+        
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("Reference", input[index].content, "Reference")
+        } else {
+            throw ParseError.abruptEnd("Reference", "Reference")
+        }
+        
+	}
+	
+	private func state_59() throws {
+
+        
+        if topOfStackIsAmong([Optional("|"), Optional(")"), Optional("*"), Optional("-"), Optional(">="), Optional("{"), Optional("+"), Optional("||"), Optional("!="), Optional("<="), Optional("/"), Optional(">"), Optional("&"), Optional("&&"), Optional("%"), Optional(">>"), Optional(";"), Optional("<"), Optional("=="), Optional("^"), Optional(","), Optional("<<")]) {
+            reduce(2, to: "CASEKExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEKExpression", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("CASEKExpression", "reduction")
+        }
+        
+	}
+	
+	private func state_60() throws {
+
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_61)
+            return
+        }
+        
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_34)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_25)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASELExpression", input[index].content, "integer")
+        } else {
+            throw ParseError.abruptEnd("CASELExpression", "integer")
+        }
+        
+	}
+	
+	private func state_61() throws {
+
+        
+        if topOfStackIsAmong([Optional("|"), Optional(")"), Optional("*"), Optional("-"), Optional(">="), Optional("{"), Optional("+"), Optional("||"), Optional("!="), Optional("<="), Optional("/"), Optional(">"), Optional("&"), Optional("&&"), Optional("%"), Optional(">>"), Optional(";"), Optional("<"), Optional("=="), Optional("^"), Optional(","), Optional("<<")]) {
+            reduce(2, to: "CASEKExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEKExpression", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("CASEKExpression", "reduction")
         }
         
 	}
@@ -2812,8 +2782,8 @@ class SLRParser {
         }
         
         
-        if topOfStackIsAmong([Optional(","), Optional("{"), Optional("||"), Optional(")"), Optional(";")]) {
-            reduce(1, to: "Expression")
+        if topOfStackIsAmong([Optional(";"), Optional("{"), Optional(","), Optional("||"), Optional(")")]) {
+            reduce(3, to: "Expression")
             return
         }
         
@@ -2827,48 +2797,48 @@ class SLRParser {
 	
 	private func state_63() throws {
 
-        if topOfStackIsNonTerminal("CASEDExpression") {
-            pushState(state_33)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEIExpression") {
-            pushState(state_35)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASECExpression") {
-            pushState(state_75)
-            return
-        }
-        
         if topOfStackIsNonTerminal("CASEGExpression") {
-            pushState(state_64)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Reference") {
             pushState(state_26)
             return
         }
         
-        if topOfStackIsNonTerminal("CASEHExpression") {
-            pushState(state_78)
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
             return
         }
         
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
+        if topOfStackIsNonTerminal("CASEIExpression") {
+            pushState(state_29)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASECExpression") {
+            pushState(state_64)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEHExpression") {
+            pushState(state_39)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_38)
             return
         }
         
         if topOfStackIsNonTerminal("CASEJExpression") {
-            pushState(state_22)
+            pushState(state_41)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEDExpression") {
+            pushState(state_51)
             return
         }
         
         if topOfStackIsNonTerminal("CASEFExpression") {
-            pushState(state_44)
+            pushState(state_36)
             return
         }
         
@@ -2877,655 +2847,82 @@ class SLRParser {
             return
         }
         
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
             return
         }
         
         if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
-            return
-        }
-        
-        if topOfStackIsToken("!") {
-            shift()
-            pushState(state_69)
-            return
-        }
-        
-        if topOfStackIsToken("sizeof") {
-            shift()
-            pushState(state_40)
-            return
-        }
-        
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_57)
-            return
-        }
-        
-        if topOfStackIsToken("~") {
-            shift()
-            pushState(state_55)
+            pushState(state_28)
             return
         }
         
         if topOfStackIsToken("identifier") {
             shift()
-            pushState(state_30)
+            pushState(state_34)
+            return
+        }
+        
+        if topOfStackIsToken("!") {
+            shift()
+            pushState(state_56)
+            return
+        }
+        
+        if topOfStackIsToken("sizeof") {
+            shift()
+            pushState(state_58)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_54)
             return
         }
         
         if topOfStackIsToken("(") {
             shift()
-            pushState(state_61)
+            pushState(state_47)
             return
         }
         
         if topOfStackIsToken("-") {
             shift()
-            pushState(state_59)
+            pushState(state_44)
+            return
+        }
+        
+        if topOfStackIsToken("~") {
+            shift()
+            pushState(state_60)
             return
         }
         
         if topOfStackIsToken("integer") {
             shift()
-            pushState(state_42)
+            pushState(state_46)
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("TypeCast", input[index].content, "(")
+            throw ParseError.unexpected("CASEDExpression", input[index].content, "CASEDExpression")
         } else {
-            throw ParseError.abruptEnd("TypeCast", "(")
+            throw ParseError.abruptEnd("CASEDExpression", "CASEDExpression")
         }
         
 	}
 	
 	private func state_64() throws {
 
-        if topOfStackIsToken("<") {
-            shift()
-            pushState(state_47)
-            return
-        }
-        
-        if topOfStackIsToken(">") {
-            shift()
-            pushState(state_73)
-            return
-        }
-        
-        if topOfStackIsToken("<=") {
-            shift()
-            pushState(state_71)
-            return
-        }
-        
-        if topOfStackIsToken(">=") {
+        if topOfStackIsToken("|") {
             shift()
             pushState(state_65)
             return
         }
         
         
-        if topOfStackIsAmong([Optional("&"), Optional("|"), Optional("=="), Optional("!="), Optional("{"), Optional(","), Optional(")"), Optional("^"), Optional("&&"), Optional("||"), Optional(";")]) {
-            reduce(1, to: "CASEFExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEGExpression", input[index].content, ">")
-        } else {
-            throw ParseError.abruptEnd("CASEGExpression", ">")
-        }
-        
-	}
-	
-	private func state_65() throws {
-
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEJExpression") {
-            pushState(state_22)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEIExpression") {
-            pushState(state_35)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEHExpression") {
-            pushState(state_66)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
-            return
-        }
-        
-        if topOfStackIsToken("!") {
-            shift()
-            pushState(state_69)
-            return
-        }
-        
-        if topOfStackIsToken("~") {
-            shift()
-            pushState(state_55)
-            return
-        }
-        
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
-            return
-        }
-        
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_57)
-            return
-        }
-        
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_61)
-            return
-        }
-        
-        if topOfStackIsToken("sizeof") {
-            shift()
-            pushState(state_40)
-            return
-        }
-        
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_59)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_30)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEIExpression", input[index].content, "CASEIExpression")
-        } else {
-            throw ParseError.abruptEnd("CASEIExpression", "CASEIExpression")
-        }
-        
-	}
-	
-	private func state_66() throws {
-
-        if topOfStackIsToken(">>") {
-            shift()
-            pushState(state_67)
-            return
-        }
-        
-        if topOfStackIsToken("<<") {
-            shift()
-            pushState(state_49)
-            return
-        }
-        
-        
-        if topOfStackIsAmong([Optional("|"), Optional(","), Optional("{"), Optional(">="), Optional(";"), Optional("=="), Optional("<="), Optional("||"), Optional(")"), Optional(">"), Optional("&"), Optional("<"), Optional("!="), Optional("&&"), Optional("^")]) {
-            reduce(3, to: "CASEGExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEGExpression", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("CASEGExpression", "reduction")
-        }
-        
-	}
-	
-	private func state_67() throws {
-
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEIExpression") {
-            pushState(state_68)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEJExpression") {
-            pushState(state_22)
-            return
-        }
-        
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_57)
-            return
-        }
-        
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
-            return
-        }
-        
-        if topOfStackIsToken("!") {
-            shift()
-            pushState(state_69)
-            return
-        }
-        
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_59)
-            return
-        }
-        
-        if topOfStackIsToken("sizeof") {
-            shift()
-            pushState(state_40)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_30)
-            return
-        }
-        
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_61)
-            return
-        }
-        
-        if topOfStackIsToken("~") {
-            shift()
-            pushState(state_55)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASELExpression", input[index].content, "Reference")
-        } else {
-            throw ParseError.abruptEnd("CASELExpression", "Reference")
-        }
-        
-	}
-	
-	private func state_68() throws {
-
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_51)
-            return
-        }
-        
-        if topOfStackIsToken("+") {
-            shift()
-            pushState(state_36)
-            return
-        }
-        
-        
-        if topOfStackIsAmong([Optional(">="), Optional(")"), Optional("=="), Optional("^"), Optional("<"), Optional("{"), Optional("&"), Optional("&&"), Optional("<<"), Optional("|"), Optional("<="), Optional(">"), Optional(">>"), Optional(";"), Optional("||"), Optional(","), Optional("!=")]) {
-            reduce(3, to: "CASEHExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEIExpression", input[index].content, "-")
-        } else {
-            throw ParseError.abruptEnd("CASEIExpression", "-")
-        }
-        
-	}
-	
-	private func state_69() throws {
-
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_70)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_30)
-            return
-        }
-        
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_43)
-            return
-        }
-        
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("Reference", input[index].content, "Reference")
-        } else {
-            throw ParseError.abruptEnd("Reference", "Reference")
-        }
-        
-	}
-	
-	private func state_70() throws {
-
-        
-        if topOfStackIsAmong([Optional("+"), Optional("%"), Optional("/"), Optional(")"), Optional(">"), Optional("&&"), Optional("!="), Optional("<<"), Optional("*"), Optional(">>"), Optional(">="), Optional("|"), Optional("-"), Optional("=="), Optional("<="), Optional("<"), Optional("{"), Optional("&"), Optional("||"), Optional("^"), Optional(";"), Optional(",")]) {
-            reduce(2, to: "CASEKExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEKExpression", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("CASEKExpression", "reduction")
-        }
-        
-	}
-	
-	private func state_71() throws {
-
-        if topOfStackIsNonTerminal("CASEJExpression") {
-            pushState(state_22)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEHExpression") {
-            pushState(state_72)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEIExpression") {
-            pushState(state_35)
-            return
-        }
-        
-        if topOfStackIsToken("~") {
-            shift()
-            pushState(state_55)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_30)
-            return
-        }
-        
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_57)
-            return
-        }
-        
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
-            return
-        }
-        
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_61)
-            return
-        }
-        
-        if topOfStackIsToken("!") {
-            shift()
-            pushState(state_69)
-            return
-        }
-        
-        if topOfStackIsToken("sizeof") {
-            shift()
-            pushState(state_40)
-            return
-        }
-        
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_59)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASELExpression", input[index].content, "(")
-        } else {
-            throw ParseError.abruptEnd("CASELExpression", "(")
-        }
-        
-	}
-	
-	private func state_72() throws {
-
-        if topOfStackIsToken("<<") {
-            shift()
-            pushState(state_49)
-            return
-        }
-        
-        if topOfStackIsToken(">>") {
-            shift()
-            pushState(state_67)
-            return
-        }
-        
-        
-        if topOfStackIsAmong([Optional("|"), Optional(","), Optional("{"), Optional(">="), Optional(";"), Optional("=="), Optional("<="), Optional("||"), Optional(")"), Optional(">"), Optional("&"), Optional("<"), Optional("!="), Optional("&&"), Optional("^")]) {
-            reduce(3, to: "CASEGExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEHExpression", input[index].content, ">>")
-        } else {
-            throw ParseError.abruptEnd("CASEHExpression", ">>")
-        }
-        
-	}
-	
-	private func state_73() throws {
-
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEIExpression") {
-            pushState(state_35)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEHExpression") {
-            pushState(state_74)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEJExpression") {
-            pushState(state_22)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
-            return
-        }
-        
-        if topOfStackIsToken("~") {
-            shift()
-            pushState(state_55)
-            return
-        }
-        
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_59)
-            return
-        }
-        
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_61)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_30)
-            return
-        }
-        
-        if topOfStackIsToken("!") {
-            shift()
-            pushState(state_69)
-            return
-        }
-        
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_57)
-            return
-        }
-        
-        if topOfStackIsToken("sizeof") {
-            shift()
-            pushState(state_40)
-            return
-        }
-        
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEIExpression", input[index].content, "CASEIExpression")
-        } else {
-            throw ParseError.abruptEnd("CASEIExpression", "CASEIExpression")
-        }
-        
-	}
-	
-	private func state_74() throws {
-
-        if topOfStackIsToken("<<") {
-            shift()
-            pushState(state_49)
-            return
-        }
-        
-        if topOfStackIsToken(">>") {
-            shift()
-            pushState(state_67)
-            return
-        }
-        
-        
-        if topOfStackIsAmong([Optional("|"), Optional(","), Optional("{"), Optional(">="), Optional(";"), Optional("=="), Optional("<="), Optional("||"), Optional(")"), Optional(">"), Optional("&"), Optional("<"), Optional("!="), Optional("&&"), Optional("^")]) {
-            reduce(3, to: "CASEGExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEHExpression", input[index].content, "<<")
-        } else {
-            throw ParseError.abruptEnd("CASEHExpression", "<<")
-        }
-        
-	}
-	
-	private func state_75() throws {
-
-        if topOfStackIsToken("|") {
-            shift()
-            pushState(state_76)
-            return
-        }
-        
-        
-        if topOfStackIsAmong([Optional(","), Optional("{"), Optional("||"), Optional(";"), Optional("&&"), Optional(")")]) {
+        if topOfStackIsAmong([Optional(";"), Optional("&&"), Optional(","), Optional(")"), Optional("||"), Optional("{")]) {
             reduce(3, to: "CASEBExpression")
             return
         }
@@ -3538,15 +2935,10 @@ class SLRParser {
         
 	}
 	
-	private func state_76() throws {
+	private func state_65() throws {
 
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
+        if topOfStackIsNonTerminal("CASEDExpression") {
+            pushState(state_66)
             return
         }
         
@@ -3555,320 +2947,152 @@ class SLRParser {
             return
         }
         
-        if topOfStackIsNonTerminal("CASEJExpression") {
-            pushState(state_22)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEFExpression") {
-            pushState(state_44)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEDExpression") {
-            pushState(state_77)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEIExpression") {
-            pushState(state_35)
+        if topOfStackIsNonTerminal("CASEGExpression") {
+            pushState(state_26)
             return
         }
         
         if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEHExpression") {
-            pushState(state_78)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEGExpression") {
-            pushState(state_64)
+            pushState(state_20)
             return
         }
         
         if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
+            pushState(state_28)
             return
         }
         
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_30)
+        if topOfStackIsNonTerminal("CASEFExpression") {
+            pushState(state_36)
             return
         }
         
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_57)
+        if topOfStackIsNonTerminal("CASEIExpression") {
+            pushState(state_29)
             return
         }
         
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_59)
+        if topOfStackIsNonTerminal("CASEHExpression") {
+            pushState(state_39)
             return
         }
         
-        if topOfStackIsToken("sizeof") {
-            shift()
-            pushState(state_40)
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_38)
             return
         }
         
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
+        if topOfStackIsNonTerminal("CASEJExpression") {
+            pushState(state_41)
             return
         }
         
-        if topOfStackIsToken("~") {
-            shift()
-            pushState(state_55)
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
             return
         }
         
         if topOfStackIsToken("(") {
             shift()
-            pushState(state_61)
+            pushState(state_47)
             return
         }
         
-        if topOfStackIsToken("!") {
-            shift()
-            pushState(state_69)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("TypeCast", input[index].content, "(")
-        } else {
-            throw ParseError.abruptEnd("TypeCast", "(")
-        }
-        
-	}
-	
-	private func state_77() throws {
-
-        if topOfStackIsToken("^") {
+        if topOfStackIsToken("identifier") {
             shift()
             pushState(state_34)
             return
         }
         
-        
-        if topOfStackIsAmong([Optional("{"), Optional("||"), Optional(","), Optional("|"), Optional(";"), Optional("&&"), Optional(")")]) {
-            reduce(3, to: "CASECExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASECExpression", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("CASECExpression", "reduction")
-        }
-        
-	}
-	
-	private func state_78() throws {
-
-        if topOfStackIsToken("<<") {
+        if topOfStackIsToken("!") {
             shift()
-            pushState(state_49)
-            return
-        }
-        
-        if topOfStackIsToken(">>") {
-            shift()
-            pushState(state_67)
-            return
-        }
-        
-        
-        if topOfStackIsAmong([Optional("|"), Optional(","), Optional("{"), Optional(">="), Optional(";"), Optional("=="), Optional("<="), Optional("||"), Optional(")"), Optional(">"), Optional("&"), Optional("<"), Optional("!="), Optional("&&"), Optional("^")]) {
-            reduce(1, to: "CASEGExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEHExpression", input[index].content, "<<")
-        } else {
-            throw ParseError.abruptEnd("CASEHExpression", "<<")
-        }
-        
-	}
-	
-	private func state_79() throws {
-
-        if topOfStackIsToken("|") {
-            shift()
-            pushState(state_76)
-            return
-        }
-        
-        
-        if topOfStackIsAmong([Optional(","), Optional("{"), Optional("||"), Optional(";"), Optional("&&"), Optional(")")]) {
-            reduce(1, to: "CASEBExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASECExpression", input[index].content, "|")
-        } else {
-            throw ParseError.abruptEnd("CASECExpression", "|")
-        }
-        
-	}
-	
-	private func state_80() throws {
-
-        if topOfStackIsToken(")") {
-            shift()
-            pushState(state_83)
-            return
-        }
-        
-        if topOfStackIsToken("||") {
-            shift()
-            pushState(state_81)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("Expression", input[index].content, "||")
-        } else {
-            throw ParseError.abruptEnd("Expression", "||")
-        }
-        
-	}
-	
-	private func state_81() throws {
-
-        if topOfStackIsNonTerminal("CASEGExpression") {
-            pushState(state_64)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEJExpression") {
-            pushState(state_22)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEDExpression") {
-            pushState(state_33)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEHExpression") {
-            pushState(state_78)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEIExpression") {
-            pushState(state_35)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASECExpression") {
-            pushState(state_79)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEBExpression") {
-            pushState(state_82)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEFExpression") {
-            pushState(state_44)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEEExpression") {
-            pushState(state_18)
+            pushState(state_56)
             return
         }
         
         if topOfStackIsToken("sizeof") {
             shift()
-            pushState(state_40)
-            return
-        }
-        
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_61)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_30)
+            pushState(state_58)
             return
         }
         
         if topOfStackIsToken("*") {
             shift()
-            pushState(state_57)
-            return
-        }
-        
-        if topOfStackIsToken("~") {
-            shift()
-            pushState(state_55)
+            pushState(state_54)
             return
         }
         
         if topOfStackIsToken("-") {
             shift()
-            pushState(state_59)
+            pushState(state_44)
             return
         }
         
-        if topOfStackIsToken("!") {
+        if topOfStackIsToken("~") {
             shift()
-            pushState(state_69)
+            pushState(state_60)
             return
         }
         
         if topOfStackIsToken("integer") {
             shift()
-            pushState(state_42)
+            pushState(state_46)
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("CASEHExpression", input[index].content, "CASEIExpression")
+            throw ParseError.unexpected("CASEGExpression", input[index].content, "CASEGExpression")
         } else {
-            throw ParseError.abruptEnd("CASEHExpression", "CASEIExpression")
+            throw ParseError.abruptEnd("CASEGExpression", "CASEGExpression")
         }
         
 	}
 	
-	private func state_82() throws {
+	private func state_66() throws {
+
+        if topOfStackIsToken("^") {
+            shift()
+            pushState(state_52)
+            return
+        }
+        
+        
+        if topOfStackIsAmong([Optional(","), Optional("&&"), Optional(")"), Optional("{"), Optional("||"), Optional(";"), Optional("|")]) {
+            reduce(3, to: "CASECExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEDExpression", input[index].content, "^")
+        } else {
+            throw ParseError.abruptEnd("CASEDExpression", "^")
+        }
+        
+	}
+	
+	private func state_67() throws {
+
+        if topOfStackIsToken("|") {
+            shift()
+            pushState(state_65)
+            return
+        }
+        
+        
+        if topOfStackIsAmong([Optional(";"), Optional("&&"), Optional(","), Optional(")"), Optional("||"), Optional("{")]) {
+            reduce(1, to: "CASEBExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEBExpression", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("CASEBExpression", "reduction")
+        }
+        
+	}
+	
+	private func state_68() throws {
 
         if topOfStackIsToken("&&") {
             shift()
@@ -3877,8 +3101,8 @@ class SLRParser {
         }
         
         
-        if topOfStackIsAmong([Optional(","), Optional("{"), Optional("||"), Optional(")"), Optional(";")]) {
-            reduce(3, to: "Expression")
+        if topOfStackIsAmong([Optional(";"), Optional("{"), Optional(","), Optional("||"), Optional(")")]) {
+            reduce(1, to: "Expression")
             return
         }
         
@@ -3890,54 +3114,38 @@ class SLRParser {
         
 	}
 	
-	private func state_83() throws {
-
-        
-        if topOfStackIsAmong([Optional("!="), Optional("<<"), Optional("&&"), Optional(">="), Optional("<="), Optional("=="), Optional("^"), Optional(">"), Optional(">>"), Optional("<"), Optional("&"), Optional("*"), Optional("||"), Optional(";"), Optional("+"), Optional(")"), Optional("%"), Optional("{"), Optional(","), Optional("|"), Optional("-"), Optional("/")]) {
-            reduce(3, to: "CASELExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASELExpression", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("CASELExpression", "reduction")
-        }
-        
-	}
-	
-	private func state_84() throws {
+	private func state_69() throws {
 
         if topOfStackIsNonTerminal("Type") {
-            pushState(state_85)
+            pushState(state_70)
             return
         }
         
         if topOfStackIsToken("identifier") {
             shift()
-            pushState(state_11)
+            pushState(state_72)
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("Type", input[index].content, "identifier")
+            throw ParseError.unexpected("Type", input[index].content, "Type")
         } else {
-            throw ParseError.abruptEnd("Type", "identifier")
+            throw ParseError.abruptEnd("Type", "Type")
         }
         
 	}
 	
-	private func state_85() throws {
+	private func state_70() throws {
 
-        if topOfStackIsToken("*") {
+        if topOfStackIsToken(")") {
             shift()
-            pushState(state_9)
+            pushState(state_71)
             return
         }
         
-        if topOfStackIsToken(")") {
+        if topOfStackIsToken("*") {
             shift()
-            pushState(state_86)
+            pushState(state_15)
             return
         }
         
@@ -3949,10 +3157,10 @@ class SLRParser {
         
 	}
 	
-	private func state_86() throws {
+	private func state_71() throws {
 
         
-        if topOfStackIsAmong([Optional("identifier"), Optional("("), Optional("integer")]) {
+        if topOfStackIsAmong([Optional("("), Optional("integer"), Optional("identifier")]) {
             reduce(4, to: "TypeCast")
             return
         }
@@ -3965,86 +3173,985 @@ class SLRParser {
         
 	}
 	
-	private func state_87() throws {
+	private func state_72() throws {
 
-        if topOfStackIsToken("&") {
-            shift()
-            pushState(state_19)
-            return
-        }
         
-        
-        if topOfStackIsAmong([Optional("{"), Optional("||"), Optional("^"), Optional("|"), Optional(")"), Optional(";"), Optional(","), Optional("&&")]) {
-            reduce(3, to: "CASEDExpression")
+        if topOfStackIsAmong([Optional("identifier"), Optional("*"), Optional(")")]) {
+            reduce(1, to: "Type")
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("CASEEExpression", input[index].content, "&")
+            throw ParseError.unexpected("Type", input[index].content, "reduction")
         } else {
-            throw ParseError.abruptEnd("CASEEExpression", "&")
+            throw ParseError.abruptEnd("Type", "reduction")
+        }
+        
+	}
+	
+	private func state_73() throws {
+
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_74)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_47)
+            return
+        }
+        
+        if topOfStackIsToken("~") {
+            shift()
+            pushState(state_60)
+            return
+        }
+        
+        if topOfStackIsToken("sizeof") {
+            shift()
+            pushState(state_58)
+            return
+        }
+        
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
+            return
+        }
+        
+        if topOfStackIsToken("!") {
+            shift()
+            pushState(state_56)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_54)
+            return
+        }
+        
+        if topOfStackIsToken("-") {
+            shift()
+            pushState(state_44)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_34)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEKExpression", input[index].content, "~")
+        } else {
+            throw ParseError.abruptEnd("CASEKExpression", "~")
+        }
+        
+	}
+	
+	private func state_74() throws {
+
+        
+        if topOfStackIsAmong([Optional("<<"), Optional("<"), Optional("+"), Optional("&&"), Optional("&"), Optional("||"), Optional("/"), Optional(")"), Optional("{"), Optional(">="), Optional("-"), Optional("%"), Optional("^"), Optional(">"), Optional("*"), Optional(">>"), Optional("|"), Optional(","), Optional(";"), Optional("=="), Optional("<="), Optional("!=")]) {
+            reduce(3, to: "CASEJExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEJExpression", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("CASEJExpression", "reduction")
+        }
+        
+	}
+	
+	private func state_75() throws {
+
+        if topOfStackIsToken("-") {
+            shift()
+            pushState(state_76)
+            return
+        }
+        
+        if topOfStackIsToken("+") {
+            shift()
+            pushState(state_30)
+            return
+        }
+        
+        
+        if topOfStackIsAmong([Optional(">>"), Optional("&&"), Optional(","), Optional(">"), Optional(")"), Optional(">="), Optional("|"), Optional("^"), Optional(";"), Optional("{"), Optional("<"), Optional("!="), Optional("&"), Optional("<="), Optional("||"), Optional("=="), Optional("<<")]) {
+            reduce(3, to: "CASEHExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEHExpression", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("CASEHExpression", "reduction")
+        }
+        
+	}
+	
+	private func state_76() throws {
+
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_38)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEJExpression") {
+            pushState(state_77)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_34)
+            return
+        }
+        
+        if topOfStackIsToken("!") {
+            shift()
+            pushState(state_56)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_54)
+            return
+        }
+        
+        if topOfStackIsToken("-") {
+            shift()
+            pushState(state_44)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_47)
+            return
+        }
+        
+        if topOfStackIsToken("~") {
+            shift()
+            pushState(state_60)
+            return
+        }
+        
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
+            return
+        }
+        
+        if topOfStackIsToken("sizeof") {
+            shift()
+            pushState(state_58)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEKExpression", input[index].content, "sizeof")
+        } else {
+            throw ParseError.abruptEnd("CASEKExpression", "sizeof")
+        }
+        
+	}
+	
+	private func state_77() throws {
+
+        if topOfStackIsToken("%") {
+            shift()
+            pushState(state_42)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_73)
+            return
+        }
+        
+        if topOfStackIsToken("/") {
+            shift()
+            pushState(state_32)
+            return
+        }
+        
+        
+        if topOfStackIsAmong([Optional("<="), Optional("<<"), Optional(">="), Optional("^"), Optional("&"), Optional("=="), Optional(","), Optional(">"), Optional(">>"), Optional("-"), Optional("!="), Optional("|"), Optional(")"), Optional("{"), Optional("&&"), Optional(";"), Optional("+"), Optional("||"), Optional("<")]) {
+            reduce(3, to: "CASEIExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEJExpression", input[index].content, "/")
+        } else {
+            throw ParseError.abruptEnd("CASEJExpression", "/")
+        }
+        
+	}
+	
+	private func state_78() throws {
+
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEIExpression") {
+            pushState(state_79)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_38)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEJExpression") {
+            pushState(state_41)
+            return
+        }
+        
+        if topOfStackIsToken("sizeof") {
+            shift()
+            pushState(state_58)
+            return
+        }
+        
+        if topOfStackIsToken("~") {
+            shift()
+            pushState(state_60)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_34)
+            return
+        }
+        
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_54)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_47)
+            return
+        }
+        
+        if topOfStackIsToken("-") {
+            shift()
+            pushState(state_44)
+            return
+        }
+        
+        if topOfStackIsToken("!") {
+            shift()
+            pushState(state_56)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEIExpression", input[index].content, "CASEIExpression")
+        } else {
+            throw ParseError.abruptEnd("CASEIExpression", "CASEIExpression")
+        }
+        
+	}
+	
+	private func state_79() throws {
+
+        if topOfStackIsToken("-") {
+            shift()
+            pushState(state_76)
+            return
+        }
+        
+        if topOfStackIsToken("+") {
+            shift()
+            pushState(state_30)
+            return
+        }
+        
+        
+        if topOfStackIsAmong([Optional(">>"), Optional("&&"), Optional(","), Optional(">"), Optional(")"), Optional(">="), Optional("|"), Optional("^"), Optional(";"), Optional("{"), Optional("<"), Optional("!="), Optional("&"), Optional("<="), Optional("||"), Optional("=="), Optional("<<")]) {
+            reduce(3, to: "CASEHExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEIExpression", input[index].content, "+")
+        } else {
+            throw ParseError.abruptEnd("CASEIExpression", "+")
+        }
+        
+	}
+	
+	private func state_80() throws {
+
+        if topOfStackIsToken("<") {
+            shift()
+            pushState(state_81)
+            return
+        }
+        
+        if topOfStackIsToken(">") {
+            shift()
+            pushState(state_85)
+            return
+        }
+        
+        if topOfStackIsToken("<=") {
+            shift()
+            pushState(state_27)
+            return
+        }
+        
+        if topOfStackIsToken(">=") {
+            shift()
+            pushState(state_83)
+            return
+        }
+        
+        
+        if topOfStackIsAmong([Optional("^"), Optional("|"), Optional("=="), Optional(","), Optional("!="), Optional("&&"), Optional(";"), Optional("{"), Optional("||"), Optional(")"), Optional("&")]) {
+            reduce(3, to: "CASEFExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEFExpression", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("CASEFExpression", "reduction")
+        }
+        
+	}
+	
+	private func state_81() throws {
+
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEJExpression") {
+            pushState(state_41)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_38)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEIExpression") {
+            pushState(state_29)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEHExpression") {
+            pushState(state_82)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_34)
+            return
+        }
+        
+        if topOfStackIsToken("~") {
+            shift()
+            pushState(state_60)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_54)
+            return
+        }
+        
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_47)
+            return
+        }
+        
+        if topOfStackIsToken("sizeof") {
+            shift()
+            pushState(state_58)
+            return
+        }
+        
+        if topOfStackIsToken("!") {
+            shift()
+            pushState(state_56)
+            return
+        }
+        
+        if topOfStackIsToken("-") {
+            shift()
+            pushState(state_44)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("TypeCast", input[index].content, "(")
+        } else {
+            throw ParseError.abruptEnd("TypeCast", "(")
+        }
+        
+	}
+	
+	private func state_82() throws {
+
+        if topOfStackIsToken(">>") {
+            shift()
+            pushState(state_78)
+            return
+        }
+        
+        if topOfStackIsToken("<<") {
+            shift()
+            pushState(state_40)
+            return
+        }
+        
+        
+        if topOfStackIsAmong([Optional("&"), Optional("=="), Optional(";"), Optional(","), Optional("{"), Optional("&&"), Optional("<"), Optional("!="), Optional(")"), Optional("|"), Optional("<="), Optional("^"), Optional(">"), Optional("||"), Optional(">=")]) {
+            reduce(3, to: "CASEGExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEHExpression", input[index].content, "<<")
+        } else {
+            throw ParseError.abruptEnd("CASEHExpression", "<<")
+        }
+        
+	}
+	
+	private func state_83() throws {
+
+        if topOfStackIsNonTerminal("CASEIExpression") {
+            pushState(state_29)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEHExpression") {
+            pushState(state_84)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEJExpression") {
+            pushState(state_41)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_38)
+            return
+        }
+        
+        if topOfStackIsToken("!") {
+            shift()
+            pushState(state_56)
+            return
+        }
+        
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
+            return
+        }
+        
+        if topOfStackIsToken("sizeof") {
+            shift()
+            pushState(state_58)
+            return
+        }
+        
+        if topOfStackIsToken("-") {
+            shift()
+            pushState(state_44)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_34)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_54)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_47)
+            return
+        }
+        
+        if topOfStackIsToken("~") {
+            shift()
+            pushState(state_60)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEGExpression", input[index].content, "CASEHExpression")
+        } else {
+            throw ParseError.abruptEnd("CASEGExpression", "CASEHExpression")
+        }
+        
+	}
+	
+	private func state_84() throws {
+
+        if topOfStackIsToken("<<") {
+            shift()
+            pushState(state_40)
+            return
+        }
+        
+        if topOfStackIsToken(">>") {
+            shift()
+            pushState(state_78)
+            return
+        }
+        
+        
+        if topOfStackIsAmong([Optional("&"), Optional("=="), Optional(";"), Optional(","), Optional("{"), Optional("&&"), Optional("<"), Optional("!="), Optional(")"), Optional("|"), Optional("<="), Optional("^"), Optional(">"), Optional("||"), Optional(">=")]) {
+            reduce(3, to: "CASEGExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEGExpression", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("CASEGExpression", "reduction")
+        }
+        
+	}
+	
+	private func state_85() throws {
+
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEJExpression") {
+            pushState(state_41)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_38)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEIExpression") {
+            pushState(state_29)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEHExpression") {
+            pushState(state_86)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_54)
+            return
+        }
+        
+        if topOfStackIsToken("-") {
+            shift()
+            pushState(state_44)
+            return
+        }
+        
+        if topOfStackIsToken("sizeof") {
+            shift()
+            pushState(state_58)
+            return
+        }
+        
+        if topOfStackIsToken("~") {
+            shift()
+            pushState(state_60)
+            return
+        }
+        
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_34)
+            return
+        }
+        
+        if topOfStackIsToken("!") {
+            shift()
+            pushState(state_56)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_47)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEKExpression", input[index].content, "*")
+        } else {
+            throw ParseError.abruptEnd("CASEKExpression", "*")
+        }
+        
+	}
+	
+	private func state_86() throws {
+
+        if topOfStackIsToken(">>") {
+            shift()
+            pushState(state_78)
+            return
+        }
+        
+        if topOfStackIsToken("<<") {
+            shift()
+            pushState(state_40)
+            return
+        }
+        
+        
+        if topOfStackIsAmong([Optional("&"), Optional("=="), Optional(";"), Optional(","), Optional("{"), Optional("&&"), Optional("<"), Optional("!="), Optional(")"), Optional("|"), Optional("<="), Optional("^"), Optional(">"), Optional("||"), Optional(">=")]) {
+            reduce(3, to: "CASEGExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEHExpression", input[index].content, "<<")
+        } else {
+            throw ParseError.abruptEnd("CASEHExpression", "<<")
+        }
+        
+	}
+	
+	private func state_87() throws {
+
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_38)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEJExpression") {
+            pushState(state_41)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEHExpression") {
+            pushState(state_39)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEIExpression") {
+            pushState(state_29)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEGExpression") {
+            pushState(state_88)
+            return
+        }
+        
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_54)
+            return
+        }
+        
+        if topOfStackIsToken("~") {
+            shift()
+            pushState(state_60)
+            return
+        }
+        
+        if topOfStackIsToken("!") {
+            shift()
+            pushState(state_56)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_47)
+            return
+        }
+        
+        if topOfStackIsToken("sizeof") {
+            shift()
+            pushState(state_58)
+            return
+        }
+        
+        if topOfStackIsToken("-") {
+            shift()
+            pushState(state_44)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_34)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEKExpression", input[index].content, "sizeof")
+        } else {
+            throw ParseError.abruptEnd("CASEKExpression", "sizeof")
         }
         
 	}
 	
 	private func state_88() throws {
 
-        if topOfStackIsToken("||") {
+        if topOfStackIsToken(">") {
+            shift()
+            pushState(state_85)
+            return
+        }
+        
+        if topOfStackIsToken("<=") {
+            shift()
+            pushState(state_27)
+            return
+        }
+        
+        if topOfStackIsToken("<") {
             shift()
             pushState(state_81)
             return
         }
         
+        if topOfStackIsToken(">=") {
+            shift()
+            pushState(state_83)
+            return
+        }
         
-        if topOfStackIsAmong([Optional(","), Optional(")")]) {
-            reduce(1, to: "Argument")
+        
+        if topOfStackIsAmong([Optional("^"), Optional("|"), Optional("=="), Optional(","), Optional("!="), Optional("&&"), Optional(";"), Optional("{"), Optional("||"), Optional(")"), Optional("&")]) {
+            reduce(3, to: "CASEFExpression")
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("Argument", input[index].content, "reduction")
+            throw ParseError.unexpected("CASEGExpression", input[index].content, ">=")
         } else {
-            throw ParseError.abruptEnd("Argument", "reduction")
+            throw ParseError.abruptEnd("CASEGExpression", ">=")
         }
         
 	}
 	
 	private func state_89() throws {
 
-        if topOfStackIsToken(",") {
+        if topOfStackIsToken(")") {
             shift()
             pushState(state_90)
             return
         }
         
-        if topOfStackIsToken(")") {
+        if topOfStackIsToken(",") {
             shift()
-            pushState(state_95)
+            pushState(state_91)
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("Arguments", input[index].content, ",")
+            throw ParseError.unexpected("CASELExpression", input[index].content, ")")
         } else {
-            throw ParseError.abruptEnd("Arguments", ",")
+            throw ParseError.abruptEnd("CASELExpression", ")")
         }
         
 	}
 	
 	private func state_90() throws {
 
+        
+        if topOfStackIsAmong([Optional(")"), Optional(";"), Optional("*"), Optional("!="), Optional("<"), Optional("<<"), Optional("{"), Optional(","), Optional("||"), Optional("/"), Optional("&"), Optional("+"), Optional(">"), Optional("-"), Optional("|"), Optional(">="), Optional("&&"), Optional("%"), Optional("<="), Optional(">>"), Optional("=="), Optional("^")]) {
+            reduce(4, to: "CASELExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASELExpression", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("CASELExpression", "reduction")
+        }
+        
+	}
+	
+	private func state_91() throws {
+
+        if topOfStackIsNonTerminal("CASEJExpression") {
+            pushState(state_41)
+            return
+        }
+        
         if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
+            pushState(state_21)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Argument") {
+            pushState(state_93)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEHExpression") {
+            pushState(state_39)
             return
         }
         
         if topOfStackIsNonTerminal("Expression") {
-            pushState(state_88)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
+            pushState(state_92)
             return
         }
         
@@ -4053,118 +4160,125 @@ class SLRParser {
             return
         }
         
-        if topOfStackIsNonTerminal("CASECExpression") {
-            pushState(state_79)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEBExpression") {
-            pushState(state_62)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Argument") {
-            pushState(state_91)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEGExpression") {
-            pushState(state_64)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEJExpression") {
-            pushState(state_22)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEHExpression") {
-            pushState(state_78)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEDExpression") {
-            pushState(state_33)
+        if topOfStackIsNonTerminal("CASEFExpression") {
+            pushState(state_36)
             return
         }
         
         if topOfStackIsNonTerminal("CASEIExpression") {
-            pushState(state_35)
+            pushState(state_29)
             return
         }
         
-        if topOfStackIsNonTerminal("CASEFExpression") {
-            pushState(state_44)
+        if topOfStackIsNonTerminal("CASEGExpression") {
+            pushState(state_26)
             return
         }
         
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
             return
         }
         
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
+        if topOfStackIsNonTerminal("CASEBExpression") {
+            pushState(state_68)
             return
         }
         
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_92)
+        if topOfStackIsNonTerminal("CASECExpression") {
+            pushState(state_67)
             return
         }
         
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_57)
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_38)
             return
         }
         
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_61)
+        if topOfStackIsNonTerminal("CASEDExpression") {
+            pushState(state_51)
             return
         }
         
         if topOfStackIsToken("!") {
             shift()
-            pushState(state_69)
-            return
-        }
-        
-        if topOfStackIsToken("sizeof") {
-            shift()
-            pushState(state_40)
-            return
-        }
-        
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_59)
+            pushState(state_56)
             return
         }
         
         if topOfStackIsToken("~") {
             shift()
-            pushState(state_55)
+            pushState(state_60)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_47)
+            return
+        }
+        
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
+            return
+        }
+        
+        if topOfStackIsToken("sizeof") {
+            shift()
+            pushState(state_58)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_94)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_54)
+            return
+        }
+        
+        if topOfStackIsToken("-") {
+            shift()
+            pushState(state_44)
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("CASEEExpression", input[index].content, "CASEEExpression")
+            throw ParseError.unexpected("CASEKExpression", input[index].content, "~")
         } else {
-            throw ParseError.abruptEnd("CASEEExpression", "CASEEExpression")
+            throw ParseError.abruptEnd("CASEKExpression", "~")
         }
         
 	}
 	
-	private func state_91() throws {
+	private func state_92() throws {
+
+        if topOfStackIsToken("||") {
+            shift()
+            pushState(state_50)
+            return
+        }
+        
+        
+        if topOfStackIsAmong([Optional(")"), Optional(",")]) {
+            reduce(1, to: "Argument")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("Expression", input[index].content, "||")
+        } else {
+            throw ParseError.abruptEnd("Expression", "||")
+        }
+        
+	}
+	
+	private func state_93() throws {
 
         
         if topOfStackIsAmong([Optional(")"), Optional(",")]) {
@@ -4180,83 +4294,58 @@ class SLRParser {
         
 	}
 	
-	private func state_92() throws {
+	private func state_94() throws {
 
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_31)
-            return
-        }
-        
         if topOfStackIsToken(":") {
             shift()
-            pushState(state_93)
+            pushState(state_95)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_35)
             return
         }
         
         
-        if topOfStackIsAmong([Optional("="), Optional("<<"), Optional("{"), Optional("."), Optional("!="), Optional("^"), Optional("+"), Optional("%"), Optional("&"), Optional(">="), Optional("<="), Optional("*"), Optional("||"), Optional("&&"), Optional("<"), Optional("|"), Optional("=="), Optional("-"), Optional("/"), Optional(","), Optional(")"), Optional(">>"), Optional(";"), Optional(">")]) {
+        if topOfStackIsAmong([Optional("-"), Optional("|"), Optional("<="), Optional(">>"), Optional("=="), Optional(">="), Optional("%"), Optional(","), Optional("{"), Optional("^"), Optional(">"), Optional(";"), Optional("<"), Optional("*"), Optional("<<"), Optional("!="), Optional("/"), Optional("&&"), Optional("."), Optional(")"), Optional("&"), Optional("||"), Optional("="), Optional("+")]) {
             reduce(1, to: "Reference")
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("CASELExpression", input[index].content, "(")
+            throw ParseError.unexpected("Argument", input[index].content, ":")
         } else {
-            throw ParseError.abruptEnd("CASELExpression", "(")
+            throw ParseError.abruptEnd("Argument", ":")
         }
         
 	}
 	
-	private func state_93() throws {
+	private func state_95() throws {
 
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASECExpression") {
-            pushState(state_79)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEIExpression") {
-            pushState(state_35)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Expression") {
-            pushState(state_94)
+        if topOfStackIsNonTerminal("CASEHExpression") {
+            pushState(state_39)
             return
         }
         
         if topOfStackIsNonTerminal("CASEFExpression") {
-            pushState(state_44)
+            pushState(state_36)
             return
         }
         
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
+        if topOfStackIsNonTerminal("CASEDExpression") {
+            pushState(state_51)
             return
         }
         
-        if topOfStackIsNonTerminal("CASEBExpression") {
-            pushState(state_62)
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
             return
         }
         
-        if topOfStackIsNonTerminal("CASEGExpression") {
-            pushState(state_64)
+        if topOfStackIsNonTerminal("CASEJExpression") {
+            pushState(state_41)
             return
         }
         
@@ -4265,87 +4354,112 @@ class SLRParser {
             return
         }
         
-        if topOfStackIsNonTerminal("CASEDExpression") {
-            pushState(state_33)
+        if topOfStackIsNonTerminal("CASEIExpression") {
+            pushState(state_29)
             return
         }
         
-        if topOfStackIsNonTerminal("CASEHExpression") {
-            pushState(state_78)
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
             return
         }
         
-        if topOfStackIsNonTerminal("CASEJExpression") {
-            pushState(state_22)
+        if topOfStackIsNonTerminal("CASEGExpression") {
+            pushState(state_26)
             return
         }
         
-        if topOfStackIsToken("!") {
-            shift()
-            pushState(state_69)
+        if topOfStackIsNonTerminal("Expression") {
+            pushState(state_96)
             return
         }
         
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_30)
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_38)
             return
         }
         
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
+        if topOfStackIsNonTerminal("CASECExpression") {
+            pushState(state_67)
             return
         }
         
-        if topOfStackIsToken("~") {
-            shift()
-            pushState(state_55)
+        if topOfStackIsNonTerminal("CASEBExpression") {
+            pushState(state_68)
             return
         }
         
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_61)
-            return
-        }
-        
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_57)
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
             return
         }
         
         if topOfStackIsToken("sizeof") {
             shift()
-            pushState(state_40)
+            pushState(state_58)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_54)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_47)
+            return
+        }
+        
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
+            return
+        }
+        
+        if topOfStackIsToken("~") {
+            shift()
+            pushState(state_60)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_34)
             return
         }
         
         if topOfStackIsToken("-") {
             shift()
-            pushState(state_59)
+            pushState(state_44)
+            return
+        }
+        
+        if topOfStackIsToken("!") {
+            shift()
+            pushState(state_56)
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("CASEIExpression", input[index].content, "CASEIExpression")
+            throw ParseError.unexpected("Expression", input[index].content, "CASEBExpression")
         } else {
-            throw ParseError.abruptEnd("CASEIExpression", "CASEIExpression")
+            throw ParseError.abruptEnd("Expression", "CASEBExpression")
         }
         
 	}
 	
-	private func state_94() throws {
+	private func state_96() throws {
 
         if topOfStackIsToken("||") {
             shift()
-            pushState(state_81)
+            pushState(state_50)
             return
         }
         
         
-        if topOfStackIsAmong([Optional(","), Optional(")")]) {
+        if topOfStackIsAmong([Optional(")"), Optional(",")]) {
             reduce(3, to: "Argument")
             return
         }
@@ -4358,23 +4472,7 @@ class SLRParser {
         
 	}
 	
-	private func state_95() throws {
-
-        
-        if topOfStackIsAmong([Optional("!="), Optional("<<"), Optional("&&"), Optional(">="), Optional("<="), Optional("=="), Optional("^"), Optional(">"), Optional(">>"), Optional("<"), Optional("&"), Optional("*"), Optional("||"), Optional(";"), Optional("+"), Optional(")"), Optional("%"), Optional("{"), Optional(","), Optional("|"), Optional("-"), Optional("/")]) {
-            reduce(4, to: "CASELExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASELExpression", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("CASELExpression", "reduction")
-        }
-        
-	}
-	
-	private func state_96() throws {
+	private func state_97() throws {
 
         
         if topOfStackIsAmong([Optional(")"), Optional(",")]) {
@@ -4390,73 +4488,73 @@ class SLRParser {
         
 	}
 	
-	private func state_97() throws {
-
-        
-        if topOfStackIsAmong([Optional("<="), Optional("=="), Optional(")"), Optional("^"), Optional("<"), Optional("!="), Optional("|"), Optional("<<"), Optional(">="), Optional("-"), Optional(","), Optional("*"), Optional("%"), Optional(">>"), Optional(">"), Optional("&&"), Optional("{"), Optional("+"), Optional("&"), Optional("/"), Optional("||"), Optional(";")]) {
-            reduce(3, to: "CASEJExpression")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("CASEJExpression", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("CASEJExpression", "reduction")
-        }
-        
-	}
-	
 	private func state_98() throws {
 
-        if topOfStackIsToken(">=") {
+        if topOfStackIsToken("<<") {
             shift()
-            pushState(state_65)
+            pushState(state_40)
             return
         }
         
-        if topOfStackIsToken("<") {
+        if topOfStackIsToken(">>") {
             shift()
-            pushState(state_47)
-            return
-        }
-        
-        if topOfStackIsToken(">") {
-            shift()
-            pushState(state_73)
-            return
-        }
-        
-        if topOfStackIsToken("<=") {
-            shift()
-            pushState(state_71)
+            pushState(state_78)
             return
         }
         
         
-        if topOfStackIsAmong([Optional("&"), Optional("|"), Optional("=="), Optional("!="), Optional("{"), Optional(","), Optional(")"), Optional("^"), Optional("&&"), Optional("||"), Optional(";")]) {
-            reduce(3, to: "CASEFExpression")
+        if topOfStackIsAmong([Optional("&"), Optional("=="), Optional(";"), Optional(","), Optional("{"), Optional("&&"), Optional("<"), Optional("!="), Optional(")"), Optional("|"), Optional("<="), Optional("^"), Optional(">"), Optional("||"), Optional(">=")]) {
+            reduce(3, to: "CASEGExpression")
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("CASEFExpression", input[index].content, "reduction")
+            throw ParseError.unexpected("CASEHExpression", input[index].content, "<<")
         } else {
-            throw ParseError.abruptEnd("CASEFExpression", "reduction")
+            throw ParseError.abruptEnd("CASEHExpression", "<<")
         }
         
 	}
 	
 	private func state_99() throws {
 
+        if topOfStackIsToken("!=") {
+            shift()
+            pushState(state_37)
+            return
+        }
+        
+        if topOfStackIsToken("==") {
+            shift()
+            pushState(state_87)
+            return
+        }
+        
+        
+        if topOfStackIsAmong([Optional(")"), Optional("^"), Optional(","), Optional("{"), Optional("&"), Optional(";"), Optional("&&"), Optional("|"), Optional("||")]) {
+            reduce(3, to: "CASEEExpression")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEFExpression", input[index].content, "!=")
+        } else {
+            throw ParseError.abruptEnd("CASEFExpression", "!=")
+        }
+        
+	}
+	
+	private func state_100() throws {
+
         if topOfStackIsToken("||") {
             shift()
-            pushState(state_81)
+            pushState(state_50)
             return
         }
         
         if topOfStackIsToken(";") {
             shift()
-            pushState(state_100)
+            pushState(state_101)
             return
         }
         
@@ -4468,27 +4566,11 @@ class SLRParser {
         
 	}
 	
-	private func state_100() throws {
-
-        
-        if topOfStackIsAmong([Optional("while"), Optional("return"), Optional("if"), Optional("assign"), Optional("}"), Optional("identifier")]) {
-            reduce(5, to: "Declaration")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("Declaration", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("Declaration", "reduction")
-        }
-        
-	}
-	
 	private func state_101() throws {
 
         
-        if topOfStackIsAmong([Optional("while"), Optional("return"), Optional("if"), Optional("assign"), Optional("}"), Optional("identifier")]) {
-            reduce(3, to: "Declaration")
+        if topOfStackIsAmong([Optional("if"), Optional("assign"), Optional("}"), Optional("identifier"), Optional("return"), Optional("while")]) {
+            reduce(5, to: "Declaration")
             return
         }
         
@@ -4503,15 +4585,15 @@ class SLRParser {
 	private func state_102() throws {
 
         
-        if topOfStackIsAmong([Optional("while"), Optional("}"), Optional("identifier"), Optional("if"), Optional("return"), Optional("assign")]) {
-            reduce(1, to: "FunctionBodyStatement")
+        if topOfStackIsAmong([Optional("if"), Optional("assign"), Optional("}"), Optional("identifier"), Optional("return"), Optional("while")]) {
+            reduce(3, to: "Declaration")
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("FunctionBodyStatement", input[index].content, "reduction")
+            throw ParseError.unexpected("Declaration", input[index].content, "reduction")
         } else {
-            throw ParseError.abruptEnd("FunctionBodyStatement", "reduction")
+            throw ParseError.abruptEnd("Declaration", "reduction")
         }
         
 	}
@@ -4519,7 +4601,7 @@ class SLRParser {
 	private func state_103() throws {
 
         
-        if topOfStackIsAmong([Optional("while"), Optional("}"), Optional("identifier"), Optional("if"), Optional("return"), Optional("assign")]) {
+        if topOfStackIsAmong([Optional("while"), Optional("return"), Optional("if"), Optional("identifier"), Optional("assign"), Optional("}")]) {
             reduce(1, to: "FunctionBodyStatement")
             return
         }
@@ -4534,105 +4616,8 @@ class SLRParser {
 	
 	private func state_104() throws {
 
-        if topOfStackIsNonTerminal("Assignment") {
-            pushState(state_107)
-            return
-        }
         
-        if topOfStackIsNonTerminal("While") {
-            pushState(state_14)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("FunctionBodyStatement") {
-            pushState(state_106)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Type") {
-            pushState(state_15)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Return") {
-            pushState(state_105)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Declaration") {
-            pushState(state_103)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("If") {
-            pushState(state_102)
-            return
-        }
-        
-        if topOfStackIsToken("}") {
-            shift()
-            pushState(state_131)
-            return
-        }
-        
-        if topOfStackIsToken("while") {
-            shift()
-            pushState(state_118)
-            return
-        }
-        
-        if topOfStackIsToken("return") {
-            shift()
-            pushState(state_114)
-            return
-        }
-        
-        if topOfStackIsToken("assign") {
-            shift()
-            pushState(state_108)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_11)
-            return
-        }
-        
-        if topOfStackIsToken("if") {
-            shift()
-            pushState(state_124)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("Return", input[index].content, "return")
-        } else {
-            throw ParseError.abruptEnd("Return", "return")
-        }
-        
-	}
-	
-	private func state_105() throws {
-
-        
-        if topOfStackIsAmong([Optional("while"), Optional("}"), Optional("identifier"), Optional("if"), Optional("return"), Optional("assign")]) {
-            reduce(1, to: "FunctionBodyStatement")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("FunctionBodyStatement", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("FunctionBodyStatement", "reduction")
-        }
-        
-	}
-	
-	private func state_106() throws {
-
-        
-        if topOfStackIsAmong([Optional("while"), Optional("assign"), Optional("return"), Optional("}"), Optional("identifier"), Optional("if")]) {
+        if topOfStackIsAmong([Optional("}"), Optional("while"), Optional("if"), Optional("assign"), Optional("return"), Optional("identifier")]) {
             reduce(2, to: "FunctionBodyStatements")
             return
         }
@@ -4645,125 +4630,35 @@ class SLRParser {
         
 	}
 	
-	private func state_107() throws {
+	private func state_105() throws {
 
-        
-        if topOfStackIsAmong([Optional("while"), Optional("}"), Optional("identifier"), Optional("if"), Optional("return"), Optional("assign")]) {
-            reduce(1, to: "FunctionBodyStatement")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("FunctionBodyStatement", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("FunctionBodyStatement", "reduction")
-        }
-        
-	}
-	
-	private func state_108() throws {
-
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_109)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_113)
-            return
-        }
-        
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("Reference", input[index].content, "Reference")
-        } else {
-            throw ParseError.abruptEnd("Reference", "Reference")
-        }
-        
-	}
-	
-	private func state_109() throws {
-
-        if topOfStackIsToken(".") {
-            shift()
-            pushState(state_27)
-            return
-        }
-        
-        if topOfStackIsToken("=") {
-            shift()
-            pushState(state_110)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("Assignment", input[index].content, "=")
-        } else {
-            throw ParseError.abruptEnd("Assignment", "=")
-        }
-        
-	}
-	
-	private func state_110() throws {
-
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEFExpression") {
-            pushState(state_44)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEDExpression") {
-            pushState(state_33)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEBExpression") {
-            pushState(state_62)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEHExpression") {
-            pushState(state_78)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Expression") {
-            pushState(state_111)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
+        if topOfStackIsNonTerminal("CASECExpression") {
+            pushState(state_67)
             return
         }
         
         if topOfStackIsNonTerminal("CASEGExpression") {
-            pushState(state_64)
+            pushState(state_26)
             return
         }
         
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
+        if topOfStackIsNonTerminal("CASEFExpression") {
+            pushState(state_36)
             return
         }
         
-        if topOfStackIsNonTerminal("CASEIExpression") {
-            pushState(state_35)
+        if topOfStackIsNonTerminal("CASEHExpression") {
+            pushState(state_39)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Expression") {
+            pushState(state_106)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEJExpression") {
+            pushState(state_41)
             return
         }
         
@@ -4772,83 +4667,108 @@ class SLRParser {
             return
         }
         
-        if topOfStackIsNonTerminal("CASECExpression") {
-            pushState(state_79)
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
             return
         }
         
-        if topOfStackIsNonTerminal("CASEJExpression") {
-            pushState(state_22)
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
             return
         }
         
-        if topOfStackIsToken("!") {
-            shift()
-            pushState(state_69)
+        if topOfStackIsNonTerminal("CASEIExpression") {
+            pushState(state_29)
             return
         }
         
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_57)
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEDExpression") {
+            pushState(state_51)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_38)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEBExpression") {
+            pushState(state_68)
             return
         }
         
         if topOfStackIsToken("sizeof") {
             shift()
-            pushState(state_40)
-            return
-        }
-        
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_59)
+            pushState(state_58)
             return
         }
         
         if topOfStackIsToken("integer") {
             shift()
-            pushState(state_42)
+            pushState(state_46)
+            return
+        }
+        
+        if topOfStackIsToken("!") {
+            shift()
+            pushState(state_56)
             return
         }
         
         if topOfStackIsToken("identifier") {
             shift()
-            pushState(state_30)
-            return
-        }
-        
-        if topOfStackIsToken("~") {
-            shift()
-            pushState(state_55)
+            pushState(state_34)
             return
         }
         
         if topOfStackIsToken("(") {
             shift()
-            pushState(state_61)
+            pushState(state_47)
+            return
+        }
+        
+        if topOfStackIsToken("~") {
+            shift()
+            pushState(state_60)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_54)
+            return
+        }
+        
+        if topOfStackIsToken("-") {
+            shift()
+            pushState(state_44)
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("Expression", input[index].content, "Expression")
+            throw ParseError.unexpected("CASEJExpression", input[index].content, "CASEJExpression")
         } else {
-            throw ParseError.abruptEnd("Expression", "Expression")
+            throw ParseError.abruptEnd("CASEJExpression", "CASEJExpression")
         }
         
 	}
 	
-	private func state_111() throws {
+	private func state_106() throws {
 
-        if topOfStackIsToken(";") {
+        if topOfStackIsToken("||") {
             shift()
-            pushState(state_112)
+            pushState(state_50)
             return
         }
         
-        if topOfStackIsToken("||") {
+        if topOfStackIsToken("{") {
             shift()
-            pushState(state_81)
+            pushState(state_107)
             return
         }
         
@@ -4860,52 +4780,213 @@ class SLRParser {
         
 	}
 	
-	private func state_112() throws {
+	private func state_107() throws {
 
-        
-        if topOfStackIsAmong([Optional("return"), Optional("while"), Optional("if"), Optional("assign"), Optional("}"), Optional("identifier")]) {
-            reduce(5, to: "Assignment")
+        if topOfStackIsNonTerminal("Type") {
+            pushState(state_14)
             return
         }
         
-        if index < input.count {
-            throw ParseError.unexpected("Assignment", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("Assignment", "reduction")
-        }
-        
-	}
-	
-	private func state_113() throws {
-
-        
-        if topOfStackIsAmong([Optional("="), Optional("<<"), Optional("{"), Optional("."), Optional("!="), Optional("^"), Optional("+"), Optional("%"), Optional("&"), Optional(">="), Optional("<="), Optional("*"), Optional("||"), Optional("&&"), Optional("<"), Optional("|"), Optional("=="), Optional("-"), Optional("/"), Optional(","), Optional(")"), Optional(">>"), Optional(";"), Optional(">")]) {
-            reduce(1, to: "Reference")
+        if topOfStackIsNonTerminal("Assignment") {
+            pushState(state_12)
             return
         }
         
-        if index < input.count {
-            throw ParseError.unexpected("Reference", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("Reference", "reduction")
-        }
-        
-	}
-	
-	private func state_114() throws {
-
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
+        if topOfStackIsNonTerminal("While") {
+            pushState(state_103)
             return
         }
         
-        if topOfStackIsNonTerminal("Expression") {
+        if topOfStackIsNonTerminal("FunctionBodyStatements") {
+            pushState(state_109)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("If") {
+            pushState(state_9)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Declaration") {
+            pushState(state_13)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Return") {
+            pushState(state_11)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("FunctionBodyStatement") {
+            pushState(state_108)
+            return
+        }
+        
+        if topOfStackIsToken("while") {
+            shift()
+            pushState(state_110)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_72)
+            return
+        }
+        
+        if topOfStackIsToken("return") {
+            shift()
             pushState(state_115)
             return
         }
         
-        if topOfStackIsNonTerminal("Reference") {
+        if topOfStackIsToken("assign") {
+            shift()
+            pushState(state_119)
+            return
+        }
+        
+        if topOfStackIsToken("if") {
+            shift()
+            pushState(state_105)
+            return
+        }
+        
+        
+        if topOfStackIsAmong([Optional("}"), Optional("while"), Optional("if"), Optional("assign"), Optional("return"), Optional("identifier")]) {
+            reduce(0, to: "FunctionBodyStatements")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("Declaration", input[index].content, "Type")
+        } else {
+            throw ParseError.abruptEnd("Declaration", "Type")
+        }
+        
+	}
+	
+	private func state_108() throws {
+
+        
+        if topOfStackIsAmong([Optional("}"), Optional("while"), Optional("if"), Optional("assign"), Optional("return"), Optional("identifier")]) {
+            reduce(1, to: "FunctionBodyStatements")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("FunctionBodyStatements", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("FunctionBodyStatements", "reduction")
+        }
+        
+	}
+	
+	private func state_109() throws {
+
+        if topOfStackIsNonTerminal("Assignment") {
+            pushState(state_12)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Declaration") {
+            pushState(state_13)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("If") {
+            pushState(state_9)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Return") {
+            pushState(state_11)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Type") {
+            pushState(state_14)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("FunctionBodyStatement") {
+            pushState(state_104)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("While") {
+            pushState(state_103)
+            return
+        }
+        
+        if topOfStackIsToken("}") {
+            shift()
+            pushState(state_125)
+            return
+        }
+        
+        if topOfStackIsToken("assign") {
+            shift()
+            pushState(state_119)
+            return
+        }
+        
+        if topOfStackIsToken("if") {
+            shift()
+            pushState(state_105)
+            return
+        }
+        
+        if topOfStackIsToken("while") {
+            shift()
+            pushState(state_110)
+            return
+        }
+        
+        if topOfStackIsToken("return") {
+            shift()
+            pushState(state_115)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_72)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("Declaration", input[index].content, "Type")
+        } else {
+            throw ParseError.abruptEnd("Declaration", "Type")
+        }
+        
+	}
+	
+	private func state_110() throws {
+
+        if topOfStackIsNonTerminal("CASEBExpression") {
+            pushState(state_68)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEGExpression") {
             pushState(state_26)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEFExpression") {
+            pushState(state_36)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEIExpression") {
+            pushState(state_29)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
             return
         }
         
@@ -4914,53 +4995,446 @@ class SLRParser {
             return
         }
         
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEBExpression") {
-            pushState(state_62)
-            return
-        }
-        
         if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEFExpression") {
-            pushState(state_44)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEDExpression") {
-            pushState(state_33)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEIExpression") {
-            pushState(state_35)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEHExpression") {
-            pushState(state_78)
+            pushState(state_20)
             return
         }
         
         if topOfStackIsNonTerminal("CASEJExpression") {
-            pushState(state_22)
+            pushState(state_41)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Expression") {
+            pushState(state_111)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEHExpression") {
+            pushState(state_39)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEDExpression") {
+            pushState(state_51)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
             return
         }
         
         if topOfStackIsNonTerminal("CASECExpression") {
-            pushState(state_79)
+            pushState(state_67)
             return
         }
         
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_38)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_54)
+            return
+        }
+        
+        if topOfStackIsToken("-") {
+            shift()
+            pushState(state_44)
+            return
+        }
+        
+        if topOfStackIsToken("!") {
+            shift()
+            pushState(state_56)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_34)
+            return
+        }
+        
+        if topOfStackIsToken("~") {
+            shift()
+            pushState(state_60)
+            return
+        }
+        
+        if topOfStackIsToken("sizeof") {
+            shift()
+            pushState(state_58)
+            return
+        }
+        
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_47)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("CASEFExpression", input[index].content, "CASEFExpression")
+        } else {
+            throw ParseError.abruptEnd("CASEFExpression", "CASEFExpression")
+        }
+        
+	}
+	
+	private func state_111() throws {
+
+        if topOfStackIsToken("{") {
+            shift()
+            pushState(state_112)
+            return
+        }
+        
+        if topOfStackIsToken("||") {
+            shift()
+            pushState(state_50)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("While", input[index].content, "{")
+        } else {
+            throw ParseError.abruptEnd("While", "{")
+        }
+        
+	}
+	
+	private func state_112() throws {
+
+        if topOfStackIsNonTerminal("FunctionBodyStatement") {
+            pushState(state_108)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Declaration") {
+            pushState(state_13)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("If") {
+            pushState(state_9)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Type") {
+            pushState(state_14)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Assignment") {
+            pushState(state_12)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Return") {
+            pushState(state_11)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("FunctionBodyStatements") {
+            pushState(state_113)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("While") {
+            pushState(state_103)
+            return
+        }
+        
+        if topOfStackIsToken("return") {
+            shift()
+            pushState(state_115)
+            return
+        }
+        
+        if topOfStackIsToken("if") {
+            shift()
+            pushState(state_105)
+            return
+        }
+        
+        if topOfStackIsToken("while") {
+            shift()
+            pushState(state_110)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_72)
+            return
+        }
+        
+        if topOfStackIsToken("assign") {
+            shift()
+            pushState(state_119)
+            return
+        }
+        
+        
+        if topOfStackIsAmong([Optional("}"), Optional("while"), Optional("if"), Optional("assign"), Optional("return"), Optional("identifier")]) {
+            reduce(0, to: "FunctionBodyStatements")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("Assignment", input[index].content, "assign")
+        } else {
+            throw ParseError.abruptEnd("Assignment", "assign")
+        }
+        
+	}
+	
+	private func state_113() throws {
+
+        if topOfStackIsNonTerminal("Return") {
+            pushState(state_11)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("If") {
+            pushState(state_9)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Type") {
+            pushState(state_14)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Declaration") {
+            pushState(state_13)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("FunctionBodyStatement") {
+            pushState(state_104)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Assignment") {
+            pushState(state_12)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("While") {
+            pushState(state_103)
+            return
+        }
+        
+        if topOfStackIsToken("if") {
+            shift()
+            pushState(state_105)
+            return
+        }
+        
+        if topOfStackIsToken("assign") {
+            shift()
+            pushState(state_119)
+            return
+        }
+        
+        if topOfStackIsToken("}") {
+            shift()
+            pushState(state_114)
+            return
+        }
+        
+        if topOfStackIsToken("while") {
+            shift()
+            pushState(state_110)
+            return
+        }
+        
+        if topOfStackIsToken("return") {
+            shift()
+            pushState(state_115)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_72)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("Return", input[index].content, "return")
+        } else {
+            throw ParseError.abruptEnd("Return", "return")
+        }
+        
+	}
+	
+	private func state_114() throws {
+
+        
+        if topOfStackIsAmong([Optional("return"), Optional("if"), Optional("identifier"), Optional("while"), Optional("assign"), Optional("}")]) {
+            reduce(5, to: "While")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("While", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("While", "reduction")
+        }
+        
+	}
+	
+	private func state_115() throws {
+
         if topOfStackIsNonTerminal("CASEGExpression") {
-            pushState(state_64)
+            pushState(state_26)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEIExpression") {
+            pushState(state_29)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEHExpression") {
+            pushState(state_39)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEFExpression") {
+            pushState(state_36)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_38)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEBExpression") {
+            pushState(state_68)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEDExpression") {
+            pushState(state_51)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Expression") {
+            pushState(state_116)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASECExpression") {
+            pushState(state_67)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEEExpression") {
+            pushState(state_18)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEJExpression") {
+            pushState(state_41)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
+            return
+        }
+        
+        if topOfStackIsToken("sizeof") {
+            shift()
+            pushState(state_58)
+            return
+        }
+        
+        if topOfStackIsToken("!") {
+            shift()
+            pushState(state_56)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_54)
+            return
+        }
+        
+        if topOfStackIsToken(";") {
+            shift()
+            pushState(state_118)
+            return
+        }
+        
+        if topOfStackIsToken("-") {
+            shift()
+            pushState(state_44)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_34)
+            return
+        }
+        
+        if topOfStackIsToken("~") {
+            shift()
+            pushState(state_60)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_47)
+            return
+        }
+        
+        if topOfStackIsToken("integer") {
+            shift()
+            pushState(state_46)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("Expression", input[index].content, "CASEBExpression")
+        } else {
+            throw ParseError.abruptEnd("Expression", "CASEBExpression")
+        }
+        
+	}
+	
+	private func state_116() throws {
+
+        if topOfStackIsToken("||") {
+            shift()
+            pushState(state_50)
             return
         }
         
@@ -4970,96 +5444,10 @@ class SLRParser {
             return
         }
         
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_59)
-            return
-        }
-        
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
-            return
-        }
-        
-        if topOfStackIsToken("!") {
-            shift()
-            pushState(state_69)
-            return
-        }
-        
-        if topOfStackIsToken("sizeof") {
-            shift()
-            pushState(state_40)
-            return
-        }
-        
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_61)
-            return
-        }
-        
-        if topOfStackIsToken("~") {
-            shift()
-            pushState(state_55)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_30)
-            return
-        }
-        
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_57)
-            return
-        }
-        
         if index < input.count {
-            throw ParseError.unexpected("CASEHExpression", input[index].content, "CASEIExpression")
+            throw ParseError.unexpected("Return", input[index].content, ";")
         } else {
-            throw ParseError.abruptEnd("CASEHExpression", "CASEIExpression")
-        }
-        
-	}
-	
-	private func state_115() throws {
-
-        if topOfStackIsToken(";") {
-            shift()
-            pushState(state_116)
-            return
-        }
-        
-        if topOfStackIsToken("||") {
-            shift()
-            pushState(state_81)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("Expression", input[index].content, "||")
-        } else {
-            throw ParseError.abruptEnd("Expression", "||")
-        }
-        
-	}
-	
-	private func state_116() throws {
-
-        
-        if topOfStackIsAmong([Optional("}"), Optional("while"), Optional("identifier"), Optional("if"), Optional("return"), Optional("assign")]) {
-            reduce(3, to: "Return")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("Return", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("Return", "reduction")
+            throw ParseError.abruptEnd("Return", ";")
         }
         
 	}
@@ -5067,8 +5455,8 @@ class SLRParser {
 	private func state_117() throws {
 
         
-        if topOfStackIsAmong([Optional("}"), Optional("while"), Optional("identifier"), Optional("if"), Optional("return"), Optional("assign")]) {
-            reduce(2, to: "Return")
+        if topOfStackIsAmong([Optional("assign"), Optional("}"), Optional("identifier"), Optional("if"), Optional("return"), Optional("while")]) {
+            reduce(3, to: "Return")
             return
         }
         
@@ -5082,33 +5470,112 @@ class SLRParser {
 	
 	private func state_118() throws {
 
-        if topOfStackIsNonTerminal("CASECExpression") {
-            pushState(state_79)
+        
+        if topOfStackIsAmong([Optional("assign"), Optional("}"), Optional("identifier"), Optional("if"), Optional("return"), Optional("while")]) {
+            reduce(2, to: "Return")
             return
         }
         
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
+        if index < input.count {
+            throw ParseError.unexpected("Return", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("Return", "reduction")
+        }
+        
+	}
+	
+	private func state_119() throws {
+
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_120)
             return
         }
         
-        if topOfStackIsNonTerminal("CASEJExpression") {
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_124)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("Assignment", input[index].content, "Reference")
+        } else {
+            throw ParseError.abruptEnd("Assignment", "Reference")
+        }
+        
+	}
+	
+	private func state_120() throws {
+
+        if topOfStackIsToken(".") {
+            shift()
             pushState(state_22)
             return
         }
         
-        if topOfStackIsNonTerminal("CASEBExpression") {
-            pushState(state_62)
+        if topOfStackIsToken("=") {
+            shift()
+            pushState(state_121)
             return
         }
         
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
+        if index < input.count {
+            throw ParseError.unexpected("Reference", input[index].content, ".")
+        } else {
+            throw ParseError.abruptEnd("Reference", ".")
+        }
+        
+	}
+	
+	private func state_121() throws {
+
+        if topOfStackIsNonTerminal("CASEDExpression") {
+            pushState(state_51)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Reference") {
+            pushState(state_21)
             return
         }
         
         if topOfStackIsNonTerminal("Expression") {
-            pushState(state_119)
+            pushState(state_122)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEJExpression") {
+            pushState(state_41)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEBExpression") {
+            pushState(state_68)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEIExpression") {
+            pushState(state_29)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEFExpression") {
+            pushState(state_36)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASEHExpression") {
+            pushState(state_39)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("TypeCast") {
+            pushState(state_20)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("CASELExpression") {
+            pushState(state_28)
             return
         }
         
@@ -5117,298 +5584,95 @@ class SLRParser {
             return
         }
         
-        if topOfStackIsNonTerminal("CASEDExpression") {
-            pushState(state_33)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEHExpression") {
-            pushState(state_78)
+        if topOfStackIsNonTerminal("CASECExpression") {
+            pushState(state_67)
             return
         }
         
         if topOfStackIsNonTerminal("CASEGExpression") {
-            pushState(state_64)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEFExpression") {
-            pushState(state_44)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Reference") {
             pushState(state_26)
             return
         }
         
-        if topOfStackIsNonTerminal("CASEIExpression") {
-            pushState(state_35)
-            return
-        }
-        
-        if topOfStackIsToken("sizeof") {
-            shift()
-            pushState(state_40)
+        if topOfStackIsNonTerminal("CASEKExpression") {
+            pushState(state_38)
             return
         }
         
         if topOfStackIsToken("*") {
             shift()
-            pushState(state_57)
+            pushState(state_54)
             return
         }
         
         if topOfStackIsToken("identifier") {
             shift()
-            pushState(state_30)
-            return
-        }
-        
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_61)
-            return
-        }
-        
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_59)
+            pushState(state_34)
             return
         }
         
         if topOfStackIsToken("~") {
             shift()
-            pushState(state_55)
+            pushState(state_60)
             return
         }
         
-        if topOfStackIsToken("!") {
+        if topOfStackIsToken("-") {
             shift()
-            pushState(state_69)
+            pushState(state_44)
             return
         }
         
         if topOfStackIsToken("integer") {
             shift()
-            pushState(state_42)
+            pushState(state_46)
+            return
+        }
+        
+        if topOfStackIsToken("sizeof") {
+            shift()
+            pushState(state_58)
+            return
+        }
+        
+        if topOfStackIsToken("!") {
+            shift()
+            pushState(state_56)
+            return
+        }
+        
+        if topOfStackIsToken("(") {
+            shift()
+            pushState(state_47)
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("CASEDExpression", input[index].content, "CASEDExpression")
+            throw ParseError.unexpected("CASEBExpression", input[index].content, "CASECExpression")
         } else {
-            throw ParseError.abruptEnd("CASEDExpression", "CASEDExpression")
-        }
-        
-	}
-	
-	private func state_119() throws {
-
-        if topOfStackIsToken("||") {
-            shift()
-            pushState(state_81)
-            return
-        }
-        
-        if topOfStackIsToken("{") {
-            shift()
-            pushState(state_120)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("While", input[index].content, "{")
-        } else {
-            throw ParseError.abruptEnd("While", "{")
-        }
-        
-	}
-	
-	private func state_120() throws {
-
-        if topOfStackIsNonTerminal("Type") {
-            pushState(state_15)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Assignment") {
-            pushState(state_107)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Declaration") {
-            pushState(state_103)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("FunctionBodyStatement") {
-            pushState(state_121)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("FunctionBodyStatements") {
-            pushState(state_122)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("If") {
-            pushState(state_102)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Return") {
-            pushState(state_105)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("While") {
-            pushState(state_14)
-            return
-        }
-        
-        if topOfStackIsToken("return") {
-            shift()
-            pushState(state_114)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_11)
-            return
-        }
-        
-        if topOfStackIsToken("if") {
-            shift()
-            pushState(state_124)
-            return
-        }
-        
-        if topOfStackIsToken("while") {
-            shift()
-            pushState(state_118)
-            return
-        }
-        
-        if topOfStackIsToken("assign") {
-            shift()
-            pushState(state_108)
-            return
-        }
-        
-        
-        if topOfStackIsAmong([Optional("while"), Optional("assign"), Optional("return"), Optional("}"), Optional("identifier"), Optional("if")]) {
-            reduce(0, to: "FunctionBodyStatements")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("Assignment", input[index].content, "assign")
-        } else {
-            throw ParseError.abruptEnd("Assignment", "assign")
-        }
-        
-	}
-	
-	private func state_121() throws {
-
-        
-        if topOfStackIsAmong([Optional("while"), Optional("assign"), Optional("return"), Optional("}"), Optional("identifier"), Optional("if")]) {
-            reduce(1, to: "FunctionBodyStatements")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("FunctionBodyStatements", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("FunctionBodyStatements", "reduction")
+            throw ParseError.abruptEnd("CASEBExpression", "CASECExpression")
         }
         
 	}
 	
 	private func state_122() throws {
 
-        if topOfStackIsNonTerminal("Return") {
-            pushState(state_105)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("If") {
-            pushState(state_102)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Assignment") {
-            pushState(state_107)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Type") {
-            pushState(state_15)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("FunctionBodyStatement") {
-            pushState(state_106)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("While") {
-            pushState(state_14)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Declaration") {
-            pushState(state_103)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
+        if topOfStackIsToken("||") {
             shift()
-            pushState(state_11)
+            pushState(state_50)
             return
         }
         
-        if topOfStackIsToken("}") {
+        if topOfStackIsToken(";") {
             shift()
             pushState(state_123)
             return
         }
         
-        if topOfStackIsToken("while") {
-            shift()
-            pushState(state_118)
-            return
-        }
-        
-        if topOfStackIsToken("if") {
-            shift()
-            pushState(state_124)
-            return
-        }
-        
-        if topOfStackIsToken("assign") {
-            shift()
-            pushState(state_108)
-            return
-        }
-        
-        if topOfStackIsToken("return") {
-            shift()
-            pushState(state_114)
-            return
-        }
-        
         if index < input.count {
-            throw ParseError.unexpected("Assignment", input[index].content, "assign")
+            throw ParseError.unexpected("Assignment", input[index].content, ";")
         } else {
-            throw ParseError.abruptEnd("Assignment", "assign")
+            throw ParseError.abruptEnd("Assignment", ";")
         }
         
 	}
@@ -5416,368 +5680,67 @@ class SLRParser {
 	private func state_123() throws {
 
         
-        if topOfStackIsAmong([Optional("if"), Optional("}"), Optional("while"), Optional("identifier"), Optional("return"), Optional("assign")]) {
-            reduce(5, to: "While")
+        if topOfStackIsAmong([Optional("if"), Optional("while"), Optional("identifier"), Optional("return"), Optional("}"), Optional("assign")]) {
+            reduce(5, to: "Assignment")
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("While", input[index].content, "reduction")
+            throw ParseError.unexpected("Assignment", input[index].content, "reduction")
         } else {
-            throw ParseError.abruptEnd("While", "reduction")
+            throw ParseError.abruptEnd("Assignment", "reduction")
         }
         
 	}
 	
 	private func state_124() throws {
 
-        if topOfStackIsNonTerminal("TypeCast") {
-            pushState(state_25)
-            return
-        }
         
-        if topOfStackIsNonTerminal("CASECExpression") {
-            pushState(state_79)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEBExpression") {
-            pushState(state_62)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Expression") {
-            pushState(state_125)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEKExpression") {
-            pushState(state_32)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASELExpression") {
-            pushState(state_24)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEFExpression") {
-            pushState(state_44)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEEExpression") {
-            pushState(state_18)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Reference") {
-            pushState(state_26)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEIExpression") {
-            pushState(state_35)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEGExpression") {
-            pushState(state_64)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEHExpression") {
-            pushState(state_78)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEJExpression") {
-            pushState(state_22)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("CASEDExpression") {
-            pushState(state_33)
-            return
-        }
-        
-        if topOfStackIsToken("(") {
-            shift()
-            pushState(state_61)
-            return
-        }
-        
-        if topOfStackIsToken("integer") {
-            shift()
-            pushState(state_42)
-            return
-        }
-        
-        if topOfStackIsToken("sizeof") {
-            shift()
-            pushState(state_40)
-            return
-        }
-        
-        if topOfStackIsToken("~") {
-            shift()
-            pushState(state_55)
-            return
-        }
-        
-        if topOfStackIsToken("-") {
-            shift()
-            pushState(state_59)
-            return
-        }
-        
-        if topOfStackIsToken("!") {
-            shift()
-            pushState(state_69)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_30)
-            return
-        }
-        
-        if topOfStackIsToken("*") {
-            shift()
-            pushState(state_57)
+        if topOfStackIsAmong([Optional("-"), Optional("|"), Optional("<="), Optional(">>"), Optional("=="), Optional(">="), Optional("%"), Optional(","), Optional("{"), Optional("^"), Optional(">"), Optional(";"), Optional("<"), Optional("*"), Optional("<<"), Optional("!="), Optional("/"), Optional("&&"), Optional("."), Optional(")"), Optional("&"), Optional("||"), Optional("="), Optional("+")]) {
+            reduce(1, to: "Reference")
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("CASEJExpression", input[index].content, "CASEKExpression")
+            throw ParseError.unexpected("Reference", input[index].content, "reduction")
         } else {
-            throw ParseError.abruptEnd("CASEJExpression", "CASEKExpression")
+            throw ParseError.abruptEnd("Reference", "reduction")
         }
         
 	}
 	
 	private func state_125() throws {
 
-        if topOfStackIsToken("{") {
+        if topOfStackIsToken("else") {
             shift()
             pushState(state_126)
             return
         }
         
-        if topOfStackIsToken("||") {
-            shift()
-            pushState(state_81)
+        
+        if topOfStackIsAmong([Optional("while"), Optional("return"), Optional("assign"), Optional("if"), Optional("}"), Optional("identifier")]) {
+            reduce(5, to: "If")
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("If", input[index].content, "{")
+            throw ParseError.unexpected("If", input[index].content, "reduction")
         } else {
-            throw ParseError.abruptEnd("If", "{")
+            throw ParseError.abruptEnd("If", "reduction")
         }
         
 	}
 	
 	private func state_126() throws {
 
-        if topOfStackIsNonTerminal("FunctionBodyStatements") {
+        if topOfStackIsNonTerminal("If") {
             pushState(state_127)
             return
         }
         
-        if topOfStackIsNonTerminal("Return") {
+        if topOfStackIsToken("if") {
+            shift()
             pushState(state_105)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("If") {
-            pushState(state_102)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Type") {
-            pushState(state_15)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Assignment") {
-            pushState(state_107)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Declaration") {
-            pushState(state_103)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("While") {
-            pushState(state_14)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("FunctionBodyStatement") {
-            pushState(state_121)
-            return
-        }
-        
-        if topOfStackIsToken("while") {
-            shift()
-            pushState(state_118)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_11)
-            return
-        }
-        
-        if topOfStackIsToken("if") {
-            shift()
-            pushState(state_124)
-            return
-        }
-        
-        if topOfStackIsToken("assign") {
-            shift()
-            pushState(state_108)
-            return
-        }
-        
-        if topOfStackIsToken("return") {
-            shift()
-            pushState(state_114)
-            return
-        }
-        
-        
-        if topOfStackIsAmong([Optional("while"), Optional("assign"), Optional("return"), Optional("}"), Optional("identifier"), Optional("if")]) {
-            reduce(0, to: "FunctionBodyStatements")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("FunctionBodyStatement", input[index].content, "Declaration")
-        } else {
-            throw ParseError.abruptEnd("FunctionBodyStatement", "Declaration")
-        }
-        
-	}
-	
-	private func state_127() throws {
-
-        if topOfStackIsNonTerminal("While") {
-            pushState(state_14)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Assignment") {
-            pushState(state_107)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("If") {
-            pushState(state_102)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Declaration") {
-            pushState(state_103)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Type") {
-            pushState(state_15)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Return") {
-            pushState(state_105)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("FunctionBodyStatement") {
-            pushState(state_106)
-            return
-        }
-        
-        if topOfStackIsToken("while") {
-            shift()
-            pushState(state_118)
-            return
-        }
-        
-        if topOfStackIsToken("assign") {
-            shift()
-            pushState(state_108)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_11)
-            return
-        }
-        
-        if topOfStackIsToken("}") {
-            shift()
-            pushState(state_128)
-            return
-        }
-        
-        if topOfStackIsToken("return") {
-            shift()
-            pushState(state_114)
-            return
-        }
-        
-        if topOfStackIsToken("if") {
-            shift()
-            pushState(state_124)
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("Return", input[index].content, "return")
-        } else {
-            throw ParseError.abruptEnd("Return", "return")
-        }
-        
-	}
-	
-	private func state_128() throws {
-
-        if topOfStackIsToken("else") {
-            shift()
-            pushState(state_129)
-            return
-        }
-        
-        
-        if topOfStackIsAmong([Optional("return"), Optional("assign"), Optional("identifier"), Optional("}"), Optional("if"), Optional("while")]) {
-            reduce(5, to: "If")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("If", input[index].content, "else")
-        } else {
-            throw ParseError.abruptEnd("If", "else")
-        }
-        
-	}
-	
-	private func state_129() throws {
-
-        if topOfStackIsNonTerminal("If") {
-            pushState(state_130)
-            return
-        }
-        
-        if topOfStackIsToken("if") {
-            shift()
-            pushState(state_124)
             return
         }
         
@@ -5789,10 +5752,10 @@ class SLRParser {
         
 	}
 	
-	private func state_130() throws {
+	private func state_127() throws {
 
         
-        if topOfStackIsAmong([Optional("return"), Optional("assign"), Optional("identifier"), Optional("}"), Optional("if"), Optional("while")]) {
+        if topOfStackIsAmong([Optional("while"), Optional("return"), Optional("assign"), Optional("if"), Optional("}"), Optional("identifier")]) {
             reduce(7, to: "If")
             return
         }
@@ -5805,7 +5768,7 @@ class SLRParser {
         
 	}
 	
-	private func state_131() throws {
+	private func state_128() throws {
 
         
         if topOfStackIsAmong([Optional("struct"), Optional("identifier"), nil]) {
@@ -5821,11 +5784,75 @@ class SLRParser {
         
 	}
 	
-	private func state_132() throws {
+	private func state_129() throws {
+
+        if topOfStackIsNonTerminal("Parameter") {
+            pushState(state_132)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Type") {
+            pushState(state_130)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_72)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("Type", input[index].content, "Type")
+        } else {
+            throw ParseError.abruptEnd("Type", "Type")
+        }
+        
+	}
+	
+	private func state_130() throws {
+
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_131)
+            return
+        }
+        
+        if topOfStackIsToken("*") {
+            shift()
+            pushState(state_15)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("Type", input[index].content, "*")
+        } else {
+            throw ParseError.abruptEnd("Type", "*")
+        }
+        
+	}
+	
+	private func state_131() throws {
 
         
         if topOfStackIsAmong([Optional(","), Optional(")")]) {
-            reduce(1, to: "Parameters")
+            reduce(2, to: "Parameter")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("Parameter", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("Parameter", "reduction")
+        }
+        
+	}
+	
+	private func state_132() throws {
+
+        
+        if topOfStackIsAmong([Optional(")"), Optional(",")]) {
+            reduce(3, to: "Parameters")
             return
         }
         
@@ -5839,49 +5866,16 @@ class SLRParser {
 	
 	private func state_133() throws {
 
-        if topOfStackIsNonTerminal("Struct") {
-            pushState(state_1)
-            return
-        }
         
-        if topOfStackIsNonTerminal("Function") {
-            pushState(state_134)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("TopLevelStatement") {
-            pushState(state_135)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Type") {
-            pushState(state_2)
-            return
-        }
-        
-        if topOfStackIsToken("struct") {
-            shift()
-            pushState(state_136)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_11)
-            return
-        }
-        
-        
-        if topOfStackIsAmong([nil]) {
-            reduce(1, to: "SwiftSLRMain")
-			accepted = true
+        if topOfStackIsAmong([Optional(")"), Optional(",")]) {
+            reduce(1, to: "Parameters")
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("TopLevelStatement", input[index].content, "Struct")
+            throw ParseError.unexpected("Parameters", input[index].content, "reduction")
         } else {
-            throw ParseError.abruptEnd("TopLevelStatement", "Struct")
+            throw ParseError.abruptEnd("Parameters", "reduction")
         }
         
 	}
@@ -5889,7 +5883,7 @@ class SLRParser {
 	private func state_134() throws {
 
         
-        if topOfStackIsAmong([nil, Optional("identifier"), Optional("struct")]) {
+        if topOfStackIsAmong([nil, Optional("struct"), Optional("identifier")]) {
             reduce(1, to: "TopLevelStatement")
             return
         }
@@ -5905,15 +5899,15 @@ class SLRParser {
 	private func state_135() throws {
 
         
-        if topOfStackIsAmong([Optional("struct"), nil, Optional("identifier")]) {
-            reduce(2, to: "TopLevelStatements")
+        if topOfStackIsAmong([nil, Optional("struct"), Optional("identifier")]) {
+            reduce(1, to: "TopLevelStatement")
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("TopLevelStatements", input[index].content, "reduction")
+            throw ParseError.unexpected("TopLevelStatement", input[index].content, "reduction")
         } else {
-            throw ParseError.abruptEnd("TopLevelStatements", "reduction")
+            throw ParseError.abruptEnd("TopLevelStatement", "reduction")
         }
         
 	}
@@ -5952,109 +5946,45 @@ class SLRParser {
 	
 	private func state_138() throws {
 
-        if topOfStackIsNonTerminal("StructBodyStatements") {
+        if topOfStackIsNonTerminal("Type") {
+            pushState(state_14)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Declaration") {
             pushState(state_139)
             return
         }
         
-        if topOfStackIsNonTerminal("Type") {
-            pushState(state_15)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Declaration") {
-            pushState(state_142)
-            return
-        }
-        
-        if topOfStackIsToken("identifier") {
-            shift()
-            pushState(state_11)
-            return
-        }
-        
-        
-        if topOfStackIsAmong([Optional("}"), Optional("identifier")]) {
-            reduce(0, to: "StructBodyStatements")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("StructBodyStatements", input[index].content, "Declaration")
-        } else {
-            throw ParseError.abruptEnd("StructBodyStatements", "Declaration")
-        }
-        
-	}
-	
-	private func state_139() throws {
-
-        if topOfStackIsNonTerminal("Type") {
-            pushState(state_15)
-            return
-        }
-        
-        if topOfStackIsNonTerminal("Declaration") {
+        if topOfStackIsNonTerminal("StructBodyStatements") {
             pushState(state_140)
             return
         }
         
         if topOfStackIsToken("identifier") {
             shift()
-            pushState(state_11)
+            pushState(state_72)
             return
         }
         
-        if topOfStackIsToken("}") {
-            shift()
-            pushState(state_141)
-            return
-        }
         
-        if index < input.count {
-            throw ParseError.unexpected("Declaration", input[index].content, "Type")
-        } else {
-            throw ParseError.abruptEnd("Declaration", "Type")
-        }
-        
-	}
-	
-	private func state_140() throws {
-
-        
-        if topOfStackIsAmong([Optional("}"), Optional("identifier")]) {
-            reduce(2, to: "StructBodyStatements")
+        if topOfStackIsAmong([Optional("identifier"), Optional("}")]) {
+            reduce(0, to: "StructBodyStatements")
             return
         }
         
         if index < input.count {
-            throw ParseError.unexpected("StructBodyStatements", input[index].content, "reduction")
+            throw ParseError.unexpected("Struct", input[index].content, "StructBodyStatements")
         } else {
-            throw ParseError.abruptEnd("StructBodyStatements", "reduction")
+            throw ParseError.abruptEnd("Struct", "StructBodyStatements")
         }
         
 	}
 	
-	private func state_141() throws {
+	private func state_139() throws {
 
         
-        if topOfStackIsAmong([Optional("struct"), Optional("identifier"), nil]) {
-            reduce(5, to: "Struct")
-            return
-        }
-        
-        if index < input.count {
-            throw ParseError.unexpected("Struct", input[index].content, "reduction")
-        } else {
-            throw ParseError.abruptEnd("Struct", "reduction")
-        }
-        
-	}
-	
-	private func state_142() throws {
-
-        
-        if topOfStackIsAmong([Optional("}"), Optional("identifier")]) {
+        if topOfStackIsAmong([Optional("identifier"), Optional("}")]) {
             reduce(1, to: "StructBodyStatements")
             return
         }
@@ -6067,10 +5997,74 @@ class SLRParser {
         
 	}
 	
-	private func state_143() throws {
+	private func state_140() throws {
+
+        if topOfStackIsNonTerminal("Type") {
+            pushState(state_14)
+            return
+        }
+        
+        if topOfStackIsNonTerminal("Declaration") {
+            pushState(state_141)
+            return
+        }
+        
+        if topOfStackIsToken("}") {
+            shift()
+            pushState(state_142)
+            return
+        }
+        
+        if topOfStackIsToken("identifier") {
+            shift()
+            pushState(state_72)
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("Declaration", input[index].content, "Type")
+        } else {
+            throw ParseError.abruptEnd("Declaration", "Type")
+        }
+        
+	}
+	
+	private func state_141() throws {
+
+        
+        if topOfStackIsAmong([Optional("identifier"), Optional("}")]) {
+            reduce(2, to: "StructBodyStatements")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("StructBodyStatements", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("StructBodyStatements", "reduction")
+        }
+        
+	}
+	
+	private func state_142() throws {
 
         
         if topOfStackIsAmong([Optional("struct"), nil, Optional("identifier")]) {
+            reduce(5, to: "Struct")
+            return
+        }
+        
+        if index < input.count {
+            throw ParseError.unexpected("Struct", input[index].content, "reduction")
+        } else {
+            throw ParseError.abruptEnd("Struct", "reduction")
+        }
+        
+	}
+	
+	private func state_143() throws {
+
+        
+        if topOfStackIsAmong([nil, Optional("struct"), Optional("identifier")]) {
             reduce(1, to: "TopLevelStatements")
             return
         }

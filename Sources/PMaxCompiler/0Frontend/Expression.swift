@@ -41,6 +41,7 @@ public indirect enum Expression: CustomStringConvertible {
 	
 	case TerminalExpressionTerminal(String, Expression, String)
 	case Reference(Reference)
+	case integer(String)
 	case identifierTerminalArgumentsTerminal(String, String, Arguments, String)
 
 	public var description: String {
@@ -49,6 +50,7 @@ public indirect enum Expression: CustomStringConvertible {
 		case .singleArgumentOperator(let op, let a): return "(\(op.rawValue) \(a.description))"
 		case .TerminalExpressionTerminal(_, let expression, _): return "(" + expression.description + ")"
 		case .Reference(let reference): return reference.description
+		case .integer(_): return "integer"
 		case .identifierTerminalArgumentsTerminal(_, _, let arguments, _): return "identifier" + "(" + arguments.description + ")"
 		}
 	}

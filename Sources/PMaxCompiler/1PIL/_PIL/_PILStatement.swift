@@ -4,9 +4,9 @@ enum PILStatement {
     /// Declarations with an initial value are converted to a declaration followed by an assignment (and are therefore split into two seemingly unrelated statements).
     case declaration(type: PILType, name: String)
     
-    /// Assignments are stored with one `lhs: PILReference` field representing the left-hand side of the assignment.
+    /// Assignments are stored with one `lhs: [String]` field representing the left-hand side of the assignment. Each element represents a member of the previous (the first is in the function's name space).
     /// They also have a `PILExpression` field representing the value to assign to the lelft-hand side reference.
-    case assignment(lhs: PILReference, rhs: PILExpression)
+    case assignment(lhs: [String], rhs: PILExpression)
     
     /// Syntactic `return` statements are lowered to `PILStatement.return`, which has an (optional) `PILExpression` associated value representing the value being returned.
     case `return`(expression: PILExpression?)

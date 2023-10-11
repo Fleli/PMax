@@ -35,7 +35,8 @@ class PILFunction: CustomStringConvertible {
     private func lowerToPIL(_ underlyingFunction: Function, _ lowerer: PILLowerer) {
         
         for statement in underlyingFunction.body {
-            
+            let lowered = statement.lowerToPIL(lowerer)
+            self.body.append(lowered)
         }
         
     }
