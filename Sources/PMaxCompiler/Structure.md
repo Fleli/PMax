@@ -1,5 +1,11 @@
 #  Structure
 
+## TODO
+
+Consider moving function calls to the `Expression` root instead of in `Reference`: Nested calls are not supported by this language since functions cannot return functions.
+
+Assignments must have a reference as their `lhs` (not a `String`). This is because we need to access struct members to assign their properties.
+
 ## Syntactic Frontend
 
 The _syntactic frontend_ of the compiler takes a `String`, lexes into `[Token]`, parses into `SLRNode` and converts to `TopLevelStatements`.

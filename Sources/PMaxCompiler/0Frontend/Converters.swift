@@ -30,31 +30,6 @@ public extension SLRNode {
 }
 public extension SLRNode {
     
-    func convertToParameters() -> Parameters {
-        
-        if children.count == 0 {
-            return []
-        }
-        
-        if children.count == 1 {
-            return [children[0].convertToParameter()]
-        }
-        
-        if children.count == 2 {
-            return children[0].convertToParameters() + [children[1].convertToParameter()]
-        }
-        
-        if children.count == 3 {
-            return children[0].convertToParameters() + [children[2].convertToParameter()]
-        }
-        
-        fatalError()
-        
-    }
-    
-}
-public extension SLRNode {
-    
     func convertToStructBodyStatements() -> StructBodyStatements {
         
         if children.count == 0 {
@@ -71,6 +46,31 @@ public extension SLRNode {
         
         if children.count == 3 {
             return children[0].convertToStructBodyStatements() + [children[2].convertToDeclaration()]
+        }
+        
+        fatalError()
+        
+    }
+    
+}
+public extension SLRNode {
+    
+    func convertToParameters() -> Parameters {
+        
+        if children.count == 0 {
+            return []
+        }
+        
+        if children.count == 1 {
+            return [children[0].convertToParameter()]
+        }
+        
+        if children.count == 2 {
+            return children[0].convertToParameters() + [children[1].convertToParameter()]
+        }
+        
+        if children.count == 3 {
+            return children[0].convertToParameters() + [children[2].convertToParameter()]
         }
         
         fatalError()
@@ -155,10 +155,10 @@ public extension SLRNode {
 
 	func convertToAssignment() -> Assignment {
 		
-		if type == "Assignment" && children.count == 4 && children[0].type == "identifier" && children[1].type == "=" && children[2].type == "Expression" && children[3].type == ";" {
-			let arg0 = children[0].convertToTerminal()
-			let arg2 = children[2].convertToExpression()
-			return .init(arg0, arg2)
+		if type == "Assignment" && children.count == 5 && children[0].type == "assign" && children[1].type == "Reference" && children[2].type == "=" && children[3].type == "Expression" && children[4].type == ";" {
+			let arg1 = children[1].convertToReference()
+			let arg3 = children[3].convertToExpression()
+			return .init(arg1, arg3)
 		}
 		
 		fatalError()
@@ -662,6 +662,16 @@ public extension SLRNode {
 			
 		}
 		
+		if type == "CASELExpression" && children.count == 4 && children[0].type == "identifier" && children[1].type == "(" && children[2].type == "Arguments" && children[3].type == ")" {
+			
+			let arg0 = children[0].convertToTerminal()
+			let arg1 = children[1].convertToTerminal()
+			let arg2 = children[2].convertToArguments()
+			let arg3 = children[3].convertToTerminal()
+			return .identifierTerminalArgumentsTerminal(arg0, arg1, arg2, arg3)
+			
+		}
+		
 		fatalError()
 		
 	}
@@ -718,14 +728,6 @@ public extension SLRNode {
 			let arg1 = children[1].convertToTerminal()
 			let arg2 = children[2].convertToTerminal()
 			return Reference.member(arg0, arg1, arg2)
-		}
-	
-		if type == "Reference" && children.count == 4 && children[0].type == "identifier" && children[1].type == "(" && children[2].type == "Arguments" && children[3].type == ")" {
-			let arg0 = children[0].convertToTerminal()
-			let arg1 = children[1].convertToTerminal()
-			let arg2 = children[2].convertToArguments()
-			let arg3 = children[3].convertToTerminal()
-			return Reference.call(arg0, arg1, arg2, arg3)
 		}
 	
 		fatalError()
