@@ -32,13 +32,16 @@ extension Expression {
             
         case .identifierTerminalArgumentsTerminal(let functionName, _, let arguments, _):
             
-            // TODO: Implement function call lowering
-            fatalError()
+            let pilCall = PILCall(functionName, arguments, lowerer)
+            let operation = PILOperation.call(pilCall)
+            
+            return PILExpression(operation)
             
         case .integer(let literal):
             
-            // TODO: Implement literal lowering
-            fatalError()
+            let varName = lowerer.literalPool.integerLiteral(literal)
+            let operation = PILOperation.reference([varName])
+            return PILExpression(operation)
             
         }
         

@@ -32,6 +32,9 @@ class PILLowerer {
                 let pilFunction = PILFunction(function, self)
                 functions[name] = pilFunction
                 print(pilFunction)
+                pilFunction.body.forEach {
+                    print($0)
+                }
             }
             
         }

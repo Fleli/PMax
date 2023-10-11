@@ -1,4 +1,4 @@
-enum PILOperation {
+enum PILOperation: CustomStringConvertible {
     
     typealias Unary = Expression.SingleArgumentOperator
     typealias Binary = Expression.InfixOperator
@@ -8,6 +8,21 @@ enum PILOperation {
     
     /// A `.reference` operation simply points to a nesting of members. The 0th element means a variable in the local scope, the 1st is a member of that variable, the 2nd is a member of that, etc.
     case reference([String])
+    
+    case call(PILCall)
+    
+    var description: String {
+        switch self {
+        case .unary(let `operator`, let arg):
+            return "(\(`operator`.rawValue)\(arg.description))"
+        case .binary(let `operator`, let arg1, let arg2):
+            return "(\(arg1.description)\(`operator`.rawValue)\(arg2.description))"
+        case .reference(let array):
+            return "\(array.reduce("", {$0 + $1 + "."}).dropLast())"
+        case .call(let call):
+            return call.description
+        }
+    }
     
     func synthesizeType() -> PILType {
         // TODO: Synthesize a type from subexpressions, or simply fetch from reference.

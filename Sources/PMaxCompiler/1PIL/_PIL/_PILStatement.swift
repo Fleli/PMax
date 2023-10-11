@@ -1,4 +1,4 @@
-enum PILStatement {
+enum PILStatement: CustomStringConvertible {
     
     /// Declarations are stored as two associated types (`type: PILType` and `name: String`).
     /// Declarations with an initial value are converted to a declaration followed by an assignment (and are therefore split into two seemingly unrelated statements).
@@ -16,5 +16,21 @@ enum PILStatement {
     
     /// A lowered `while` statement, including its `condition` and `body`
     case `while`(condition: PILExpression, body: [PILStatement])
+    
+    
+    var description: String {
+        switch self {
+        case .declaration(let type, let name):
+            return "\(type.description) \(name);"
+        case .assignment(let lhs, let rhs):
+            return "\(lhs.reduce("", {$0 + $1 + "."}).dropLast()) = \(rhs.description)"
+        case .return(let expression):
+            return "return \(expression?.description ?? "");"
+        case .if(let pILIfStatement):
+            return "if"
+        case .while(let condition, let body):
+            return "while"
+        }
+    }
     
 }
