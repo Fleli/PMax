@@ -1,4 +1,4 @@
-enum PILStatement: CustomStringConvertible {
+enum PILStatement {
     
     /// Declarations are stored as two associated types (`type: PILType` and `name: String`).
     /// Declarations with an initial value are converted to a declaration followed by an assignment (and are therefore split into two seemingly unrelated statements).
@@ -18,19 +18,26 @@ enum PILStatement: CustomStringConvertible {
     case `while`(condition: PILExpression, body: [PILStatement])
     
     
-    var description: String {
+    func _print(_ indent: Int = 0) {
+        
+        let prefix = String(repeating: "|   ", count: indent)
+        
         switch self {
         case .declaration(let type, let name):
-            return "\(type.description) \(name);"
+            print(prefix + type.description + " " + name + ";")
         case .assignment(let lhs, let rhs):
-            return "\(lhs.reduce("", {$0 + $1 + "."}).dropLast()) = \(rhs.description)"
+            print(prefix + "\(lhs.reduce("", {$0 + "\($1)."}).dropLast()) = \(rhs.description);")
         case .return(let expression):
-            return "return \(expression?.description ?? "");"
+            print(prefix + "return \(expression?.description ?? "[void]");")
         case .if(let pILIfStatement):
-            return "if"
+            pILIfStatement._print(indent)
         case .while(let condition, let body):
-            return "while"
+            print(prefix + "while \(condition.description) {")
+            body.forEach { $0._print(indent + 1) }
+            print(prefix + "}")
         }
+        
     }
+    
     
 }

@@ -33,7 +33,7 @@ class PILLowerer {
                 functions[name] = pilFunction
                 print(pilFunction)
                 pilFunction.body.forEach {
-                    print($0)
+                    $0._print(1)
                 }
             }
             

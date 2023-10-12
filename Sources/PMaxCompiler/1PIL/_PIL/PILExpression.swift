@@ -7,7 +7,7 @@ class PILExpression: CustomStringConvertible {
     var value: PILOperation
     
     var description: String {
-        " (\(value.description) [\(type.description)]) "
+        "(\(value.description) [\(type.description)])"
     }
     
     init(_ value: PILOperation) {

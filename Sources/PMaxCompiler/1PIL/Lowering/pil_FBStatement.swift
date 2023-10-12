@@ -15,6 +15,10 @@ extension FunctionBodyStatement {
             let lhs = [declaration.name]
             let pilAssign = PILStatement.assignment(lhs: lhs, rhs: initValue.lowerToPIL(lowerer))
             
+            // TODO: Should change this so that if `x` is declared, you can't use `x` in its rhs (either disallow, produce warning or try to use `x` from an outer scope)
+            
+            // TODO: Consider adding a temporary variable that is assigned _before_ `x` is declared, and then assign that to `x`. Be wary of any cryptic error messages resulting from this, though.
+            
             return [pilDecl, pilAssign]
             
         case .assignment(let assignment):
