@@ -1,7 +1,10 @@
 class PILLowerer {
     
     /// The `PILLowerer`'s `literalPool` is availble internally so that functions that lower from syntactic statements to `PIL` can notify the literal pool of newly encountered literals.
-    let literalPool: LiteralPool
+    var literalPool: LiteralPool!
+    
+    /// The global scope is necessary to refer to directly for literal definitions.
+    var global: PILScope!
     
     /// The `local` scope is used to notify the `PILLowerer`'s environment of declarations, and to verify the existence of variables when they are referenced.
     var local: PILScope!
@@ -14,9 +17,10 @@ class PILLowerer {
     init(_ topLevelStatements: TopLevelStatements) {
         
         self.topLevelStatements = topLevelStatements
-        self.literalPool = LiteralPool()
         
-        self.local = PILScope(self)
+        self.literalPool = LiteralPool(self)
+        self.global = PILScope(self)
+        self.local = global
         
     }
     

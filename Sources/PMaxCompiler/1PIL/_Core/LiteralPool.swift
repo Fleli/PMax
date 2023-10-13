@@ -1,5 +1,11 @@
 class LiteralPool {
     
+    private weak var lowerer: PILLowerer!
+    
+    init(_ lowerer: PILLowerer) {
+        self.lowerer = lowerer
+    }
+    
     /// For each new literal, increment this. It is used to be certain that literal variables do not collide with programmer-declared variables.
     private var internalLiteralCounter = 0
     
@@ -18,6 +24,8 @@ class LiteralPool {
         let newVariable = "$literal#\(internalLiteralCounter)"
         
         integerLiterals[literal] = newVariable
+        
+        lowerer.global.declare(.int, newVariable)
         
         return newVariable
         

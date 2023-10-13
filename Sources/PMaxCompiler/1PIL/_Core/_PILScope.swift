@@ -25,13 +25,18 @@ class PILScope {
         
         variables[name] = type
         
-        print("Declared \(type) \(name)")
-        
     }
     
     func getVariable(_ name: String) -> PILType? {
-        print("Fetched \(variables[name]) at \(name)")
-        return variables[name]
+        
+        if let local = variables[name] {
+            return local
+        } else if let parent {
+            return parent.getVariable(name)
+        }
+        
+        return nil
+        
     }
     
 }
