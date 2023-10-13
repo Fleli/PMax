@@ -30,10 +30,11 @@ public indirect enum Expression: CustomStringConvertible {
 	
 	public enum SingleArgumentOperator: String {
 		case operator_0 = "sizeof"
-		case operator_1 = "*"
-		case operator_2 = "!"
-		case operator_3 = "~"
-		case operator_4 = "-"
+		case operator_1 = "!"
+		case operator_2 = "~"
+		case operator_3 = "-"
+		case operator_4 = "*"
+		case operator_5 = "&"
 	}
 	
 	case singleArgumentOperator(SingleArgumentOperator, Expression)

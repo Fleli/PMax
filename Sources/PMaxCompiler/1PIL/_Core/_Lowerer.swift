@@ -15,7 +15,7 @@ class PILLowerer {
     
     private var structs: [String : PILStruct] = [:]
     
-    private var functions: [String : PILFunction] = [:]
+    private(set) var functions: [String : PILFunction] = [:]
     
     init(_ topLevelStatements: TopLevelStatements) {
         

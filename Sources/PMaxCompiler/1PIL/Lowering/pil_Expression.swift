@@ -16,8 +16,26 @@ extension Expression {
             
             let lowered_a = a.lowerToPIL(lowerer)
             
-            let pilOperation = PILOperation.unary(operator: unary, arg: lowered_a)
+            // Pointer dereference er et special case
+            if unary.rawValue == "*" {
+                
+                let pilOperation = PILOperation.dereference(lowered_a)
+                return PILExpression(pilOperation, lowerer)
+                
+            } else if unary.rawValue == "&" {
+                
+                guard let pointee = lowered_a.asFlattenedReference() else {
+                    lowerer.submitError(.cannotFindAddressOfNonReference)
+                    let pilOperation = PILOperation.unary(operator: unary, arg: lowered_a)
+                    return PILExpression(pilOperation, lowerer)
+                }
+                
+                let pilOperation = PILOperation.addressOf(pointee)
+                return PILExpression(pilOperation, lowerer)
+                
+            }
             
+            let pilOperation = PILOperation.unary(operator: unary, arg: lowered_a)
             return PILExpression(pilOperation, lowerer)
             
         case .TerminalExpressionTerminal(_, let expression, _):

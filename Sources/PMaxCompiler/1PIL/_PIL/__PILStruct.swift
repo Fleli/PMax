@@ -13,8 +13,7 @@ class PILStruct: CustomStringConvertible {
             let type = PILType(stmt.type, lowerer)
             
             if stmt.value != nil {
-                lowerer.submitError(<#T##newError: PMaxError##PMaxError#>)
-                // TODO: Consider changing the grammar, or producing an issue.
+                lowerer.submitError(.structMembersCannotHaveDefaultValues(structName: self.name, field: fieldName))
             }
             
             guard fields[fieldName] == nil else {

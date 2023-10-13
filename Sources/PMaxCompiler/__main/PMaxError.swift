@@ -11,6 +11,10 @@ enum PMaxError: CustomStringConvertible {
     case binaryOperatorNotDefined(op: String, arg1Type: PILType, arg2Type: PILType)
     case functionDoesNotExist(name: String)
     case structMembersCannotHaveDefaultValues(structName: String, field: String)
+    case incorrectNumberOfArguments(functionName: String, expected: Int, given: Int)
+    case incorrectTypeInFunctionCall(functionName: String, expected: PILType, given: PILType, position: Int)
+    case dereferenceNonPointerType(type: PILType)
+    case cannotFindAddressOfNonReference
     
     var description: String {
         switch self {
@@ -36,6 +40,14 @@ enum PMaxError: CustomStringConvertible {
             return "The function '\(name)' is not defined."
         case .structMembersCannotHaveDefaultValues(let structName, let field):
             return "Member '\(field)' of struct '\(structName)' cannot have default value."
+        case .incorrectNumberOfArguments(let functionName, let expected, let given):
+            return "Expected \(expected) arguments in call to '\(functionName)', but got \(given)."
+        case .incorrectTypeInFunctionCall(let functionName, let expected, let given, let position):
+            return "Argument type at position \(position) in call to '\(functionName)' should be '\(expected)', not '\(given)'."
+        case .dereferenceNonPointerType(let type):
+            return "Cannot dereference non-pointer type '\(type)'."
+        case .cannotFindAddressOfNonReference:
+            return "Cannot use the '&' operator on non-reference expression."
         }
     }
     

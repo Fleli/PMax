@@ -6,10 +6,15 @@ enum PILOperation: CustomStringConvertible {
     case unary(operator: Unary, arg: PILExpression)
     case binary(operator: Binary, arg1: PILExpression, arg2: PILExpression)
     
+    // TODO: Find out how dereferencing (*x) is going to work.
+    
     /// A `.reference` operation simply points to a nesting of members. The 0th element means a variable in the local scope, the 1st is a member of that variable, the 2nd is a member of that, etc.
     case reference([String])
     
     case call(PILCall)
+    
+    case dereference(PILExpression)
+    case addressOf([String])
     
     var description: String {
         switch self {
@@ -21,6 +26,10 @@ enum PILOperation: CustomStringConvertible {
             return "\(array.reduce("", {$0 + $1 + "."}).dropLast())"
         case .call(let call):
             return call.description
+        case .dereference(let arg):
+            return "(*\(arg))"
+        case .addressOf(let array):
+            return "(&\(array.reduce("", {$0 + $1 + "."}).dropLast()))"
         }
     }
     
@@ -72,6 +81,23 @@ enum PILOperation: CustomStringConvertible {
             }
             
             return funcType
+            
+        case .dereference(let expression):
+            
+            let expressionType = expression.type
+            
+            guard case .pointer(let pointee) = expressionType else {
+                lowerer.submitError(.dereferenceNonPointerType(type: expressionType))
+                return .error
+            }
+            
+            return pointee
+            
+        case .addressOf(let array):
+            
+            let reference = PILOperation.reference(array)
+            let type = reference.synthesizeType(lowerer)
+            return .pointer(pointee: type)
             
         }
         
