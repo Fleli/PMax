@@ -15,4 +15,9 @@ class PILExpression: CustomStringConvertible {
         self.value = value
     }
     
+    init(_ value: PILOperation, cast: PILType) {
+        self.type = cast
+        self.value = value
+    }
+    
 }

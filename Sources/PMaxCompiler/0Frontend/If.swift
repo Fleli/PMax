@@ -9,16 +9,16 @@ public class If: CustomStringConvertible {
 	let body: FunctionBodyStatements
 	let elseIf: If?
 	
-	init(_ condition: Expression, _ body: FunctionBodyStatements, _ elseIf: If) {
-		self.condition = condition
-		self.body = body
-		self.elseIf = elseIf
-	}
-	
 	init(_ condition: Expression, _ body: FunctionBodyStatements) {
 		self.condition = condition
 		self.body = body
 		self.elseIf = nil
+	}
+	
+	init(_ condition: Expression, _ body: FunctionBodyStatements, _ elseIf: If) {
+		self.condition = condition
+		self.body = body
+		self.elseIf = elseIf
 	}
 
 	public var description: String {

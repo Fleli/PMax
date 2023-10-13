@@ -8,6 +8,8 @@ class PILLowerer {
     
     private var functions: [String : PILFunction] = [:]
     
+    private var infixOperators: [PILBinaryOperatorSignature : PILBinaryOperator] = [:]
+    private var unaryOperators: [PILUnaryOperatorSignature : PILUnaryOperator] = [:]
     
     init(_ topLevelStatements: TopLevelStatements) {
         self.topLevelStatements = topLevelStatements
@@ -35,6 +37,14 @@ class PILLowerer {
                 pilFunction.body.forEach {
                     $0._print(1)
                 }
+            case .operator(.binaryOperator(let binaryOperator)):
+                let pilOp = PILBinaryOperator(binaryOperator, self)
+                infixOperators[pilOp.signature] = pilOp
+                print(pilOp)
+            case .operator(.unaryOperator(let unaryOperator)):
+                let pilOp = PILUnaryOperator(unaryOperator, self)
+                unaryOperators[pilOp.signature] = pilOp
+                print(pilOp)
             }
             
         }

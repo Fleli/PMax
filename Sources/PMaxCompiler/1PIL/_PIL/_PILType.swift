@@ -1,4 +1,4 @@
-indirect enum PILType: CustomStringConvertible {
+indirect enum PILType: CustomStringConvertible, Hashable {
     
     case word
     case void

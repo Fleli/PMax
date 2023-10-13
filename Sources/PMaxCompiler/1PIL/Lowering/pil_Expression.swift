@@ -43,6 +43,14 @@ extension Expression {
             let operation = PILOperation.reference([varName])
             return PILExpression(operation)
             
+        case .TypeCastTerminalExpressionTerminal(let typeCast, _, let expression, _):
+            
+            // A type cast is like all other expressions, but we modify the type of it to whatever the programmer specified.
+            let annotatedExpression = expression.lowerToPIL(lowerer)
+            annotatedExpression.type = PILType(typeCast.type, lowerer)
+            
+            return annotatedExpression
+            
         }
         
     }

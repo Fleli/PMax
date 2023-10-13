@@ -29,18 +29,18 @@ public indirect enum Expression: CustomStringConvertible {
 	case infixOperator(InfixOperator, Expression, Expression)
 	
 	public enum SingleArgumentOperator: String {
-		case operator_0 = "TypeCast"
-		case operator_1 = "sizeof"
-		case operator_2 = "*"
-		case operator_3 = "!"
-		case operator_4 = "~"
-		case operator_5 = "-"
+		case operator_0 = "sizeof"
+		case operator_1 = "*"
+		case operator_2 = "!"
+		case operator_3 = "~"
+		case operator_4 = "-"
 	}
 	
 	case singleArgumentOperator(SingleArgumentOperator, Expression)
 	
 	case TerminalExpressionTerminal(String, Expression, String)
 	case Reference(Reference)
+	case TypeCastTerminalExpressionTerminal(TypeCast, String, Expression, String)
 	case integer(String)
 	case identifierTerminalArgumentsTerminal(String, String, Arguments, String)
 
@@ -50,6 +50,7 @@ public indirect enum Expression: CustomStringConvertible {
 		case .singleArgumentOperator(let op, let a): return "(\(op.rawValue) \(a.description))"
 		case .TerminalExpressionTerminal(_, let expression, _): return "(" + expression.description + ")"
 		case .Reference(let reference): return reference.description
+		case .TypeCastTerminalExpressionTerminal(let typeCast, _, let expression, _): return typeCast.description + "(" + expression.description + ")"
 		case .integer(_): return "integer"
 		case .identifierTerminalArgumentsTerminal(_, _, let arguments, _): return "identifier" + "(" + arguments.description + ")"
 		}
