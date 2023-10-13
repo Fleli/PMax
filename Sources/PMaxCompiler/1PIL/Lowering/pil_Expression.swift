@@ -27,7 +27,6 @@ extension Expression {
         case .Reference(let reference):
             
             let pilOperation = reference.lowerToPIL(lowerer)
-            // TODO: Her må vi finne typen til operasjonen
             return PILExpression(pilOperation, lowerer)
             
         case .identifierTerminalArgumentsTerminal(let functionName, _, let arguments, _):

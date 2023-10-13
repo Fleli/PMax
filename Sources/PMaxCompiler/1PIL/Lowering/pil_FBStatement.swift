@@ -6,6 +6,9 @@ extension FunctionBodyStatement {
         // As expressions are lowered, we check (via reference lowering) that the variables they refer to exist.
         // Thus, no statements _here_ need to verify that the variables they use actually exist.
         
+        // TODO: På et eller annet tidspunkt må assignments endres til å ha expressions som lhs siden vi må kunne skrive på dereferenced adresser osv.
+        // Ordne det senere ...
+        
         switch self {
         case .declaration(let declaration):
             
@@ -29,7 +32,7 @@ extension FunctionBodyStatement {
             
             // TODO: Should change this so that if `x` is declared, you can't use `x` in its rhs (either disallow, produce warning or try to use `x` from an outer scope). Consider adding a temporary variable that is assigned _before_ `x` is declared, and then assign that to `x`. Be wary of any cryptic error messages resulting from this, though.
             
-            if type != rhs.type {
+            if type != rhs.type && type != .error && rhs.type != .error {
                 lowerer.submitError(.assignmentTypeMismatch(variable: declaration.name, expected: type, actual: rhs.type))
             }
             
@@ -39,6 +42,15 @@ extension FunctionBodyStatement {
             
             let lhs = assignment.lhs.flattenReference()
             let rhs = assignment.rhs.lowerToPIL(lowerer)
+            
+            let lhsType = PILExpression(.reference(lhs), lowerer).type
+            let rhsType = rhs.type
+            
+            let description = lhs.reduce("", {$0 + $1 + "."}).dropLast()
+            
+            if lhsType != rhsType && lhsType != .error && rhsType != .error {
+                lowerer.submitError(.assignmentTypeMismatch(variable: String(description), expected: lhsType, actual: rhsType))
+            }
             
             let pilAssign = PILStatement.assignment(lhs: lhs, rhs: rhs)
             

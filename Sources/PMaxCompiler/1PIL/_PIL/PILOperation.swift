@@ -27,19 +27,30 @@ enum PILOperation: CustomStringConvertible {
     func synthesizeType(_ lowerer: PILLowerer) -> PILType {
         
         switch self {
-        case .unary(_, _):
-            // v1 supports unary operators on `int` only
+        case .unary(let `operator`, let arg):
+            
+            guard case .int = arg.type else {
+                lowerer.submitError(.unaryOperatorNotDefined(op: `operator`.rawValue, argType: arg.type))
+                return .error
+            }
+            
             return .int
-        case .binary(_, _, _):
-            // v1 supports binary operators on `int` only
+            
+        case .binary(let `operator`, let arg1, let arg2):
+            
+            guard case .int = arg1.type, case .int = arg2.type else {
+                lowerer.submitError(.binaryOperatorNotDefined(op: `operator`.rawValue, arg1Type: arg1.type, arg2Type: arg2.type))
+                return .error
+            }
+            
             return .int
+            
         case .reference(let array):
             
             let mainVariable = array[0]
             
             guard let mainType = lowerer.local.getVariable(mainVariable) else {
-                // TODO: Submit error
-                // We use the `.error` type if the variable does not exist.
+                lowerer.submitError(.variableIsNotDeclared(name: mainVariable))
                 return .error
             }
             
