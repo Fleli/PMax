@@ -9,8 +9,11 @@ class PILLowerer {
     /// The `local` scope is used to notify the `PILLowerer`'s environment of declarations, and to verify the existence of variables when they are referenced.
     var local: PILScope!
     
+    private var errors: [PMaxError] = []
     
     private let topLevelStatements: TopLevelStatements
+    
+    private var structs: [String : PILStruct] = [:]
     
     private var functions: [String : PILFunction] = [:]
     
@@ -27,6 +30,8 @@ class PILLowerer {
     
     func lower() {
         prepare()
+        lowerFunctionBodies()
+        errors.forEach { print($0) }
     }
     
     private func prepare() {
@@ -34,20 +39,28 @@ class PILLowerer {
         for syntacticStatement in topLevelStatements {
             
             switch syntacticStatement {
-            case .struct(_):
-                continue
+            case .struct(let `struct`):
+                let newStruct = PILStruct(`struct`, self)
+                structs[newStruct.name] = newStruct
+                print(newStruct)
             case .function(let function):
                 let name = function.name
                 let pilFunction = PILFunction(function, self)
                 functions[name] = pilFunction
-                print(pilFunction)
-                pilFunction.body.forEach {
-                    $0._print(1)
-                }
             }
             
         }
         
+    }
+    
+    private func lowerFunctionBodies() {
+        for function in functions.values {
+            function.lowerToPIL(self)
+            print("\(function.name)")
+            function.body.forEach {
+                $0._print(1)
+            }
+        }
     }
     
     func push() {
@@ -66,17 +79,30 @@ class PILLowerer {
         }
         
         guard case .struct(let name) = type else {
-            // TODO: Submit error (cannot find members of a non-struct type)
+            submitError(.cannotFindMemberOfNonStructType(member: field, type: type))
             return .error
         }
         
-        // TODO: Find a PILStruct instance and check if it contains the given field.
-        return .error
+        guard let pilStruct = structs[name] else {
+            submitError(.typeDoesNotExist(typeName: name))
+            return .error
+        }
+        
+        guard let type = pilStruct.fields[field] else {
+            submitError(.fieldDoesNotExist(structName: name, field: field))
+            return .error
+        }
+        
+        return type
         
     }
     
     func functionType(_ functionName: String) -> PILType {
         return functions[functionName]?.type ?? .error
+    }
+    
+    func submitError(_ newError: PMaxError) {
+        errors.append(newError)
     }
     
 }

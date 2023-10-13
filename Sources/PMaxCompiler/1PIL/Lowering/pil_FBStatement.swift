@@ -12,18 +12,26 @@ extension FunctionBodyStatement {
             let type = PILType(declaration.type, lowerer)
             let pilDecl = PILStatement.declaration(type: type, name: declaration.name)
             
-            lowerer.local.declare(type, declaration.name)
+            let success = lowerer.local.declare(type, declaration.name)
+            
+            guard success else {
+                // The declaration in the scope submits an error message, so we don't need to do it here.
+                return []
+            }
             
             guard let initValue = declaration.value else {
                 return [pilDecl]
             }
             
             let lhs = [declaration.name]
-            let pilAssign = PILStatement.assignment(lhs: lhs, rhs: initValue.lowerToPIL(lowerer))
+            let rhs = initValue.lowerToPIL(lowerer)
+            let pilAssign = PILStatement.assignment(lhs: lhs, rhs: rhs)
             
-            // TODO: Should change this so that if `x` is declared, you can't use `x` in its rhs (either disallow, produce warning or try to use `x` from an outer scope)
+            // TODO: Should change this so that if `x` is declared, you can't use `x` in its rhs (either disallow, produce warning or try to use `x` from an outer scope). Consider adding a temporary variable that is assigned _before_ `x` is declared, and then assign that to `x`. Be wary of any cryptic error messages resulting from this, though.
             
-            // TODO: Consider adding a temporary variable that is assigned _before_ `x` is declared, and then assign that to `x`. Be wary of any cryptic error messages resulting from this, though.
+            if type != rhs.type {
+                lowerer.submitError(.assignmentTypeMismatch(variable: declaration.name, expected: type, actual: rhs.type))
+            }
             
             return [pilDecl, pilAssign]
             

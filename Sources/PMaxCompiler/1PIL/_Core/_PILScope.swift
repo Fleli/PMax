@@ -16,14 +16,15 @@ class PILScope {
         self.lowerer = parent.lowerer
     }
     
-    func declare(_ type: PILType, _ name: String) {
+    func declare(_ type: PILType, _ name: String) -> Bool {
         
-        if variables[name] != nil {
-            // TODO: Submit error
-            return
+        if let existing = variables[name] {
+            lowerer!.submitError(.redeclarationOfVariable(varName: name, existing: existing, new: type))
+            return false
         }
         
         variables[name] = type
+        return true
         
     }
     
