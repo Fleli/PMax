@@ -64,7 +64,15 @@ enum PILOperation: CustomStringConvertible {
             return type
             
         case .call(let pILCall):
-            return lowerer.functionType(pILCall.name)
+            
+            let funcType = lowerer.functionType(pILCall.name)
+            
+            if funcType == .error {
+                lowerer.submitError(.functionDoesNotExist(name: pILCall.name))
+            }
+            
+            return funcType
+            
         }
         
     }

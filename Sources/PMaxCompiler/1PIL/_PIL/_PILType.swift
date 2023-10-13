@@ -1,3 +1,10 @@
+
+// TODO: Bør lage både en veldefinert `==`-funksjon for absolutt likhet, og en løsere `assignableTo(other:)`-funksjon som sjekker om `self` kan assignes til `other`, som f.eks. kan gjøres dersom `self` er en `void*` og `other` er en vilkårlig pointer (for å slippe casts ved f.eks. `malloc` er dette et fint spesialtilfelle å ta med i kompilatoren)
+
+// TODO: Må også ha mulighet for å addere `int` til en hvilken som helst annen `.pointer`-type slik at pointer-aritmetikk blir mulig uten massevis av type casts.
+
+// Merk imidlertid at disse ikke er strengt _nødvendige_ (syntaktisk sukker), så de legges til senere (men definitivt før "launch").
+
 indirect enum PILType: CustomStringConvertible, Hashable {
     
     case int

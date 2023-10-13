@@ -13,7 +13,7 @@ class PILStruct: CustomStringConvertible {
             let type = PILType(stmt.type, lowerer)
             
             if stmt.value != nil {
-                // Produce *warning*, not *issue*. Default values in struct have no effect
+                lowerer.submitError(<#T##newError: PMaxError##PMaxError#>)
                 // TODO: Consider changing the grammar, or producing an issue.
             }
             

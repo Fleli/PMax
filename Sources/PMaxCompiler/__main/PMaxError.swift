@@ -9,6 +9,8 @@ enum PMaxError: CustomStringConvertible {
     case variableIsNotDeclared(name: String)
     case unaryOperatorNotDefined(op: String, argType: PILType)
     case binaryOperatorNotDefined(op: String, arg1Type: PILType, arg2Type: PILType)
+    case functionDoesNotExist(name: String)
+    case structMembersCannotHaveDefaultValues(structName: String, field: String)
     
     var description: String {
         switch self {
@@ -30,6 +32,10 @@ enum PMaxError: CustomStringConvertible {
             return "The unary operator '\(op)' is not defined on operand of type '\(argType)'."
         case .binaryOperatorNotDefined(let op, let arg1Type, let arg2Type):
             return "The binary operator '\(op)' is not defined on operands of types '\(arg1Type)' and '\(arg2Type)'."
+        case .functionDoesNotExist(let name):
+            return "The function '\(name)' is not defined."
+        case .structMembersCannotHaveDefaultValues(let structName, let field):
+            return "Member '\(field)' of struct '\(structName)' cannot have default value."
         }
     }
     
