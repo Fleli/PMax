@@ -7,7 +7,7 @@ class PILFunction: CustomStringConvertible {
     var body: [PILStatement] = []
     
     var description: String {
-        "PILFunction \(name):  \t\(parameters.map {$0.type}) -> \(type)"
+        "PILFunction \(name): \(parameters.map {$0.type}) -> \(type)"
     }
     
     /// Initialize a `PILFunction` from an underlying (syntactical) `Function` object. This includes lowering all statements within the function to their `PIL` equivalent.

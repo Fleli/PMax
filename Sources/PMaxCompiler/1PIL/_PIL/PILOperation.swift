@@ -24,10 +24,38 @@ enum PILOperation: CustomStringConvertible {
         }
     }
     
-    func synthesizeType() -> PILType {
-        // TODO: Synthesize a type from subexpressions, or simply fetch from reference.
-        // TODO: This may require declarations to be added as we go (that is, name binding may have to be done as we lower the statement tree).
-        return .void
+    func synthesizeType(_ lowerer: PILLowerer) -> PILType {
+        
+        switch self {
+        case .unary(_, _):
+            // v1 supports unary operators on `int` only
+            return .int
+        case .binary(_, _, _):
+            // v1 supports binary operators on `int` only
+            return .int
+        case .reference(let array):
+            
+            let mainVariable = array[0]
+            
+            guard let mainType = lowerer.local.getVariable(mainVariable) else {
+                // TODO: Submit error
+                // We use the `.error` type if the variable does not exist.
+                return .error
+            }
+            
+            var type = mainType
+            
+            for i in 1 ..< array.count {
+                let field = array[i]
+                type = lowerer.fieldType(field, of: type)
+            }
+            
+            return type
+            
+        case .call(let pILCall):
+            return lowerer.functionType(pILCall.name)
+        }
+        
     }
     
 }

@@ -10,7 +10,7 @@ extension Expression {
             
             let pilOperation = PILOperation.binary(operator: binary, arg1: lowered_a, arg2: lowered_b)
             
-            return PILExpression(pilOperation)
+            return PILExpression(pilOperation, lowerer)
             
         case .singleArgumentOperator(let unary, let a):
             
@@ -18,7 +18,7 @@ extension Expression {
             
             let pilOperation = PILOperation.unary(operator: unary, arg: lowered_a)
             
-            return PILExpression(pilOperation)
+            return PILExpression(pilOperation, lowerer)
             
         case .TerminalExpressionTerminal(_, let expression, _):
             
@@ -28,20 +28,20 @@ extension Expression {
             
             let pilOperation = reference.lowerToPIL(lowerer)
             // TODO: Her må vi finne typen til operasjonen
-            return PILExpression(pilOperation)
+            return PILExpression(pilOperation, lowerer)
             
         case .identifierTerminalArgumentsTerminal(let functionName, _, let arguments, _):
             
             let pilCall = PILCall(functionName, arguments, lowerer)
             let operation = PILOperation.call(pilCall)
             
-            return PILExpression(operation)
+            return PILExpression(operation, lowerer)
             
         case .integer(let literal):
             
             let varName = lowerer.literalPool.integerLiteral(literal)
             let operation = PILOperation.reference([varName])
-            return PILExpression(operation)
+            return PILExpression(operation, lowerer)
             
         case .TypeCastTerminalExpressionTerminal(let typeCast, _, let expression, _):
             

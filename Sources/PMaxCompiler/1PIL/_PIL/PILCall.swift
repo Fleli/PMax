@@ -16,12 +16,14 @@ class PILCall: CustomStringConvertible {
             args.append(loweredExpression)
         }
         
+        // TODO: Må vi type-checke argumentene her?
+        
         self.arguments = args
         
     }
     
     var description: String {
-        ""
+        "\(name) (\(arguments.reduce("", {$0 + $1.description + ", "})))"
     }
     
 }

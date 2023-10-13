@@ -30,6 +30,31 @@ public extension SLRNode {
 }
 public extension SLRNode {
     
+    func convertToParameters() -> Parameters {
+        
+        if children.count == 0 {
+            return []
+        }
+        
+        if children.count == 1 {
+            return [children[0].convertToParameter()]
+        }
+        
+        if children.count == 2 {
+            return children[0].convertToParameters() + [children[1].convertToParameter()]
+        }
+        
+        if children.count == 3 {
+            return children[0].convertToParameters() + [children[2].convertToParameter()]
+        }
+        
+        fatalError()
+        
+    }
+    
+}
+public extension SLRNode {
+    
     func convertToStructBodyStatements() -> StructBodyStatements {
         
         if children.count == 0 {
@@ -46,31 +71,6 @@ public extension SLRNode {
         
         if children.count == 3 {
             return children[0].convertToStructBodyStatements() + [children[2].convertToDeclaration()]
-        }
-        
-        fatalError()
-        
-    }
-    
-}
-public extension SLRNode {
-    
-    func convertToArguments() -> Arguments {
-        
-        if children.count == 0 {
-            return []
-        }
-        
-        if children.count == 1 {
-            return [children[0].convertToArgument()]
-        }
-        
-        if children.count == 2 {
-            return children[0].convertToArguments() + [children[1].convertToArgument()]
-        }
-        
-        if children.count == 3 {
-            return children[0].convertToArguments() + [children[2].convertToArgument()]
         }
         
         fatalError()
@@ -105,22 +105,22 @@ public extension SLRNode {
 }
 public extension SLRNode {
     
-    func convertToParameters() -> Parameters {
+    func convertToArguments() -> Arguments {
         
         if children.count == 0 {
             return []
         }
         
         if children.count == 1 {
-            return [children[0].convertToParameter()]
+            return [children[0].convertToArgument()]
         }
         
         if children.count == 2 {
-            return children[0].convertToParameters() + [children[1].convertToParameter()]
+            return children[0].convertToArguments() + [children[1].convertToArgument()]
         }
         
         if children.count == 3 {
-            return children[0].convertToParameters() + [children[2].convertToParameter()]
+            return children[0].convertToArguments() + [children[2].convertToArgument()]
         }
         
         fatalError()
@@ -269,11 +269,6 @@ public extension SLRNode {
         if type == "TopLevelStatement" && children[0].type == "Function" {
             let nonTerminalNode = children[0].convertToFunction()
             return TopLevelStatement.function(nonTerminalNode)
-        }
-	
-        if type == "TopLevelStatement" && children[0].type == "Operator" {
-            let nonTerminalNode = children[0].convertToOperator()
-            return TopLevelStatement.`operator`(nonTerminalNode)
         }
 	
         fatalError()
@@ -715,96 +710,6 @@ public extension SLRNode {
 		fatalError()
 		
 	}
-
-}
-
-public extension SLRNode {
-
-	func convertToOperator() -> Operator {
-		
-        if type == "Operator" && children[0].type == "BinaryOperator" {
-            let nonTerminalNode = children[0].convertToBinaryOperator()
-            return Operator.binaryOperator(nonTerminalNode)
-        }
-	
-        if type == "Operator" && children[0].type == "UnaryOperator" {
-            let nonTerminalNode = children[0].convertToUnaryOperator()
-            return Operator.unaryOperator(nonTerminalNode)
-        }
-	
-        fatalError()
-        
-    }
-
-}
-
-public extension SLRNode {
-
-	func convertToBinaryOperator() -> BinaryOperator {
-		
-		if type == "BinaryOperator" && children.count == 13 && children[0].type == "@infix" && children[1].type == "identifier" && children[2].type == "DeclarableOperator" && children[3].type == "(" && children[4].type == "identifier" && children[5].type == "identifier" && children[6].type == "," && children[7].type == "identifier" && children[8].type == "identifier" && children[9].type == ")" && children[10].type == "{" && children[11].type == "Expression" && children[12].type == "}" {
-			let arg1 = children[1].convertToTerminal()
-			let arg2 = children[2].convertToDeclarableOperator()
-			let arg4 = children[4].convertToTerminal()
-			let arg5 = children[5].convertToTerminal()
-			let arg7 = children[7].convertToTerminal()
-			let arg8 = children[8].convertToTerminal()
-			let arg11 = children[11].convertToExpression()
-			return .init(arg1, arg2, arg4, arg5, arg7, arg8, arg11)
-		}
-		
-		fatalError()
-		
-	}
-
-}
-
-public extension SLRNode {
-
-	func convertToUnaryOperator() -> UnaryOperator {
-		
-		if type == "UnaryOperator" && children.count == 10 && children[0].type == "@unary" && children[1].type == "identifier" && children[2].type == "DeclarableOperator" && children[3].type == "(" && children[4].type == "identifier" && children[5].type == "identifier" && children[6].type == ")" && children[7].type == "{" && children[8].type == "Expression" && children[9].type == "}" {
-			let arg1 = children[1].convertToTerminal()
-			let arg2 = children[2].convertToDeclarableOperator()
-			let arg4 = children[4].convertToTerminal()
-			let arg5 = children[5].convertToTerminal()
-			let arg8 = children[8].convertToExpression()
-			return .init(arg1, arg2, arg4, arg5, arg8)
-		}
-		
-		fatalError()
-		
-	}
-
-}
-
-public extension SLRNode {
-
-	func convertToDeclarableOperator() -> DeclarableOperator {
-		
-        if type == "DeclarableOperator" && children[0].type == "+" {
-            return DeclarableOperator._plusSign_
-        }
-        
-        if type == "DeclarableOperator" && children[0].type == "-" {
-            return DeclarableOperator._hyphen_
-        }
-        
-        if type == "DeclarableOperator" && children[0].type == "*" {
-            return DeclarableOperator._asterisk_
-        }
-        
-        if type == "DeclarableOperator" && children[0].type == "/" {
-            return DeclarableOperator._slash_
-        }
-        
-        if type == "DeclarableOperator" && children[0].type == "%" {
-            return DeclarableOperator._percentSign_
-        }
-        
-        fatalError()
-        
-    }
 
 }
 

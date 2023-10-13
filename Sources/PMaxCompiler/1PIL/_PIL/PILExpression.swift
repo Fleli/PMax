@@ -10,8 +10,8 @@ class PILExpression: CustomStringConvertible {
         "(\(value.description) [\(type.description)])"
     }
     
-    init(_ value: PILOperation) {
-        self.type = value.synthesizeType()
+    init(_ value: PILOperation, _ lowerer: PILLowerer) {
+        self.type = value.synthesizeType(lowerer)
         self.value = value
     }
     
