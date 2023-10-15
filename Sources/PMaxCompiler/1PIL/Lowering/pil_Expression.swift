@@ -2,22 +2,6 @@ extension Expression {
     
     func lowerToPIL(_ lowerer: PILLowerer) -> PILExpression {
         
-//      IMPLEMENTED
-//      infix operators         a + b
-//      unary operators         - a
-//      grouping                ( E )
-//      function calls          a ( Args )
-//      integer literals        5
-//      type casts              (as X) (E)
-//      member access           (E) . m
-//      MISSING
-//      address-of              & E
-//      dereference             * E
-//      identifier              x
-//
-//
-//
-        
         switch self {
         case .infixOperator(let binary, let a, let b):
             
@@ -67,15 +51,22 @@ extension Expression {
             
         case .asterisk_Expression(_, let expression):
             
-            fatalError()
+            let lowered = expression.lowerToPIL(lowerer)
+            let dereference = PILOperation.dereference(lowered)
+            
+            return PILExpression(dereference, lowerer)
             
         case .ampersand_Expression(_, let expression):
             
-            fatalError()
+            let lowered = expression.lowerToPIL(lowerer)
+            let addressOf = PILOperation.addressOf(lowered)
+            
+            return PILExpression(addressOf, lowerer)
             
         case .identifier(let identifier):
             
-            fatalError()
+            let operation = PILOperation.variable(identifier)
+            return PILExpression(operation, lowerer)
             
         }
         
