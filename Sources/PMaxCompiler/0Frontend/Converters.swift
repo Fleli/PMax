@@ -80,31 +80,6 @@ public extension SLRNode {
 }
 public extension SLRNode {
     
-    func convertToTopLevelStatements() -> TopLevelStatements {
-        
-        if children.count == 0 {
-            return []
-        }
-        
-        if children.count == 1 {
-            return [children[0].convertToTopLevelStatement()]
-        }
-        
-        if children.count == 2 {
-            return children[0].convertToTopLevelStatements() + [children[1].convertToTopLevelStatement()]
-        }
-        
-        if children.count == 3 {
-            return children[0].convertToTopLevelStatements() + [children[2].convertToTopLevelStatement()]
-        }
-        
-        fatalError()
-        
-    }
-    
-}
-public extension SLRNode {
-    
     func convertToStructBodyStatements() -> StructBodyStatements {
         
         if children.count == 0 {
@@ -121,6 +96,31 @@ public extension SLRNode {
         
         if children.count == 3 {
             return children[0].convertToStructBodyStatements() + [children[2].convertToDeclaration()]
+        }
+        
+        fatalError()
+        
+    }
+    
+}
+public extension SLRNode {
+    
+    func convertToTopLevelStatements() -> TopLevelStatements {
+        
+        if children.count == 0 {
+            return []
+        }
+        
+        if children.count == 1 {
+            return [children[0].convertToTopLevelStatement()]
+        }
+        
+        if children.count == 2 {
+            return children[0].convertToTopLevelStatements() + [children[1].convertToTopLevelStatement()]
+        }
+        
+        if children.count == 3 {
+            return children[0].convertToTopLevelStatements() + [children[2].convertToTopLevelStatement()]
         }
         
         fatalError()
@@ -161,9 +161,78 @@ public extension SLRNode {
 			return .init(arg1, arg3)
 		}
 		
+		if type == "Assignment" && children.count == 7 && children[0].type == "assign" && children[1].type == "Expression" && children[2].type == "@" && children[3].type == "SugarOperator" && children[4].type == "=" && children[5].type == "Expression" && children[6].type == ";" {
+			let arg1 = children[1].convertToExpression()
+			let arg3 = children[3].convertToSugarOperator()
+			let arg5 = children[5].convertToExpression()
+			return .init(arg1, arg3, arg5)
+		}
+		
 		fatalError()
 		
 	}
+
+}
+
+public extension SLRNode {
+
+	func convertToSugarOperator() -> SugarOperator {
+		
+        if type == "SugarOperator" && children[0].type == "||" {
+            return SugarOperator._verticalBar_verticalBar_
+        }
+        
+        if type == "SugarOperator" && children[0].type == "&&" {
+            return SugarOperator._ampersand_ampersand_
+        }
+        
+        if type == "SugarOperator" && children[0].type == "|" {
+            return SugarOperator._verticalBar_
+        }
+        
+        if type == "SugarOperator" && children[0].type == "^" {
+            return SugarOperator._94
+        }
+        
+        if type == "SugarOperator" && children[0].type == "&" {
+            return SugarOperator._ampersand_
+        }
+        
+        if type == "SugarOperator" && children[0].type == "<<" {
+            return SugarOperator._lessThan_lessThan_
+        }
+        
+        if type == "SugarOperator" && children[0].type == ">>" {
+            return SugarOperator._greaterThan_greaterThan_
+        }
+        
+        if type == "SugarOperator" && children[0].type == "+" {
+            return SugarOperator._plusSign_
+        }
+        
+        if type == "SugarOperator" && children[0].type == "-" {
+            return SugarOperator._hyphen_
+        }
+        
+        if type == "SugarOperator" && children[0].type == "*" {
+            return SugarOperator._asterisk_
+        }
+        
+        if type == "SugarOperator" && children[0].type == "/" {
+            return SugarOperator._slash_
+        }
+        
+        if type == "SugarOperator" && children[0].type == "%" {
+            return SugarOperator._percentSign_
+        }
+        
+        if type == "SugarOperator" && children[0].type == "~" {
+            return SugarOperator._tilde_
+        }
+        
+        fatalError()
+        
+    }
 
 }
 
