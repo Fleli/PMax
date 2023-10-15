@@ -2,8 +2,21 @@ extension Expression {
     
     func lowerToPIL(_ lowerer: PILLowerer) -> PILExpression {
         
-        // TODO: Member access requires changes to be made to SwiftParse
-        /// In `precedence`, users should be able to write specs that end up as `Expression -> Expression #. #identifier` (for example with a `>` marker, as another kind of `:` marker).
+//      IMPLEMENTED
+//      infix operators         a + b
+//      unary operators         - a
+//      grouping                ( E )
+//      function calls          a ( Args )
+//      integer literals        5
+//      type casts              (as X) (E)
+//      member access           (E) . m
+//      MISSING
+//      address-of              & E
+//      dereference             * E
+//      identifier              x
+//
+//
+//
         
         switch self {
         case .infixOperator(let binary, let a, let b):
@@ -18,20 +31,6 @@ extension Expression {
         case .singleArgumentOperator(let unary, let a):
             
             let lowered_a = a.lowerToPIL(lowerer)
-            
-            // Pointer dereference er et special case
-            if unary.rawValue == "*" {
-                
-                // Not implemented
-                fatalError()
-                
-            } else if unary.rawValue == "&" {
-                
-                // Not implemented
-                fatalError()
-                
-            }
-            
             let pilOperation = PILOperation.unary(operator: unary, arg: lowered_a)
             return PILExpression(pilOperation, lowerer)
             
@@ -66,10 +65,16 @@ extension Expression {
             let operation = PILOperation.member(main: loweredMain, member: member)
             return PILExpression(operation, lowerer)
             
-        default:
+        case .asterisk_Expression(_, let expression):
             
-            // Not implemented
-            // Remove default, use specific cases instead.
+            fatalError()
+            
+        case .ampersand_Expression(_, let expression):
+            
+            fatalError()
+            
+        case .identifier(let identifier):
+            
             fatalError()
             
         }
