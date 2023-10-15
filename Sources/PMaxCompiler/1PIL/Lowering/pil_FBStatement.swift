@@ -20,10 +20,21 @@ extension FunctionBodyStatement {
             
             if let defaultValue = declaration.value {
                 
+                // TODO: Consider reordering and generating an intermediate variable here since default values in declarations shouldn't really be able to refer to themselves. In other words, we change the order to:
+                // (1) Declare a new non-colliding variable
+                // (2) Assign the default value to that new variable
+                // (3) Declare the variable we're interested in (`name`)
+                // (4) Assign the intermediate variable to the actual variable
+                // That way, use of `name` in the default value will refer to `name` in outer scopes and can be used unambiguously.
+                
+                let lhsOperation = PILOperation.variable(name)
+                let lhsExpression = PILExpression(lhsOperation, lowerer)
+                
                 let loweredDefaultValue = defaultValue.lowerToPIL(lowerer)
                 
-                // TODO: Not implemented yet.
-                // Declarations with default values require assignments to be fixed first.
+                let assignment = PILStatement.assignment(lhs: lhsExpression, rhs: loweredDefaultValue)
+                
+                statements.append(assignment)
                 
             }
             
