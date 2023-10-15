@@ -79,13 +79,23 @@ enum PILOperation: CustomStringConvertible {
             
         case .dereference(let expression):
             
-            // Not implemented
-            fatalError()
+            switch expression.type {
+            case .int, .void, .struct(_):
+                lowerer.submitError(.dereferenceNonPointerType(type: expression.type))
+                fallthrough
+            case .error:
+                return .error
+            case .pointer(let pointee):
+                return pointee
+            }
             
         case .addressOf(let expression):
             
-            // Not implemented
-            fatalError()
+            if case .error = expression.type {
+                return .error
+            }
+            
+            return .pointer(pointee: expression.type)
             
         case .member(let main, let member):
             
