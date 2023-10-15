@@ -20,10 +20,20 @@ public class Compiler {
             return
         }
         
-        print(converted.description)
+        for statement in converted {
+            switch statement {
+            case .struct(let `struct`):
+                print("struct \(`struct`.name)")
+                `struct`.statements.forEach { print("   ", $0) }
+            case .function(let function):
+                print("\(function.returnType) \(function.name) \(function.parameters) {")
+                function.body.forEach { print("   ", $0) }
+                print("}")
+            }
+        }
         
-        let pilLowerer = PILLowerer(converted)
-        pilLowerer.lower()
+//        let pilLowerer = PILLowerer(converted)
+//        pilLowerer.lower()
         
     }
     

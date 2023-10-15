@@ -20,13 +20,4 @@ class PILExpression: CustomStringConvertible {
         self.value = value
     }
     
-    func asFlattenedReference() -> [String]? {
-        switch value {
-        case .reference(let arr):
-            return arr
-        default:
-            return nil
-        }
-    }
-    
 }

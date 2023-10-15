@@ -71,7 +71,7 @@ class PILLowerer {
         local = local.parent!
     }
     
-    /// Verify that `type` is a struct and that it has a field named `field`. Return the type if it exists.
+    /// Verify that `type` is a struct and that it has a field named `field`. Return the type if it exists. The `fieldType` method will submit any necessary error messages.
     func fieldType(_ field: String, of type: PILType) -> PILType {
         
         if case .error = type {

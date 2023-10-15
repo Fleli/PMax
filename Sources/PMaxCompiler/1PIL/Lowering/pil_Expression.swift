@@ -2,6 +2,9 @@ extension Expression {
     
     func lowerToPIL(_ lowerer: PILLowerer) -> PILExpression {
         
+        // TODO: Member access requires changes to be made to SwiftParse
+        /// In `precedence`, users should be able to write specs that end up as `Expression -> Expression #. #identifier` (for example with a `>` marker, as another kind of `:` marker).
+        
         switch self {
         case .infixOperator(let binary, let a, let b):
             
@@ -19,35 +22,24 @@ extension Expression {
             // Pointer dereference er et special case
             if unary.rawValue == "*" {
                 
-                let pilOperation = PILOperation.dereference(lowered_a)
-                return PILExpression(pilOperation, lowerer)
+                // Not implemented
+                fatalError()
                 
             } else if unary.rawValue == "&" {
                 
-                guard let pointee = lowered_a.asFlattenedReference() else {
-                    lowerer.submitError(.cannotFindAddressOfNonReference)
-                    let pilOperation = PILOperation.unary(operator: unary, arg: lowered_a)
-                    return PILExpression(pilOperation, lowerer)
-                }
-                
-                let pilOperation = PILOperation.addressOf(pointee)
-                return PILExpression(pilOperation, lowerer)
+                // Not implemented
+                fatalError()
                 
             }
             
             let pilOperation = PILOperation.unary(operator: unary, arg: lowered_a)
             return PILExpression(pilOperation, lowerer)
             
-        case .TerminalExpressionTerminal(_, let expression, _):
+        case .leftParenthesis_ExpressionrightParenthesis_(_, let expression, _):
             
             return expression.lowerToPIL(lowerer)
             
-        case .Reference(let reference):
-            
-            let pilOperation = reference.lowerToPIL(lowerer)
-            return PILExpression(pilOperation, lowerer)
-            
-        case .identifierTerminalArgumentsTerminal(let functionName, _, let arguments, _):
+        case .identifierleftParenthesis_ArgumentsrightParenthesis_(let functionName, _, let arguments, _):
             
             let pilCall = PILCall(functionName, arguments, lowerer)
             let operation = PILOperation.call(pilCall)
@@ -57,16 +49,28 @@ extension Expression {
         case .integer(let literal):
             
             let varName = lowerer.literalPool.integerLiteral(literal)
-            let operation = PILOperation.reference([varName])
+            let operation = PILOperation.variable(varName)
             return PILExpression(operation, lowerer)
             
-        case .TypeCastTerminalExpressionTerminal(let typeCast, _, let expression, _):
+        case .TypeCastleftParenthesis_ExpressionrightParenthesis_(let typeCast, _, let expression, _):
             
             // A type cast is like all other expressions, but we modify the type of it to whatever the programmer specified.
             let annotatedExpression = expression.lowerToPIL(lowerer)
             annotatedExpression.type = PILType(typeCast.type, lowerer)
             
             return annotatedExpression
+            
+        case .leftParenthesis_ExpressionrightParenthesis_period_identifier(_, let main, _, _, let member):
+            
+            let loweredMain = main.lowerToPIL(lowerer)
+            let operation = PILOperation.member(main: loweredMain, member: member)
+            return PILExpression(operation, lowerer)
+            
+        default:
+            
+            // Not implemented
+            // Remove default, use specific cases instead.
+            fatalError()
             
         }
         

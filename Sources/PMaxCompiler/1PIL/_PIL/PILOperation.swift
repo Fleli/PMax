@@ -6,15 +6,17 @@ enum PILOperation: CustomStringConvertible {
     case unary(operator: Unary, arg: PILExpression)
     case binary(operator: Binary, arg1: PILExpression, arg2: PILExpression)
     
-    // TODO: Find out how dereferencing (*x) is going to work.
-    
-    /// A `.reference` operation simply points to a nesting of members. The 0th element means a variable in the local scope, the 1st is a member of that variable, the 2nd is a member of that, etc.
-    case reference([String])
-    
     case call(PILCall)
     
+    /// Use the `variable` case when we try to access a variable, either local or global.
+    case variable(String)
+    
     case dereference(PILExpression)
-    case addressOf([String])
+    
+    case addressOf(PILExpression)
+    
+    /// The `member` operation involves finding a member of another (struct-type) variable.
+    case member(main: PILExpression, member: String)
     
     var description: String {
         switch self {
@@ -22,14 +24,16 @@ enum PILOperation: CustomStringConvertible {
             return "(\(`operator`.rawValue)\(arg.description))"
         case .binary(let `operator`, let arg1, let arg2):
             return "(\(arg1.description)\(`operator`.rawValue)\(arg2.description))"
-        case .reference(let array):
-            return "\(array.reduce("", {$0 + $1 + "."}).dropLast())"
         case .call(let call):
             return call.description
+        case .variable(let variable):
+            return variable
         case .dereference(let arg):
             return "(*\(arg))"
-        case .addressOf(let array):
-            return "(&\(array.reduce("", {$0 + $1 + "."}).dropLast()))"
+        case .addressOf(let arg):
+            return "(&\(arg))"
+        case .member(let main, let member):
+            return "((\(main)).\(member))"
         }
     }
     
@@ -54,24 +58,6 @@ enum PILOperation: CustomStringConvertible {
             
             return .int
             
-        case .reference(let array):
-            
-            let mainVariable = array[0]
-            
-            guard let mainType = lowerer.local.getVariable(mainVariable) else {
-                lowerer.submitError(.variableIsNotDeclared(name: mainVariable))
-                return .error
-            }
-            
-            var type = mainType
-            
-            for i in 1 ..< array.count {
-                let field = array[i]
-                type = lowerer.fieldType(field, of: type)
-            }
-            
-            return type
-            
         case .call(let pILCall):
             
             let funcType = lowerer.functionType(pILCall.name)
@@ -82,22 +68,28 @@ enum PILOperation: CustomStringConvertible {
             
             return funcType
             
-        case .dereference(let expression):
+        case .variable(let variable):
             
-            let expressionType = expression.type
-            
-            guard case .pointer(let pointee) = expressionType else {
-                lowerer.submitError(.dereferenceNonPointerType(type: expressionType))
+            guard let type = lowerer.local.getVariable(variable) else {
+                lowerer.submitError(.variableIsNotDeclared(name: variable))
                 return .error
             }
             
-            return pointee
+            return type
             
-        case .addressOf(let array):
+        case .dereference(let expression):
             
-            let reference = PILOperation.reference(array)
-            let type = reference.synthesizeType(lowerer)
-            return .pointer(pointee: type)
+            // Not implemented
+            fatalError()
+            
+        case .addressOf(let expression):
+            
+            // Not implemented
+            fatalError()
+            
+        case .member(let main, let member):
+            
+            return lowerer.fieldType(member, of: main.type)
             
         }
         
