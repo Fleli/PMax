@@ -27,14 +27,10 @@ extension FunctionBodyStatement {
                 // (4) Assign the intermediate variable to the actual variable
                 // That way, use of `name` in the default value will refer to `name` in outer scopes and can be used unambiguously.
                 
-                let lhsOperation = PILOperation.variable(name)
-                let lhsExpression = PILExpression(lhsOperation, lowerer)
+                let syntacticEquivalentAssignment = Assignment(.identifier(name), defaultValue)
+                let loweredAssignment = syntacticEquivalentAssignment.lowerToPIL(lowerer)
                 
-                let loweredDefaultValue = defaultValue.lowerToPIL(lowerer)
-                
-                let assignment = PILStatement.assignment(lhs: lhsExpression, rhs: loweredDefaultValue)
-                
-                statements.append(assignment)
+                statements.append(loweredAssignment)
                 
             }
             

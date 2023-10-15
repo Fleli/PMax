@@ -5,9 +5,11 @@ extension Assignment {
         let lhs = self.lhs.lowerToPIL(lowerer)
         let rhs = self.rhs.lowerToPIL(lowerer)
         
-        let assignment = PILStatement.assignment(lhs: lhs, rhs: rhs)
+        if !rhs.type.assignable(to: lhs.type) {
+            lowerer.submitError(.assignmentTypeMismatch(lhs: lhs, actual: rhs.type))
+        }
         
-        return assignment
+        return PILStatement.assignment(lhs: lhs, rhs: rhs)
         
     }
     

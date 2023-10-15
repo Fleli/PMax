@@ -1,10 +1,4 @@
 
-// TODO: Bør lage både en veldefinert `==`-funksjon for absolutt likhet, og en løsere `assignableTo(other:)`-funksjon som sjekker om `self` kan assignes til `other`, som f.eks. kan gjøres dersom `self` er en `void*` og `other` er en vilkårlig pointer (for å slippe casts ved f.eks. `malloc` er dette et fint spesialtilfelle å ta med i kompilatoren)
-
-// TODO: Må også ha mulighet for å addere `int` til en hvilken som helst annen `.pointer`-type slik at pointer-aritmetikk blir mulig uten massevis av type casts.
-
-// Merk imidlertid at disse ikke er strengt _nødvendige_ (syntaktisk sukker), så de legges til senere (men definitivt før "launch").
-
 indirect enum PILType: CustomStringConvertible, Hashable {
     
     case int
@@ -40,6 +34,46 @@ indirect enum PILType: CustomStringConvertible, Hashable {
         case .pointer(let wrapped, _):
             let pilWrapped = PILType(wrapped, lowerer)
             self = .pointer(pointee: pilWrapped)
+        }
+        
+    }
+    
+    func allowedInArithmetic() -> Bool {
+        
+        // TODO: Double-check that errors should be allowed in arithmetic operations.
+        // Rationale at implementation time: The erroneous type was probably meant to be an arithmetic-enabled type, so submitting errors _here_ because something failed _earlier_ seems unnecessary.
+        
+        switch self {
+        case .int, .pointer(_), .error:
+            return true
+        case .`struct`(_), .void:
+            return false
+        }
+        
+    }
+    
+    /// Checks if `self` is assignable to `other`. Consider the attempt to assign an `int` to a `T*`. Since the lanugage spec specifies that implicit `int`-to-pointer conversions are allowed, this would return `true`. 
+    func assignable(to other: PILType) -> Bool {
+        
+        switch (self, other) {
+            
+        case (_, .void), (.void, _):                // void cannot be assigned to anything and is not assignable itself
+            return false
+        case (_, .error), (.error, _):              // we allow errors to be assigned since an error message is already submitted if we have an error
+            return true
+        case (.int, .int):                          // int can be assigned to int
+            return true
+        case (.pointer(_), .int):                   // implicit pointer-to-int conversion is allowed in assignments
+            return false
+        case (.int, .pointer(_)):                   // implicit int-to-pointer conversion is always allowed
+            return true
+        case (.pointer(let a), .pointer(let b)):    // a pointer can only be assigned to an identical pointer
+            return a == b
+        case (.`struct`(let a), .`struct`(let b)):  // a struct can only be assigned to an identical struct
+            return a == b
+        default:                                    // other combinations are not allowed
+            return false                            // TODO: Verify that no combinations are missed.
+            
         }
         
     }

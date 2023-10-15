@@ -4,7 +4,7 @@ enum PMaxError: CustomStringConvertible {
     case typeDoesNotExist(typeName: String)
     case fieldDoesNotExist(structName: String, field: String)
     case redeclarationOfField(structName: String, field: String)
-    case assignmentTypeMismatch(variable: String, expected: PILType, actual: PILType)
+    case assignmentTypeMismatch(lhs: PILExpression, actual: PILType)
     case redeclarationOfVariable(varName: String, existing: PILType, new: PILType)
     case variableIsNotDeclared(name: String)
     case unaryOperatorNotDefined(op: String, argType: PILType)
@@ -26,8 +26,8 @@ enum PMaxError: CustomStringConvertible {
             return "The property '\(field)' does not exist on '\(structName)'."
         case .redeclarationOfField(let structName, let field):
             return "Redeclaration of field '\(field)' on struct '\(structName)'."
-        case .assignmentTypeMismatch(let variable, let expected, let actual):
-            return "Cannot assign value of type '\(actual)' to '\(variable)' of type '\(expected)'."
+        case .assignmentTypeMismatch(let expression, let actual):
+            return "Cannot assign value of type '\(actual)' to '\(expression)' of type '\(expression.type)'."
         case .redeclarationOfVariable(let varName, let existing, let new):
             return "The variable '\(existing) \(varName)' is already declared within this scope, so '\(new) \(varName)' cannot be declared."
         case .variableIsNotDeclared(let name):
