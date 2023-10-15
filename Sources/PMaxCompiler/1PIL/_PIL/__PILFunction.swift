@@ -27,9 +27,12 @@ class PILFunction: CustomStringConvertible {
     private func appendParameters(_ underlyingFunction: Function, _ lowerer: PILLowerer) {
         
         for parameter in underlyingFunction.parameters {
+            
+            /// We store each parameter in the `parameters` array
             let type = PILType(parameter.type, lowerer)
             let newParameter = PILParameter(type, parameter.name)
             self.parameters.append(newParameter)
+            
         }
         
     }
@@ -38,6 +41,12 @@ class PILFunction: CustomStringConvertible {
         
         lowerer.push()
         
+        // We declare each parameter in the function scope.
+        for parameter in parameters {
+            lowerer.local.declare(parameter.type, parameter.label)
+        }
+        
+        // Then we lower the function's body.
         for statement in underlyingFunction.body {
             let lowered = statement.lowerToPIL(lowerer)
             self.body += lowered

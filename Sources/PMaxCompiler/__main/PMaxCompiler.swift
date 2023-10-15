@@ -32,8 +32,8 @@ public class Compiler {
             }
         }
         
-//        let pilLowerer = PILLowerer(converted)
-//        pilLowerer.lower()
+        let pilLowerer = PILLowerer(converted)
+        pilLowerer.lower()
         
     }
     
