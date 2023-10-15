@@ -71,6 +71,17 @@ extension Expression {
             
             return PILExpression(operation, lowerer)
             
+        case .leftParenthesis_ExpressionrightParenthesis_hyphen_greaterThan_identifier(_, let expression, _, _, let member):
+            
+            let loweredExpression = expression.lowerToPIL(lowerer)
+            let dereferenced = PILOperation.dereference(loweredExpression)
+            let dereferencedExpression = PILExpression(dereferenced, lowerer)
+            
+            let memberAccess = PILOperation.member(main: dereferencedExpression, member: member)
+            let composite = PILExpression(memberAccess, lowerer)
+            
+            return composite
+            
         }
         
     }

@@ -5,22 +5,22 @@
 
 public extension SLRNode {
     
-    func convertToStructBodyStatements() -> StructBodyStatements {
+    func convertToArguments() -> Arguments {
         
         if children.count == 0 {
             return []
         }
         
         if children.count == 1 {
-            return [children[0].convertToDeclaration()]
+            return [children[0].convertToArgument()]
         }
         
         if children.count == 2 {
-            return children[0].convertToStructBodyStatements() + [children[1].convertToDeclaration()]
+            return children[0].convertToArguments() + [children[1].convertToArgument()]
         }
         
         if children.count == 3 {
-            return children[0].convertToStructBodyStatements() + [children[2].convertToDeclaration()]
+            return children[0].convertToArguments() + [children[2].convertToArgument()]
         }
         
         fatalError()
@@ -105,22 +105,22 @@ public extension SLRNode {
 }
 public extension SLRNode {
     
-    func convertToArguments() -> Arguments {
+    func convertToStructBodyStatements() -> StructBodyStatements {
         
         if children.count == 0 {
             return []
         }
         
         if children.count == 1 {
-            return [children[0].convertToArgument()]
+            return [children[0].convertToDeclaration()]
         }
         
         if children.count == 2 {
-            return children[0].convertToArguments() + [children[1].convertToArgument()]
+            return children[0].convertToStructBodyStatements() + [children[1].convertToDeclaration()]
         }
         
         if children.count == 3 {
-            return children[0].convertToArguments() + [children[2].convertToArgument()]
+            return children[0].convertToStructBodyStatements() + [children[2].convertToDeclaration()]
         }
         
         fatalError()
@@ -671,6 +671,17 @@ public extension SLRNode {
 			let arg3 = children[3].convertToTerminal()
 			let arg4 = children[4].convertToTerminal()
 			return .leftParenthesis_ExpressionrightParenthesis_period_identifier(arg0, arg1, arg2, arg3, arg4)
+			
+		}
+		
+		if type == "CASELExpression" && children.count == 5 && children[0].type == "(" && children[1].type == "Expression" && children[2].type == ")" && children[3].type == "->" && children[4].type == "identifier" {
+			
+			let arg0 = children[0].convertToTerminal()
+			let arg1 = children[1].convertToExpression()
+			let arg2 = children[2].convertToTerminal()
+			let arg3 = children[3].convertToTerminal()
+			let arg4 = children[4].convertToTerminal()
+			return .leftParenthesis_ExpressionrightParenthesis_hyphen_greaterThan_identifier(arg0, arg1, arg2, arg3, arg4)
 			
 		}
 		

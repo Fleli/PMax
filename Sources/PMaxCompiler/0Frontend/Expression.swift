@@ -43,6 +43,7 @@ public indirect enum Expression: CustomStringConvertible {
 	case identifier(String)
 	case identifierleftParenthesis_ArgumentsrightParenthesis_(String, String, Arguments, String)
 	case leftParenthesis_ExpressionrightParenthesis_period_identifier(String, Expression, String, String, String)
+	case leftParenthesis_ExpressionrightParenthesis_hyphen_greaterThan_identifier(String, Expression, String, String, String)
 	case ampersand_Expression(String, Expression)
 	case asterisk_Expression(String, Expression)
 
@@ -56,6 +57,7 @@ public indirect enum Expression: CustomStringConvertible {
 		case .identifier(_): return "identifier"
 		case .identifierleftParenthesis_ArgumentsrightParenthesis_(_, _, let arguments, _): return "identifier" + "(" + arguments.description + ")"
 		case .leftParenthesis_ExpressionrightParenthesis_period_identifier(_, let expression, _, _, _): return "(" + expression.description + ")" + "." + "identifier"
+		case .leftParenthesis_ExpressionrightParenthesis_hyphen_greaterThan_identifier(_, let expression, _, _, _): return "(" + expression.description + ")" + "->" + "identifier"
 		case .ampersand_Expression(_, let expression): return "&" + expression.description
 		case .asterisk_Expression(_, let expression): return "*" + expression.description
 		}
