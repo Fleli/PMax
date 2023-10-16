@@ -38,13 +38,19 @@ Raw syntactic types are converted to corresponding `PILType` instances. `.struct
 
 PIL is _not_ built around protocol conformance, but rather as `enum` cases. Each type of `PIL` statement is its own case with a number of associated values. Some statements, like `if`, are so complex that they are stored as seperate classes that are pointed to in the case's associated value. Others, like declarations, simply store the declaraed variable's type and name as associated values.
 
-## Basic blocks
+## Flattening
 
-After semantic analysis, we wish to
-1. Linearize the program to a TAC-like structure
-2. Split it into basic blocks with clear entry and exits points for function calls, conditionals, loops, etc.
+After confirming that the input is meaningful, we begin to _flatten_ all expressions. The main job of the flattening stage is to make sure no more than three operands are included per statement. That is why this form is called _Three Address-Code_ (TAC).
 
-We first linearize each statement. This involves turning complex (tree-structured) expressions into simple, two-operand calculations that can be performed by the computer. However, we **don't** concatenate each list of simple instructions - they are kept separate because we still need to know what TAC instructions belong to which PIL instruction.
+As we lower from PIL to TAC, assignments that use expressions in tree form, like `assign x = (a + b) * c;`, are broken up into several distinct statements. We introduce temporary variables to compute each stage in the expression (for example `t1 = a + b`) and then use these to gradually build the full expression (`x = t1 * c`). 
 
-The reason for keeping the source information is that `if`, `while`, etc. need to jump to very specific points in the code. For instance, each time we evaluate a `while` condition, we need to jump to the exact point where the calculations for it begin, not before or after. This is easy to accomplish if we, even after linearizing the program, remember where each statement came from.
+Since `t1`, `t2`, ... are allowed as identifiers in PMax, we instead generate variables we _know_ won't collide with any existing identifier. The flattener will contain an `index: Int` that tracks the number of internal temporary variables generated, and use this to generate identifiers `$temp$1`, `$temp$2` and so on.
+
+### Procedure
+
+The flattening performs two tasks simultaneously:
+1. It does the job of actually flattening expressions by breaking them up into smaller assignments and declarations.
+2. It organizes each upper-level statement into its own basic block. This means that the TAC statements related to a statement `A` are clearly separated from those that belong to `B`. The compiler inserts a jump from `A` to `B`.
+
+Note: This will introduce significant delays since we're (for example) unnecessarily jumping from a declaration to an assignment. This will be improved in future versions.
 
