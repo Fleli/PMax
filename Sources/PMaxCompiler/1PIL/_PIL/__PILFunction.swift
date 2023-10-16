@@ -52,7 +52,19 @@ class PILFunction: CustomStringConvertible {
             self.body += lowered
         }
         
+        verifyReturns(lowerer)
+        
         lowerer.pop()
+        
+    }
+    
+    func verifyReturns(_ lowerer: PILLowerer) {
+        
+        let returnsOnAllPaths = body.reduce(false, {$0 || $1.returnsOnAllPaths(type, lowerer)})
+        
+        if !returnsOnAllPaths {
+            lowerer.submitError(.doesNotReturnOnAllPaths(function: name))
+        }
         
     }
     

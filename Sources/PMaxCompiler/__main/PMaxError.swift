@@ -16,6 +16,8 @@ enum PMaxError: CustomStringConvertible {
     case dereferenceNonPointerType(type: PILType)
     case cannotFindAddressOfNonReference
     case invalidSugaredAssignment(`operator`: String)
+    case incorrectReturnType(expected: PILType, given: PILType)
+    case doesNotReturnOnAllPaths(function: String)
     
     var description: String {
         switch self {
@@ -51,6 +53,10 @@ enum PMaxError: CustomStringConvertible {
             return "Cannot use the '&' operator on non-reference expression."
         case .invalidSugaredAssignment(let `operator`):
             return "The operator '\(`operator`)' is not allowed in sugared assignments."
+        case .incorrectReturnType(let expected, let given):
+            return "Type '\(given)' cannot be converted to expected return type '\(expected)'."
+        case .doesNotReturnOnAllPaths(let function):
+            return "Function '\(function)' does not return a value on all paths."
         }
         
     }
