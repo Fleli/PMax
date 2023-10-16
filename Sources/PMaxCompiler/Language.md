@@ -24,6 +24,15 @@ Assignments begin with the `assign` keyword (will hopefully be removed once Swif
 
 Assignments can (optionally) be sugared to perform an operation on the left-hand side and the right-hand side, and write the result to the left-hand side. This is similar to `x += y` in other languages. However, due to SwiftSLR being weak, we must include the `@` symbol before the sugared operator. This will hopefully change once SwiftSLR is upgraded (it needs to make better use of its lookahead).
 
+### Returns
+
+```
+return;
+return value;
+```
+
+A `return` statement exits a function, optionally returning a value. All functions are required to have a return statement on all paths (in other words, functions must be explicitly exited). This also applies to `void` functions (they just use the `return;` variant). This requirement may change in future versions.
+
 ### ...
 
 ## Types
