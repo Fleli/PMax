@@ -26,14 +26,13 @@ class TACScope {
     func declare(_ type: PILType, _ name: String) {
         print("Declared \(name) @ \(framePointerOffset)")
         variables[name] = (type, .framePointer(offset: framePointerOffset))
-        framePointerOffset += lowerer.sizes(type)
+        framePointerOffset += lowerer.sizeOf(type)
     }
     
     func declareInTextSection(_ type: PILType, _ name: String) {
         print("Declared \(name) in text section @ \(textSectionCounter).")
         variables[name] = (type, .textSegment(index: textSectionCounter))
-        // TODO: This must be changed in future versions when non-int literals become allowed.
-        textSectionCounter += 1
+        textSectionCounter += lowerer.sizeOf(type)
     }
     
     func getVariable(_ name: String) -> (PILType, Location) {

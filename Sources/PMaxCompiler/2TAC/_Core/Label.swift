@@ -3,9 +3,7 @@ class Label: Hashable, CustomStringConvertible {
     let name: String
     
     var description: String {
-        
-        return "\(name):\n" + statements.reduce("", {$0 + "\t" + $1.description + "\n"})
-        
+        "\(name):\n" + statements.reduce("", {$0 + "\t" + $1.description + "\n"})
     }
     
     private(set) var statements: [TACStatement]

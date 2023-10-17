@@ -106,7 +106,7 @@ class TACLowerer: ErrorReceiver {
     }
     
     
-    func sizes(_ type: PILType) -> Int {
+    func sizeOf(_ type: PILType) -> Int {
         
         switch type {
         case .int, .pointer(_):
