@@ -13,9 +13,10 @@ class PILLowerer: ErrorReceiver {
     
     private let topLevelStatements: TopLevelStatements
     
-    private var structs: [String : PILStruct] = [:]
-    
+    private(set) var structs: [String : PILStruct] = [:]
     private(set) var functions: [String : PILFunction] = [:]
+    
+    private(set) var structLayouts: [String : MemoryLayout] = [:]
     
     init(_ topLevelStatements: TopLevelStatements) {
         
@@ -31,6 +32,7 @@ class PILLowerer: ErrorReceiver {
     func lower() {
         prepare()
         lowerFunctionBodies()
+        findMemoryLayouts()
         errors.forEach { print($0) }
     }
     
@@ -60,6 +62,13 @@ class PILLowerer: ErrorReceiver {
             function.body.forEach {
                 $0._print(1)
             }
+        }
+    }
+    
+    private func findMemoryLayouts() {
+        for `struct` in structs.values {
+            let layout = `struct`.memoryLayout(self)
+            structLayouts[`struct`.name] = layout
         }
     }
     

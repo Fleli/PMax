@@ -1,9 +1,11 @@
 class TACLowerer: ErrorReceiver {
     
-    
-    var local: PILScope!
+    var global: TACScope!
+    var local: TACScope!
     
     var activeLabel: Label!
+    
+    private let pilLowerer: PILLowerer
     
     private var labels: [Label] = []
     
@@ -11,22 +13,49 @@ class TACLowerer: ErrorReceiver {
     
     private(set) var errors: [PMaxError] = []
     
+    private var structs: [String : PILStruct] = [:]
+    
     private(set) var functions: [String : PILFunction] = [:]
     
     init(_ pilLowerer: PILLowerer) {
         
-        self.local = PILScope(self)
+        print("\n\n")
         
+        self.pilLowerer = pilLowerer
+        self.structs = pilLowerer.structs
         self.functions = pilLowerer.functions
+        
+        self.global = TACScope(self)
+        self.local = global
+        
+        registerGlobalVariables()
+        
+    }
+    
+    
+    private func registerGlobalVariables() {
+        
+        for globalVariable in pilLowerer.global.variables {
+            
+            let name = globalVariable.key
+            let type = globalVariable.value
+            
+            guard case .int = type else {
+                fatalError("Global variables can only be 'int', not '\(type)'.")
+            }
+            
+            global.declareInTextSection(type, name)
+            
+        }
         
     }
     
     
     func lower() {
         
-        print("\n\n")
-        
         for function in functions.values {
+            
+            push()
             
             let newLabel = newLabel("fn=\(function.name)")
             activeLabel = newLabel
@@ -34,6 +63,8 @@ class TACLowerer: ErrorReceiver {
             for statement in function.body {
                 statement.lowerToTAC(self)
             }
+            
+            pop()
             
         }
         
@@ -72,6 +103,29 @@ class TACLowerer: ErrorReceiver {
         
         return name
         
+    }
+    
+    
+    func sizes(_ type: PILType) -> Int {
+        
+        switch type {
+        case .int, .pointer(_):
+            return 1
+        case .void, .error:
+            return 0
+        case .struct(let name):
+            return pilLowerer.structLayouts[name]!.size
+        }
+        
+    }
+    
+    
+    func push() {
+        local = TACScope(local)
+    }
+    
+    func pop() {
+        local = local.parent!
     }
     
     

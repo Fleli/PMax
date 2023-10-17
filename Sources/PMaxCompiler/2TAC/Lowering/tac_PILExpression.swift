@@ -7,7 +7,7 @@ extension PILExpression {
         case .unary(let `operator`, let arg):
             
             let argument = arg.lowerToTAC(lowerer)
-            let result = lowerer.newInternalVariable("unary:\(argument):\(`operator`.rawValue)", self.type)
+            let result = lowerer.newInternalVariable("unary:\(`operator`.rawValue)", self.type)
             
             let tac = TACStatement.assignUnaryOperation(lhs: result, operation: `operator`, arg: argument)
             lowerer.activeLabel.newStatement(tac)

@@ -18,6 +18,7 @@ enum PMaxError: CustomStringConvertible {
     case invalidSugaredAssignment(`operator`: String)
     case incorrectReturnType(expected: PILType, given: PILType)
     case doesNotReturnOnAllPaths(function: String)
+    case structIsRecursive(structName: String)
     
     var description: String {
         switch self {
@@ -57,6 +58,8 @@ enum PMaxError: CustomStringConvertible {
             return "Type '\(given)' cannot be converted to expected return type '\(expected)'."
         case .doesNotReturnOnAllPaths(let function):
             return "Function '\(function)' does not return a value on all paths."
+        case .structIsRecursive(let structName):
+            return "The struct '\(structName)' is recursive."
         }
         
     }
