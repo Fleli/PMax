@@ -23,7 +23,7 @@ extension PILStatement {
             
         case .if(let pILIfStatement):
             
-            let continueLabel = Label("if:next")
+            let continueLabel = lowerer.newLabel("if:next")
             pILIfStatement.lowerToTAC(lowerer, continueLabel)
             
         case .while(let condition, let body):

@@ -5,7 +5,7 @@ class TACLowerer: ErrorReceiver {
     
     var activeLabel: Label!
     
-    private var labels: Set<Label> = []
+    private var labels: [Label] = []
     
     private var internalCounter = 0
     
@@ -55,7 +55,7 @@ class TACLowerer: ErrorReceiver {
         internalCounter += 1
         
         let newLabel = Label("$label\(internalCounter):\(context)")
-        labels.insert(newLabel)
+        labels.append(newLabel)
         
         return newLabel
         
@@ -65,7 +65,7 @@ class TACLowerer: ErrorReceiver {
     /// Generate (and declare) a new internal variable. It does not collide with any other variable names. It uses a `context` parameter to give a _somewhat_ informative name.
     func newInternalVariable(_ context: String, _ type: PILType) -> String {
         
-        let name = "$$\(internalCounter):\(context)"
+        let name = "$$\(internalCounter)"
         local.declare(type, name)
         
         return name
