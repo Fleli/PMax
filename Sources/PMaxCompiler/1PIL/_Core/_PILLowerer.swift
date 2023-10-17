@@ -1,4 +1,4 @@
-class PILLowerer {
+class PILLowerer: ErrorReceiver {
     
     /// The `PILLowerer`'s `literalPool` is availble internally so that functions that lower from syntactic statements to `PIL` can notify the literal pool of newly encountered literals.
     var literalPool: LiteralPool!
