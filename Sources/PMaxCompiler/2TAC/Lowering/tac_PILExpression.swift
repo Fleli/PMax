@@ -16,10 +16,10 @@ extension PILExpression {
             
         case .binary(let `operator`, let arg1, let arg2):
             
+            let result = lowerer.newInternalVariable("binary:\(`operator`.rawValue)", self.type)
+            
             let argument1 = arg1.lowerToTAC(lowerer)
             let argument2 = arg2.lowerToTAC(lowerer)
-            
-            let result = lowerer.newInternalVariable("binary:\(argument1),\(argument2):\(`operator`.rawValue)", self.type)
             
             let tac = TACStatement.assignBinaryOperation(lhs: result, operation: `operator`, arg1: argument1, arg2: argument2)
             lowerer.activeLabel.newStatement(tac)

@@ -65,6 +65,8 @@ class TACLowerer: ErrorReceiver {
     /// Generate (and declare) a new internal variable. It does not collide with any other variable names. It uses a `context` parameter to give a _somewhat_ informative name.
     func newInternalVariable(_ context: String, _ type: PILType) -> String {
         
+        internalCounter += 1
+        
         let name = "$$\(internalCounter)"
         local.declare(type, name)
         
