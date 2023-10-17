@@ -35,6 +35,9 @@ public class Compiler {
         let pilLowerer = PILLowerer(converted)
         pilLowerer.lower()
         
+        let tacLowerer = TACLowerer(pilLowerer)
+        tacLowerer.lower()
+        
     }
     
 }

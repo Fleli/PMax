@@ -1,8 +1,14 @@
-class Label: Hashable {
+class Label: Hashable, CustomStringConvertible {
     
     let name: String
     
-    var statements: [TACStatement]
+    var description: String {
+        
+        return "\(name):\n" + statements.reduce("", {$0 + "\t" + $1.description + "\n"})
+        
+    }
+    
+    private(set) var statements: [TACStatement]
     
     init(_ name: String) {
         self.name = name

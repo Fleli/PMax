@@ -1,9 +1,7 @@
 extension PILStatement {
     
     
-    func lowerToTAC(_ lowerer: TACLowerer, _ activeLabel: Label) {
-        
-        var activeLabel = activeLabel
+    func lowerToTAC(_ lowerer: TACLowerer) {
         
         switch self {
             
@@ -13,13 +11,25 @@ extension PILStatement {
             lowerer.local.declare(type, name)
             
         case .assignment(let lhs, let rhs):
+            
             break
+            
         case .return(let expression):
-            break
+            
+            let value = expression?.lowerToTAC(lowerer)
+            
+            let statement = TACStatement.return(value: value)
+            lowerer.activeLabel.newStatement(statement)
+            
         case .if(let pILIfStatement):
-            pILIfStatement.lowerToTAC(lowerer, activeLabel)
+            
+            let continueLabel = Label("if:next")
+            pILIfStatement.lowerToTAC(lowerer, continueLabel)
+            
         case .while(let condition, let body):
+            
             break
+            
         }
         
         
