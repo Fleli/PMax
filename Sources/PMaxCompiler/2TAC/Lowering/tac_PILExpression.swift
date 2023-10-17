@@ -9,6 +9,12 @@ extension PILExpression {
             let argument = arg.lowerToTAC(lowerer)
             let result = lowerer.newInternalVariable("unary:\(`operator`.rawValue)", self.type)
             
+            // TODO: For types larger than one word, we need to move multiple words when assigning. Consider implementing one of two options:
+            // (1) The context in which we submit the TAC statement literally submits _n_ TAC statements if there are _n_ words to copy.
+            // (2) Each assignment statement in TAC includes a _size_ value that is used later on to decide how many words to move.
+            // Comment: The second method seems better. It requires some more metainformation for each assignment, but the task of finding the exact number of raw words to move seems more relevant to an even lower-level stage than the TAC representation. Also, cluttering each lowering stage with loops etc. to submit the correct number of statements will reduce readability (it can probably be done easier in a later lowering stage that is _designed_ for it).
+            // Note: Losing the context that is given as we lower to TAC may be problematic. Investiagte further how well this approach will work.
+            
             let tac = TACStatement.assignUnaryOperation(lhs: result, operation: `operator`, arg: argument)
             lowerer.activeLabel.newStatement(tac)
             
