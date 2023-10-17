@@ -1,7 +1,7 @@
 extension PILExpression {
     
     /// The `lowerToTAC(_:)` method on `PILExpression` lowers a `PILExpression` to three-address code. It also returns the name of the variable that contains the result of the computation.
-    func lowerToTAC(_ lowerer: TACLowerer) -> String {
+    func lowerToTAC(_ lowerer: TACLowerer) -> Location {
         
         switch value {
         case .unary(let `operator`, let arg):
@@ -31,7 +31,7 @@ extension PILExpression {
             for argument in pILCall.arguments {
                 
                 let name = argument.lowerToTAC(lowerer)
-                let statement = TACStatement.pushParameter(name: name)
+                let statement = TACStatement.pushParameter(at: name)
                 lowerer.activeLabel.newStatement(statement)
                 
             }
@@ -50,7 +50,7 @@ extension PILExpression {
             
         case .variable(let name):
             
-            return name
+            return lowerer.local.getVariable(name).1
             
         case .dereference(let pILExpression):
             

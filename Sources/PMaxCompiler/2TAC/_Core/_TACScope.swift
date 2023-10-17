@@ -23,10 +23,13 @@ class TACScope {
         self.framePointerOffset = parent.framePointerOffset
     }
     
-    func declare(_ type: PILType, _ name: String) {
+    @discardableResult
+    func declare(_ type: PILType, _ name: String) -> Location {
         print("Declared \(name) @ \(framePointerOffset)")
-        variables[name] = (type, .framePointer(offset: framePointerOffset))
+        let location = Location.framePointer(offset: framePointerOffset)
+        variables[name] = (type, location)
         framePointerOffset += lowerer.sizeOf(type)
+        return location
     }
     
     func declareInTextSection(_ type: PILType, _ name: String) {
@@ -37,7 +40,12 @@ class TACScope {
     
     func getVariable(_ name: String) -> (PILType, Location) {
         // SKAL eksistere, ellers har noe gått galt.
-        return variables[name]!
+        guard let v = variables[name] else {
+            return parent!.getVariable(name)
+        }
+        
+        return v
+        
     }
     
 }

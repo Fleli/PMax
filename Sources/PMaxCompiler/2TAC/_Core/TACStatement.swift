@@ -3,29 +3,29 @@ enum TACStatement: CustomStringConvertible {
     typealias Binary = Expression.InfixOperator
     typealias Unary = Expression.SingleArgumentOperator
     
-    case assignBinaryOperation(lhs: String, operation: Binary, arg1: String, arg2: String)
-    case assignUnaryOperation(lhs: String, operation: Unary, arg: String)
+    case assignBinaryOperation(lhs: Location, operation: Binary, arg1: Location, arg2: Location)
+    case assignUnaryOperation(lhs: Location, operation: Unary, arg: Location)
     
     case jump(label: String)
-    case jumpIfNonZero(label: String, variable: String)
+    case jumpIfNonZero(label: String, variable: Location)
     
-    case call(lhs: String, function: String, returnLabel: String)
-    case pushParameter(name: String)
+    case call(lhs: Location, function: String, returnLabel: String)
+    case pushParameter(at: Location)
     
-    case dereference(lhs: String, arg: String)
-    case addressOf(lhs: String, arg: String)
+    case dereference(lhs: Location, arg: Location)
+    case addressOf(lhs: Location, arg: Location)
     
-    case member(lhs: String, rhsMain: String, rhsMember: String)
+    case member(lhs: Location, rhsMain: Location, rhsMember: String)
     
-    case `return`(value: String?)
+    case `return`(value: Location?)
     
     var description: String {
         
         switch self {
         case .assignBinaryOperation(let lhs, let operation, let arg1, let arg2):
-            return lhs + " = " + arg1 + " \(operation.rawValue) " + arg2
+            return "\(lhs) = \(arg1) \(operation.rawValue) \(arg2)"
         case .assignUnaryOperation(let lhs, let operation, let arg):
-            return lhs + " = " + " \(operation.rawValue) " + arg
+            return "\(lhs) = " + " \(operation.rawValue) \(arg)"
         case .jump(let label):
             return "jump \(label)"
         case .jumpIfNonZero(let label, let variable):
@@ -35,13 +35,13 @@ enum TACStatement: CustomStringConvertible {
         case .pushParameter(let name):
             return "param \(name)"
         case .dereference(let lhs, let arg):
-            return lhs + " = *\(arg)"
+            return "\(lhs) = *\(arg)"
         case .addressOf(let lhs, let arg):
-            return lhs + " = &\(arg)"
+            return "\(lhs) = &\(arg)"
         case .member(let lhs, let rhsMain, let rhsMember):
             return "\(lhs) = \(rhsMain).\(rhsMember)"
         case .return(let value):
-            return "ret \(value ?? "[void]")"
+            return "ret \(value?.description ?? "[void]")"
         }
         
     }
