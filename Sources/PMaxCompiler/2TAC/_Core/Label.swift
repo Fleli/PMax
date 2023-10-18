@@ -26,10 +26,4 @@ class Label: Hashable, CustomStringConvertible {
         return lhs.name == rhs.name
     }
     
-    func addStatements(following pattern: () -> ()) {
-        
-        
-        
-    }
-    
 }

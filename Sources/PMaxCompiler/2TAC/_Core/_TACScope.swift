@@ -2,7 +2,7 @@ class TACScope {
     
     let parent: TACScope?
     
-    private var textSectionCounter: Int
+    private var dataSectionCounter: Int
     private var framePointerOffset: Int
     
     private var variables: [String : (PILType, Location)] = [:]
@@ -12,14 +12,14 @@ class TACScope {
     init(_ lowerer: TACLowerer) {
         self.parent = nil
         self.lowerer = lowerer
-        self.textSectionCounter = 0
+        self.dataSectionCounter = 0
         self.framePointerOffset = 0
     }
     
     init(_ parent: TACScope) {
         self.parent = parent
         self.lowerer = parent.lowerer
-        self.textSectionCounter = parent.textSectionCounter
+        self.dataSectionCounter = parent.dataSectionCounter
         self.framePointerOffset = parent.framePointerOffset
     }
     
@@ -32,10 +32,10 @@ class TACScope {
         return location
     }
     
-    func declareInTextSection(_ type: PILType, _ name: String) {
-        print("Declared \(name) in text section @ \(textSectionCounter).")
-        variables[name] = (type, .textSegment(index: textSectionCounter))
-        textSectionCounter += lowerer.sizeOf(type)
+    func declareInDataSection(_ type: PILType, _ name: String) {
+        print("Declared \(name) in text section @ \(dataSectionCounter).")
+        variables[name] = (type, .dataSection(index: dataSectionCounter))
+        dataSectionCounter += lowerer.sizeOf(type)
     }
     
     func getVariable(_ name: String) -> (PILType, Location) {

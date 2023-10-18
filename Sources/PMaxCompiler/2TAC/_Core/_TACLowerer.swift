@@ -44,7 +44,7 @@ class TACLowerer {
                 fatalError("Global variables can only be 'int', not '\(type)'.")
             }
             
-            global.declareInTextSection(type, name)
+            global.declareInDataSection(type, name)
             
         }
         
