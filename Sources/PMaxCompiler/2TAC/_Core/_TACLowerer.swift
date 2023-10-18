@@ -5,7 +5,7 @@ class TACLowerer {
     
     var activeLabel: Label!
     
-    private let pilLowerer: PILLowerer
+    let pilLowerer: PILLowerer
     
     private var labels: [Label] = []
     

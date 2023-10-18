@@ -15,7 +15,7 @@ enum TACStatement: CustomStringConvertible {
     case dereference(lhs: Location, arg: Location)
     case addressOf(lhs: Location, arg: Location)
     
-    case member(lhs: Location, rhsMain: Location, rhsMember: String)
+    case simpleAssign(lhs: Location, rhs: Location)
     
     case `return`(value: Location?)
     
@@ -38,8 +38,8 @@ enum TACStatement: CustomStringConvertible {
             return "\(lhs) = *\(arg)"
         case .addressOf(let lhs, let arg):
             return "\(lhs) = &\(arg)"
-        case .member(let lhs, let rhsMain, let rhsMember):
-            return "\(lhs) = \(rhsMain).\(rhsMember)"
+        case .simpleAssign(let lhs, let rhs):
+            return "\(lhs) = \(rhs)"
         case .return(let value):
             return "ret \(value?.description ?? "[void]")"
         }

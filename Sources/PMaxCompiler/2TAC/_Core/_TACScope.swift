@@ -25,7 +25,7 @@ class TACScope {
     
     @discardableResult
     func declare(_ type: PILType, _ name: String) -> Location {
-        print("Declared \(name) @ \(framePointerOffset)")
+        print("Declare \(type) \(name) at \(framePointerOffset)")
         let location = Location.framePointer(offset: framePointerOffset)
         variables[name] = (type, location)
         framePointerOffset += lowerer.sizeOf(type)
@@ -33,7 +33,7 @@ class TACScope {
     }
     
     func declareInDataSection(_ type: PILType, _ name: String) {
-        print("Declared \(name) in text section @ \(dataSectionCounter).")
+        print("Declare \(type) \(name) in data section.")
         variables[name] = (type, .dataSection(index: dataSectionCounter))
         dataSectionCounter += lowerer.sizeOf(type)
     }

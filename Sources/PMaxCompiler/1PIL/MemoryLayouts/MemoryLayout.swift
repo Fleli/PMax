@@ -1,4 +1,11 @@
-struct MemoryLayout {
+struct MemoryLayout: CustomStringConvertible {
+    
+    
+    var description: String {
+        "Memory Layout\n" + fields
+            .sorted(by: {$0.value.start < $1.value.start})
+            .reduce("") {$0 + "\t\($1.key): [\($1.value.start)-\($1.value.start + $1.value.length - 1)]\n"}
+    }
     
     
     /// The total size of instances of this struct

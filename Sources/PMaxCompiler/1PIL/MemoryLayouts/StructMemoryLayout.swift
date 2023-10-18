@@ -12,13 +12,15 @@ extension PILStruct: Hashable {
         
         let history = history.union([self])
         
-        for field in self.fields {
+        for field in sortedFields {
             
-            guard let size = field.value.size(lowerer, history) else {
+            let type = fields[field]
+            
+            guard let size = type?.size(lowerer, history) else {
                 return nil
             }
             
-            layout.addField(field.key, size)
+            layout.addField(field, size)
             
         }
         

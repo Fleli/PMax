@@ -2,6 +2,7 @@ class PILStruct: CustomStringConvertible {
     
     let name: String
     var fields: [String : PILType] = [:]
+    var sortedFields: [String] = []
     
     init(_ underlyingStructDeclaration: Struct, _ lowerer: PILLowerer) {
         
@@ -10,6 +11,7 @@ class PILStruct: CustomStringConvertible {
         for stmt in underlyingStructDeclaration.statements {
             
             let fieldName = stmt.name
+            sortedFields.append(fieldName)
             let type = PILType(stmt.type, lowerer)
             
             if stmt.value != nil {

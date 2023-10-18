@@ -69,6 +69,7 @@ class PILLowerer {
         for `struct` in structs.values {
             let layout = `struct`.memoryLayout(self)
             structLayouts[`struct`.name] = layout
+            print("Layout of \(`struct`.name): \(layout)")
         }
     }
     

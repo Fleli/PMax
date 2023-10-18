@@ -82,10 +82,26 @@ extension PILExpression {
             
         case .member(let main, let member):
             
-            let mainResult = main.lowerToTAC(lowerer)
+            var mainResult = main.lowerToTAC(lowerer)
             
             let lhs = lowerer.newInternalVariable("member", self.type)
-            let statement = TACStatement.member(lhs: lhs, rhsMain: mainResult, rhsMember: member)
+            
+            if case .`struct`(let structName) = main.type, case .framePointer(let offset) = mainResult {
+                
+                let layout = lowerer.pilLowerer.structLayouts[structName]
+                let memberLayout = layout!.fields[member]!
+                
+                let localOffset = memberLayout.start
+                
+                mainResult = .framePointer(offset: offset + localOffset)
+                
+            } else {
+                
+                fatalError()
+                
+            }
+            
+            let statement = TACStatement.simpleAssign(lhs: lhs, rhs: mainResult)
             
             lowerer.activeLabel.newStatement(statement)
             
