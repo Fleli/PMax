@@ -9,7 +9,7 @@ class PILLowerer {
     /// The `local` scope is used to notify the `PILLowerer`'s environment of declarations, and to verify the existence of variables when they are referenced.
     var local: PILScope!
     
-    private var errors: [PMaxError] = []
+    private(set) var errors: [PMaxError] = []
     
     private let topLevelStatements: TopLevelStatements
     
@@ -69,7 +69,7 @@ class PILLowerer {
         for `struct` in structs.values {
             let layout = `struct`.memoryLayout(self)
             structLayouts[`struct`.name] = layout
-            print("Layout of \(`struct`.name): \(layout)")
+            print("Layout of \(`struct`.name): (\(layout!.description))")
         }
     }
     

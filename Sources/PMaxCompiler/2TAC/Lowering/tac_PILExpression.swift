@@ -1,12 +1,12 @@
 extension PILExpression {
     
     /// The `lowerToTAC(_:)` method on `PILExpression` lowers a `PILExpression` to three-address code. It also returns the name of the variable that contains the result of the computation.
-    func lowerToTAC(_ lowerer: TACLowerer) -> Location {
+    func lowerToTAC(_ lowerer: TACLowerer, _ asLHS: Bool) -> Location {
         
         switch value {
         case .unary(let `operator`, let arg):
             
-            let argument = arg.lowerToTAC(lowerer)
+            let argument = arg.lowerToTAC(lowerer, asLHS)
             let result = lowerer.newInternalVariable("unary:\(`operator`.rawValue)", self.type)
             
             // TODO: For types larger than one word, we need to move multiple words when assigning. Consider implementing one of two options:
@@ -24,8 +24,8 @@ extension PILExpression {
             
             let result = lowerer.newInternalVariable("binary:\(`operator`.rawValue)", self.type)
             
-            let argument1 = arg1.lowerToTAC(lowerer)
-            let argument2 = arg2.lowerToTAC(lowerer)
+            let argument1 = arg1.lowerToTAC(lowerer, asLHS)
+            let argument2 = arg2.lowerToTAC(lowerer, asLHS)
             
             let tac = TACStatement.assignBinaryOperation(lhs: result, operation: `operator`, arg1: argument1, arg2: argument2)
             lowerer.activeLabel.newStatement(tac)
@@ -36,7 +36,7 @@ extension PILExpression {
             
             for argument in pILCall.arguments {
                 
-                let name = argument.lowerToTAC(lowerer)
+                let name = argument.lowerToTAC(lowerer, asLHS)
                 let statement = TACStatement.pushParameter(at: name)
                 lowerer.activeLabel.newStatement(statement)
                 
@@ -60,7 +60,7 @@ extension PILExpression {
             
         case .dereference(let pILExpression):
             
-            let argument = pILExpression.lowerToTAC(lowerer)
+            let argument = pILExpression.lowerToTAC(lowerer, asLHS)
             
             let lhs = lowerer.newInternalVariable("dereference", self.type)
             let statement = TACStatement.dereference(lhs: lhs, arg: argument)
@@ -71,7 +71,7 @@ extension PILExpression {
             
         case .addressOf(let pILExpression):
             
-            let argument = pILExpression.lowerToTAC(lowerer)
+            let argument = pILExpression.lowerToTAC(lowerer, asLHS)
             
             let lhs = lowerer.newInternalVariable("addressOf", self.type)
             let statement = TACStatement.addressOf(lhs: lhs, arg: argument)
@@ -82,30 +82,7 @@ extension PILExpression {
             
         case .member(let main, let member):
             
-            var mainResult = main.lowerToTAC(lowerer)
-            
-            let lhs = lowerer.newInternalVariable("member", self.type)
-            
-            if case .`struct`(let structName) = main.type, case .framePointer(let offset) = mainResult {
-                
-                let layout = lowerer.pilLowerer.structLayouts[structName]
-                let memberLayout = layout!.fields[member]!
-                
-                let localOffset = memberLayout.start
-                
-                mainResult = .framePointer(offset: offset + localOffset)
-                
-            } else {
-                
-                fatalError()
-                
-            }
-            
-            let statement = TACStatement.simpleAssign(lhs: lhs, rhs: mainResult)
-            
-            lowerer.activeLabel.newStatement(statement)
-            
-            return lhs
+            return lowerMemberToTAC(main, member, lowerer, asLHS)
             
         }
         

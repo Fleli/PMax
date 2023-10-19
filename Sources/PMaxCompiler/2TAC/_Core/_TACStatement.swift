@@ -15,7 +15,11 @@ enum TACStatement: CustomStringConvertible {
     case dereference(lhs: Location, arg: Location)
     case addressOf(lhs: Location, arg: Location)
     
+    /// A `.simpleAssign` represents an assignment from one location to another. No dereferencing at the top level here.
     case simpleAssign(lhs: Location, rhs: Location)
+    
+    /// Whenever we assign to a dereferenced pointer, we assign to a raw address. The `lhs` here is the location containing the address to write to. `rhs` contains the address containing the value to copy.
+    case assignToRawAddress(lhs: Location, rhs: Location)
     
     case `return`(value: Location?)
     
@@ -40,6 +44,8 @@ enum TACStatement: CustomStringConvertible {
             return "\(lhs) = &\(arg)"
         case .simpleAssign(let lhs, let rhs):
             return "\(lhs) = \(rhs)"
+        case .assignToRawAddress(let lhs, let rhs):
+            return "*(\(lhs)) = \(rhs)"
         case .return(let value):
             return "ret \(value?.description ?? "[void]")"
         }

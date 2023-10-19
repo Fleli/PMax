@@ -35,6 +35,11 @@ public class Compiler {
         let pilLowerer = PILLowerer(converted)
         pilLowerer.lower()
         
+        guard pilLowerer.errors.count == 0 else {
+            print("Errors were found. Terminating compiler before TAC lowering.")
+            return
+        }
+        
         let tacLowerer = TACLowerer(pilLowerer)
         tacLowerer.lower()
         

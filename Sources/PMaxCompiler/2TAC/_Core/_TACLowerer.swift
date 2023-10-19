@@ -11,11 +11,11 @@ class TACLowerer {
     
     private var internalCounter = 0
     
-    private(set) var errors: [PMaxError] = []
-    
     private var structs: [String : PILStruct] = [:]
     
     private(set) var functions: [String : PILFunction] = [:]
+    
+    private(set) var errors: [PMaxError] = []
     
     init(_ pilLowerer: PILLowerer) {
         
