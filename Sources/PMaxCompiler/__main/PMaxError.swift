@@ -19,6 +19,7 @@ enum PMaxError: CustomStringConvertible {
     case incorrectReturnType(expected: PILType, given: PILType)
     case doesNotReturnOnAllPaths(function: String)
     case structIsRecursive(structName: String)
+    case unassignableLHS(lhs: PILExpression)
     
     var description: String {
         switch self {
@@ -60,6 +61,8 @@ enum PMaxError: CustomStringConvertible {
             return "Function '\(function)' does not return a value on all paths."
         case .structIsRecursive(let structName):
             return "The struct '\(structName)' is recursive."
+        case .unassignableLHS(let lhs):
+            return "The expression \(lhs) is unassignable because it is not a local variable, pointer dereference or member access."
         }
         
     }
