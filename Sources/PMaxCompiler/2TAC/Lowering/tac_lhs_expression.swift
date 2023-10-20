@@ -24,7 +24,7 @@ extension PILExpression {
             
         case .member(let main, let member):
             
-            return self.lowerLHSMember(main, member, lowerer)
+            return lowerLHSMember(main, member, lowerer)
             
         default:
             

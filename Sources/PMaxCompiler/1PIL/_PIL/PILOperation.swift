@@ -37,4 +37,23 @@ enum PILOperation: CustomStringConvertible {
         }
     }
     
+    var readableDescription: String {
+        switch self {
+        case .unary(let `operator`, let arg):
+            return "(\(`operator`.rawValue)\(arg.readableDescription))"
+        case .binary(let `operator`, let arg1, let arg2):
+            return "(\(arg1.readableDescription)\(`operator`.rawValue)\(arg2.readableDescription))"
+        case .call(let pILCall):
+            return "\(pILCall.name)(\(pILCall.arguments.reduce("", {$0 + $1.readableDescription}).dropFirst().dropLast()))"
+        case .variable(let string):
+            return string
+        case .dereference(let pILExpression):
+            return "*\(pILExpression.readableDescription)"
+        case .addressOf(let pILExpression):
+            return "&\(pILExpression.readableDescription)"
+        case .member(let main, let member):
+            return "(\(main.readableDescription)).\(member)"
+        }
+    }
+    
 }

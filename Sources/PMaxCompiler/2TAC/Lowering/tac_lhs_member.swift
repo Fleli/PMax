@@ -16,7 +16,6 @@ extension PILExpression {
         
         // let memberLength = memberLocationInformation.length
         
-        
         switch mainLocationAsLHS {
         case .framePointer(let offset):
             

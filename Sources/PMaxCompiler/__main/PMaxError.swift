@@ -32,7 +32,7 @@ enum PMaxError: CustomStringConvertible {
         case .redeclarationOfField(let structName, let field):
             return "Redeclaration of field '\(field)' on struct '\(structName)'."
         case .assignmentTypeMismatch(let expression, let actual):
-            return "Cannot assign value of type '\(actual)' to '\(expression)' of type '\(expression.type)'."
+            return "Cannot assign value of type '\(actual)' to '\(expression.readableDescription)' of type '\(expression.type)'."
         case .redeclarationOfVariable(let varName, let existing, let new):
             return "The variable '\(existing) \(varName)' is already declared within this scope, so '\(new) \(varName)' cannot be declared."
         case .variableIsNotDeclared(let name):
@@ -62,7 +62,7 @@ enum PMaxError: CustomStringConvertible {
         case .structIsRecursive(let structName):
             return "The struct '\(structName)' is recursive."
         case .unassignableLHS(let lhs):
-            return "The expression \(lhs) is unassignable because it is not a local variable, pointer dereference or member access."
+            return "The expression \(lhs.readableDescription) is unassignable because it is not a local variable, pointer dereference or member access."
         }
         
     }

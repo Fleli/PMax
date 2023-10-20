@@ -76,6 +76,10 @@ class TACLowerer {
             print(label)
         }
         
+        for error in errors {
+            print("-", error)
+        }
+        
     }
     
     

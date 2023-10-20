@@ -10,6 +10,10 @@ class PILExpression: CustomStringConvertible {
         "(\(value.description) [\(type.description)])"
     }
     
+    var readableDescription: String {
+        value.readableDescription
+    }
+    
     init(_ value: PILOperation, _ lowerer: PILLowerer) {
         self.type = value.synthesizeType(lowerer)
         self.value = value
