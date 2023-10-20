@@ -49,6 +49,8 @@ indirect enum PILType: CustomStringConvertible, Hashable {
             return true
         case (.int, .int):                          // int can be assigned to int
             return true
+        case (.pointer(.void), .pointer(let p)) where p != .void:   // Allow implicit void* -> T* conversions.
+            return true
         case (.pointer(_), .int):                   // implicit pointer-to-int conversion is allowed in assignments
             return false
         case (.int, .pointer(_)):                   // implicit int-to-pointer conversion is always allowed
