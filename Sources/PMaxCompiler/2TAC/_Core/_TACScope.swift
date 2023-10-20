@@ -29,11 +29,21 @@ class TACScope {
     
     @discardableResult
     func declare(_ type: PILType, _ name: String) -> Location {
-        print("Declare \(type) \(name) at \(framePointerOffset)")
+        
         let location = Location.framePointer(offset: framePointerOffset)
         variables[name] = (type, location)
         framePointerOffset += lowerer.sizeOf(type)
+        
+        var message = "\(type) \(name)"
+        
+        while message.count < 30 {
+            message.append(" ")
+        }
+        
+        print(message + "@\(location)")
+        
         return location
+        
     }
     
     func declareInDataSection(_ type: PILType, _ name: String) {
@@ -45,9 +55,17 @@ class TACScope {
         }
         
         // Otherwise (if it has no parent), it is the global scope.
-        print("Declare \(type) \(name) in data section.")
-        variables[name] = (type, .dataSection(index: dataSectionCounter))
+        let location = Location.dataSection(index: dataSectionCounter)
+        variables[name] = (type, location)
         dataSectionCounter += lowerer.sizeOf(type)
+        
+        var message = "\(type) \(name)"
+        
+        while message.count < 30 {
+            message.append(" ")
+        }
+        
+        print(message + "@\(location)")
         
     }
     

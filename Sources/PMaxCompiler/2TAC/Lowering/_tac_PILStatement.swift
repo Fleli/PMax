@@ -15,7 +15,8 @@ extension PILStatement {
             let lhsLocation = lhs.lowerToTACAsLHS(lowerer)
             let rhsLocation = rhs.lowerToTAC(lowerer)
             
-            let statement = TACStatement.assign(lhs: lhsLocation, rhs: rhsLocation)
+            let wordsToAssign = lowerer.sizeOf(lhs.type)
+            let statement = TACStatement.assign(lhs: lhsLocation, rhs: rhsLocation, words: wordsToAssign)
             lowerer.activeLabel.newStatement(statement)
             
         case .return(let expression):

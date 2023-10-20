@@ -18,7 +18,8 @@ extension PILExpression {
         
         mainResult = .framePointer(offset: offset + localOffset)
         
-        let statement = TACStatement.assign(lhs: lhs, rhs: mainResult)
+        let wordsToAssign = lowerer.sizeOf(self.type)
+        let statement = TACStatement.assign(lhs: lhs, rhs: mainResult, words: wordsToAssign)
         
         lowerer.activeLabel.newStatement(statement)
         
