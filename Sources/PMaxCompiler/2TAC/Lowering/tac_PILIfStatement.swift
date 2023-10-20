@@ -21,9 +21,19 @@ extension PILIfStatement {
         let jumpIfTrue = TACStatement.jumpIfNonZero(label: bodyInitLabel.name, variable: conditionEvaluationResult)
         lowerer.activeLabel.newStatement(jumpIfTrue)
         lowerer.activeLabel = bodyInitLabel
-        body.forEach { $0.lowerToTAC(lowerer) }
+        
+        // Før vi begynner å lowere body, pusher vi et nytt scope slik at name resolution blir riktig. Vi popper dette etterpå.
+        
+        lowerer.push()
+        
+        for statement in body {
+            statement.lowerToTAC(lowerer)
+        }
+        
         let jumpToContinue = TACStatement.jump(label: continueLabel.name)
         lowerer.activeLabel.newStatement(jumpToContinue)
+        
+        lowerer.pop()
         
         // Vi svitsjer nå tilbake til conditionEvaluationLabel, for vi må også gjøre noe dersom condition failet.
         lowerer.activeLabel = conditionEvaluationLabel

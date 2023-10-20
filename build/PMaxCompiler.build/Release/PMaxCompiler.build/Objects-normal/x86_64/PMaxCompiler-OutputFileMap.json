@@ -1,0 +1,295 @@
+{
+  "" : {
+    "const-values" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/PMaxCompiler-master.swiftconstvalues",
+    "dependencies" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/PMaxCompiler-master.d",
+    "diagnostics" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/PMaxCompiler-master.dia",
+    "emit-module-dependencies" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/PMaxCompiler-master-emit-module.d",
+    "emit-module-diagnostics" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/PMaxCompiler-master-emit-module.dia",
+    "swift-dependencies" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/PMaxCompiler-master.swiftdeps"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/__main/Builtin.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Builtin.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Builtin.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Builtin.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/__main/PMaxCompiler.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/PMaxCompiler.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/PMaxCompiler.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/PMaxCompiler.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/__main/PMaxError.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/PMaxError.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/PMaxError.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/PMaxError.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/Argument.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Argument.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Argument.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Argument.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/Arguments.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Arguments.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Arguments.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Arguments.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/Assignment.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Assignment.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Assignment.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Assignment.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/Converters.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Converters.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Converters.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Converters.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/Declaration.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Declaration.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Declaration.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Declaration.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/Expression.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Expression.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Expression.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Expression.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/Function.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Function.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Function.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Function.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/FunctionBodyStatement.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/FunctionBodyStatement.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/FunctionBodyStatement.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/FunctionBodyStatement.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/FunctionBodyStatements.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/FunctionBodyStatements.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/FunctionBodyStatements.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/FunctionBodyStatements.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/If.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/If.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/If.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/If.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/Lexer.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Lexer.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Lexer.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Lexer.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/Member.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Member.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Member.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Member.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/Parameter.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Parameter.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Parameter.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Parameter.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/Parameters.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Parameters.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Parameters.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Parameters.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/Parser.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Parser.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Parser.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Parser.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/Return.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Return.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Return.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Return.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/Struct.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Struct.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Struct.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Struct.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/StructBodyStatements.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/StructBodyStatements.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/StructBodyStatements.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/StructBodyStatements.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/SugarOperator.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/SugarOperator.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/SugarOperator.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/SugarOperator.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/TopLevelStatement.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/TopLevelStatement.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/TopLevelStatement.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/TopLevelStatement.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/TopLevelStatements.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/TopLevelStatements.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/TopLevelStatements.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/TopLevelStatements.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/Type.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Type.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Type.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Type.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/TypeCast.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/TypeCast.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/TypeCast.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/TypeCast.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/While.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/While.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/While.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/While.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/1PIL/_Core/_PILLowerer.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/_PILLowerer.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/_PILLowerer.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/_PILLowerer.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/1PIL/_Core/_PILScope.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/_PILScope.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/_PILScope.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/_PILScope.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/1PIL/_Core/LiteralPool.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/LiteralPool.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/LiteralPool.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/LiteralPool.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/1PIL/_PIL/__PILFunction.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/__PILFunction.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/__PILFunction.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/__PILFunction.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/1PIL/_PIL/__PILStruct.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/__PILStruct.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/__PILStruct.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/__PILStruct.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/1PIL/_PIL/_PILStatement.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/_PILStatement.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/_PILStatement.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/_PILStatement.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/1PIL/_PIL/_PILType.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/_PILType.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/_PILType.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/_PILType.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/1PIL/_PIL/operandTypes.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/operandTypes.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/operandTypes.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/operandTypes.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/1PIL/_PIL/PILCall.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/PILCall.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/PILCall.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/PILCall.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/1PIL/_PIL/PILExpression.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/PILExpression.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/PILExpression.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/PILExpression.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/1PIL/_PIL/PILIfStatement.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/PILIfStatement.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/PILIfStatement.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/PILIfStatement.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/1PIL/_PIL/PILOperation.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/PILOperation.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/PILOperation.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/PILOperation.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/1PIL/_PIL/synthesizeType.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/synthesizeType.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/synthesizeType.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/synthesizeType.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/1PIL/Lowering/pil_Assignment.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/pil_Assignment.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/pil_Assignment.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/pil_Assignment.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/1PIL/Lowering/pil_Expression.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/pil_Expression.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/pil_Expression.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/pil_Expression.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/1PIL/Lowering/pil_FBStatement.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/pil_FBStatement.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/pil_FBStatement.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/pil_FBStatement.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/1PIL/Lowering/pil_If.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/pil_If.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/pil_If.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/pil_If.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/1PIL/MemoryLayouts/MemoryLayout.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/MemoryLayout.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/MemoryLayout.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/MemoryLayout.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/1PIL/MemoryLayouts/StructMemoryLayout.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/StructMemoryLayout.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/StructMemoryLayout.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/StructMemoryLayout.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/1PIL/MemoryLayouts/TypeSize.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/TypeSize.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/TypeSize.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/TypeSize.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/2TAC/_Core/_TACLowerer.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/_TACLowerer.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/_TACLowerer.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/_TACLowerer.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/2TAC/_Core/_TACScope.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/_TACScope.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/_TACScope.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/_TACScope.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/2TAC/_Core/_TACStatement.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/_TACStatement.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/_TACStatement.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/_TACStatement.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/2TAC/_Core/Label.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Label.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Label.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Label.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/2TAC/_Core/Location.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Location.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Location.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/Location.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/2TAC/Lowering/_tac_PILStatement.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/_tac_PILStatement.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/_tac_PILStatement.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/_tac_PILStatement.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/2TAC/Lowering/tac_lhs_expression.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/tac_lhs_expression.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/tac_lhs_expression.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/tac_lhs_expression.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/2TAC/Lowering/tac_member.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/tac_member.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/tac_member.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/tac_member.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/2TAC/Lowering/tac_PILExpression.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/tac_PILExpression.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/tac_PILExpression.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/tac_PILExpression.o"
+  },
+  "/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/2TAC/Lowering/tac_PILIfStatement.swift" : {
+    "index-unit-output-path" : "/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/tac_PILIfStatement.o",
+    "llvm-bc" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/tac_PILIfStatement.bc",
+    "object" : "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/x86_64/tac_PILIfStatement.o"
+  }
+}

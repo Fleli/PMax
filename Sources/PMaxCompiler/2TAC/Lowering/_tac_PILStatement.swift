@@ -60,9 +60,19 @@ extension PILStatement {
             
             // We now move to the body and lower all of its statements. At the end of the body, insert a jump to the condition evaluator.
             lowerer.activeLabel = bodyLabel
-            body.forEach { $0.lowerToTAC(lowerer) }
+            
+            // Before we lower any statements, we make sure to push a new scope since the `while` loop's body is within { ... }. We pop the scope afterwards.
+            
+            lowerer.push()
+            
+            for statement in body {
+                statement.lowerToTAC(lowerer)
+            }
+            
             let jumpBackToCondition = TACStatement.jump(label: conditionEvaluationLabel.name)
             lowerer.activeLabel.newStatement(jumpBackToCondition)
+            
+            lowerer.pop()
             
             // Now, we consider the case where the condition failed. So we move back to the condition evaluation and insert a jump to nextLabel.
             lowerer.activeLabel = conditionEvaluationLabel
