@@ -42,15 +42,7 @@ PIL is _not_ built around protocol conformance, but rather as `enum` cases. Each
 
 After confirming that the input is meaningful, we begin to _flatten_ all expressions. The main job of the flattening stage is to make sure no more than three operands are included per statement. That is why this form is called _Three Address-Code_ (TAC).
 
-As we lower from PIL to TAC, assignments that use expressions in tree form, like `assign x = (a + b) * c;`, are broken up into several distinct statements. We introduce temporary variables to compute each stage in the expression (for example `t1 = a + b`) and then use these to gradually build the full expression (`x = t1 * c`). 
+As we lower from PIL to TAC, assignments that use expressions in tree form, like `assign x = (a + b) * c;`, are broken up into several distinct statements. We introduce intermediate variables to compute each stage in the expression (for example `t1 = a + b`) and then use these to gradually build the full expression (`x = t1 * c`). 
 
-Since `t1`, `t2`, ... are allowed as identifiers in PMax, we instead generate variables we _know_ won't collide with any existing identifier. The flattener will contain an `index: Int` that tracks the number of internal temporary variables generated, and use this to generate identifiers `$temp$1`, `$temp$2` and so on.
-
-### Procedure
-
-The flattening performs two tasks simultaneously:
-1. It does the job of actually flattening expressions by breaking them up into smaller assignments and declarations.
-2. It organizes each upper-level statement into its own basic block. This means that the TAC statements related to a statement `A` are clearly separated from those that belong to `B`. The compiler inserts a jump from `A` to `B`.
-
-Note: This will introduce significant delays since we're (for example) unnecessarily jumping from a declaration to an assignment. This will be improved in future versions.
+Since `t1`, `t2`, ... are allowed as identifiers in PMax, we instead generate variables we _know_ won't collide with any existing identifier. The flattener will contain an `index: Int` that tracks the number of internal temporary variables generated, and use this to generate identifiers `$1`, `$2` and so on.
 

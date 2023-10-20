@@ -100,7 +100,7 @@ class TACLowerer {
     /// Generate (and declare) a new internal variable. It does not collide with any other variable names. It uses a `context` parameter to give a _somewhat_ informative name.
     func newInternalVariable(_ context: String, _ type: PILType) -> Location {
         internalCounter += 1
-        let name = "$$\(internalCounter)"
+        let name = "$\(internalCounter)"
         return local.declare(type, name)
     }
     
