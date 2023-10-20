@@ -36,7 +36,7 @@ public class Compiler {
         pilLowerer.lower()
         
         guard pilLowerer.errors.count == 0 else {
-            print("Errors were found. Terminating compiler before TAC lowering.")
+            print("Errors were found. Terminating compilation before TAC lowering.")
             return
         }
         

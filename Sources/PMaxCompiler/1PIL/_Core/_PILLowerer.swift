@@ -30,10 +30,15 @@ class PILLowerer {
     
     
     func lower() {
+        
         prepare()
         lowerFunctionBodies()
         findMemoryLayouts()
-        errors.forEach { print($0) }
+        
+        errors.forEach { error in
+            print("- \(error)")
+        }
+        
     }
     
     private func prepare() {
@@ -69,7 +74,13 @@ class PILLowerer {
         for `struct` in structs.values {
             let layout = `struct`.memoryLayout(self)
             structLayouts[`struct`.name] = layout
-            print("Layout of \(`struct`.name): (\(layout!.description))")
+            
+            guard let layout else {
+                continue
+            }
+            
+            print("Memory layout for '\(`struct`.name)': \(layout)")
+            
         }
     }
     
