@@ -23,7 +23,13 @@ extension PILStatement {
             
             let value = expression?.lowerToTAC(lowerer)
             
-            let statement = TACStatement.return(value: value)
+            var words = 0
+            
+            if let t = expression?.type {
+                words = lowerer.sizeOf(t)
+            }
+            
+            let statement = TACStatement.return(value: value, words: words)
             lowerer.activeLabel.newStatement(statement)
              
         case .if(let pILIfStatement):

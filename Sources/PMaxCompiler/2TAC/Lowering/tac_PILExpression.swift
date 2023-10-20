@@ -31,13 +31,14 @@ extension PILExpression {
             for argument in pILCall.arguments {
                 
                 let name = argument.lowerToTAC(lowerer)
-                let statement = TACStatement.pushParameter(at: name)
+                let words = lowerer.sizeOf(argument.type)
+                let statement = TACStatement.pushParameter(at: name, words: words)
                 lowerer.activeLabel.newStatement(statement)
                 
             }
             
             let lhs = lowerer.newInternalVariable("call to \(pILCall.name)", self.type)
-            let returnLabel = lowerer.newLabel("call to \(pILCall.name):ret")
+            let returnLabel = lowerer.newLabel("\(pILCall.name):ret")
             
             let retType = lowerer.functions[pILCall.name]!.type
             let retSize = lowerer.sizeOf(retType)

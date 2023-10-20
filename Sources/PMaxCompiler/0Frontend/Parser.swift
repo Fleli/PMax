@@ -7023,7 +7023,7 @@ public class SLRNode: CustomStringConvertible {
     public var description: String { "\(type)" }
     
     public func printFullDescription(_ indent: Int) {
-        print(String(repeating: "|   ", count: indent) + type)
+        print(String(repeating: "| ", count: indent) + type)
         for child in children {
             child.printFullDescription(indent + 1)
         }

@@ -57,6 +57,10 @@ class TACLowerer {
             
             push()
             
+            for parameter in function.parameters {
+                local.declare(parameter.type, parameter.label)
+            }
+            
             let newLabel = newLabel("fn=\(function.name)")
             activeLabel = newLabel
             
