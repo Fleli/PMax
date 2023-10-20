@@ -38,7 +38,7 @@ class TACScope {
         dataSectionCounter += lowerer.sizeOf(type)
     }
     
-    func getVariable(_ name: String) -> (PILType, Location) {
+    func getVariable(_ name: String) -> (type: PILType, location: Location) {
         // SKAL eksistere, ellers har noe gått galt.
         guard let v = variables[name] else {
             return parent!.getVariable(name)

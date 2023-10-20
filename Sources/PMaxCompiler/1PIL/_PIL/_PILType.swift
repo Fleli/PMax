@@ -38,21 +38,7 @@ indirect enum PILType: CustomStringConvertible, Hashable {
         
     }
     
-    func allowedInArithmetic() -> Bool {
-        
-        // TODO: Double-check that errors should be allowed in arithmetic operations.
-        // Rationale at implementation time: The erroneous type was probably meant to be an arithmetic-enabled type, so submitting errors _here_ because something failed _earlier_ seems unnecessary.
-        
-        switch self {
-        case .int, .pointer(_), .error:
-            return true
-        case .`struct`(_), .void:
-            return false
-        }
-        
-    }
-    
-    /// Checks if `self` is assignable to `other`. Consider the attempt to assign an `int` to a `T*`. Since the lanugage spec specifies that implicit `int`-to-pointer conversions are allowed, this would return `true`. 
+    /// Checks if `self` is assignable to `other`. Consider the attempt to assign an `int` to a `T*`. Since the lanugage spec specifies that implicit `int`-to-pointer conversions are allowed, this would return `true`.
     func assignable(to other: PILType) -> Bool {
         
         switch (self, other) {

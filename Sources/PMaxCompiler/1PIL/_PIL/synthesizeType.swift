@@ -5,21 +5,21 @@ extension PILOperation {
         switch self {
         case .unary(let `operator`, let arg):
             
-            guard arg.type.allowedInArithmetic() else {
+            guard let inferred = PILType.inferUnaryOperatorType(arg.type) else {
                 lowerer.submitError(.unaryOperatorNotDefined(op: `operator`.rawValue, argType: arg.type))
                 return .error
             }
             
-            return .int
+            return inferred
             
         case .binary(let `operator`, let arg1, let arg2):
             
-            guard arg1.type.allowedInArithmetic(), arg2.type.allowedInArithmetic() else {
+            guard let inferred = PILType.inferBinaryOperatorType(arg1.type, arg2.type) else {
                 lowerer.submitError(.binaryOperatorNotDefined(op: `operator`.rawValue, arg1Type: arg1.type, arg2Type: arg2.type))
                 return .error
             }
             
-            return .int
+            return inferred
             
         case .call(let pILCall):
             

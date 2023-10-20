@@ -10,18 +10,21 @@ extension PILStatement {
             // Declarations do not add any new statements. They just inform the local scope about the variable's existence.
             lowerer.local.declare(type, name)
             
-        case .assignment(_, _):
+        case .assignment(let lhs, let rhs):
             
-            // Not implemented
-            fatalError()
+            let lhsLocation = lhs.lowerToTACAsLHS(lowerer)
+            let rhsLocation = rhs.lowerToTAC(lowerer)
+            
+            let statement = TACStatement.simpleAssign(lhs: lhsLocation, rhs: rhsLocation)
+            lowerer.activeLabel.newStatement(statement)
             
         case .return(let expression):
             
-            let value = expression?.lowerToTAC(lowerer, false)
+            let value = expression?.lowerToTAC(lowerer)
             
             let statement = TACStatement.return(value: value)
             lowerer.activeLabel.newStatement(statement)
-            
+             
         case .if(let pILIfStatement):
             
             let continueLabel = lowerer.newLabel("if:next")
@@ -44,7 +47,7 @@ extension PILStatement {
             lowerer.activeLabel = conditionEvaluationLabel
             
             // If the condition is true, move to the body.
-            let conditionResult = condition.lowerToTAC(lowerer, false)
+            let conditionResult = condition.lowerToTAC(lowerer)
             let jumpToBody = TACStatement.jumpIfNonZero(label: bodyLabel.name, variable: conditionResult)
             lowerer.activeLabel.newStatement(jumpToBody)
             

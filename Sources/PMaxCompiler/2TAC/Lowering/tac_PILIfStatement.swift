@@ -15,7 +15,7 @@ extension PILIfStatement {
         lowerer.activeLabel = conditionEvaluationLabel
         
         // Der evaluerer vi faktisk condition
-        let conditionEvaluationResult = condition.lowerToTAC(lowerer, false)
+        let conditionEvaluationResult = condition.lowerToTAC(lowerer)
         
         // Dersom true, så hopper vi til bodyInitLabel. Der utfører vi instruksjoner og hopper til `continueLabel` når ferdig.
         let jumpIfTrue = TACStatement.jumpIfNonZero(label: bodyInitLabel.name, variable: conditionEvaluationResult)
