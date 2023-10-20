@@ -47,11 +47,18 @@ extension PILExpression {
             // Since the main expression is treated as a left-hand side expression, we may get a raw pointer from it.
             if case .rawPointer(let offset) = mainLocationAsLHS {
                 
+                // TODO: This part this thorough testing. Using the literal pool from PIL in TAC lowering is extremely risky since things may get out of sync. Finding a good solution to this is preferable.
+                
                 // The raw pointer's value (the value stored in [fp + offset]) is unknown at compile-time. But the member-offset is known, so we do an addition between the unknown and the known value.
                 
                 // The known value is converted to a string and treated as a literal addition to the pointer value. We notify the literal pool and fetch the corresponding variable.
                 let memberOffsetString = "\(memberOffset)"
                 let memberOffsetLiteral = lowerer.pilLowerer.literalPool.integerLiteral(memberOffsetString)
+                
+                if !lowerer.local.variableExists(memberOffsetLiteral) {
+                    lowerer.local.declareInDataSection(.int, memberOffsetLiteral)
+                }
+                
                 let memberOffsetLiteralLocation = lowerer.local.getVariable(memberOffsetLiteral).location
                 
                 Self.offsetCalculationCount += 1
