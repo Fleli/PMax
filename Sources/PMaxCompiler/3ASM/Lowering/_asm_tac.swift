@@ -38,6 +38,10 @@ extension TACStatement {
             
             assembly += perform_call(lhs, functionLabel, returnLabel, words)
             
+        case .pushParameter(let location, let words, let parameterOffset):
+            
+            assembly += push_parameter(location, words, parameterOffset)
+            
         default:
             return ""
         }
