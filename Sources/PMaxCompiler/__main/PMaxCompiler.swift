@@ -43,6 +43,15 @@ public class Compiler {
         let tacLowerer = TACLowerer(pilLowerer)
         tacLowerer.lower()
         
+        guard tacLowerer.errors.count == 0 else {
+            print("Errors were found. Terminating compilation before ASM lowering.")
+            return
+        }
+        
+        let labels = tacLowerer.labels
+        let asmLowerer = AssemblyLowerer(labels)
+        asmLowerer.lower()
+        
     }
     
 }

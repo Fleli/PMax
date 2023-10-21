@@ -7,7 +7,7 @@ class TACLowerer {
     
     let pilLowerer: PILLowerer
     
-    private var labels: [Label] = []
+    private(set) var labels: [Label] = []
     
     private var internalCounter = 0
     
