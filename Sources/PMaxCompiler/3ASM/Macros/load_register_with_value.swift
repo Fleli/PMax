@@ -19,7 +19,9 @@ extension TACStatement {
             
         case .dataSection(let index):
             
-            return ""
+            return
+                calculate_data_offset(index, index + extraOffset)
+                .ldfr(index, index, "Load the variable in the data section pointed to by r\(index)")
             
         case .rawPointer(let offset):
             
