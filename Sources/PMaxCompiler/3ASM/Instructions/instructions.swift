@@ -12,7 +12,7 @@ extension String {
     
     /// Add immediate
     func addi(_ dst: Int, _ src: Int, _ imm: Int, _ comment: String? = nil) -> String {
-        build("addi r\(dst), r\(dst), \(imm)", comment)
+        build("addi r\(dst), r\(src), \(imm)", comment)
     }
     
     /// Load with register as address
@@ -25,19 +25,14 @@ extension String {
         build("st r\(dstAddress), r\(valAddress)", comment)
     }
     
-    func build(_ instruction: String, _ comment: String?) -> String {
-        
-        var instruction = "\t" + instruction
-        
-        if let comment {
-            let missing = 50 - instruction.count
-            let spacing = String(repeating: " ", count: missing)
-            instruction += spacing + "; " + comment
-        }
-        
-        return self + instruction + "\n"
-        
+    /// Perform an addition on the operands `srcA` and `srcB`. Store the result in `dst`.
+    func add(_ dst: Int, _ srcA: Int, _ srcB: Int, _ comment: String? = nil) -> String {
+        build("add r\(dst), r\(srcA) r\(srcB)", comment)
     }
     
+    /// Perform a subtraction on the operands `srcA` and `srcB`. Store the result in `dst`.
+    func sub(_ dst: Int, _ srcA: Int, _ srcB: Int, _ comment: String? = nil) -> String {
+        build("sub r\(dst), r\(srcA) r\(srcB)", comment)
+    }
     
 }

@@ -26,11 +26,18 @@ extension TACStatement {
                 
             }
             
+        case .assignBinaryOperation(let lhs, let operation, let arg1, let arg2):
+            
+            assembly = load_register_with_value(at: arg1, register: 0, 0)
+            assembly += load_register_with_value(at: arg2, register: 1, 0)
+            assembly += perform_arithmetic(0, 0, 1, operation)
+            assembly += assign_to_location(lhs, 0, 1, 0)
+            
         default:
             return ""
         }
         
-        return assembly
+        return "\n ; \(self.description)\n" + assembly
         
     }
     

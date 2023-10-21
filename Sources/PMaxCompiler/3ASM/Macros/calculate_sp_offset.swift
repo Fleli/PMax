@@ -6,8 +6,7 @@ extension TACStatement {
     func calculate_stack_pointer_offset(_ destination: Int, _ offset: Int) -> String {
         
         return ""
-            .ld(destination, Self.stackPointerAddress, "Load the stack pointer")
-            .addi(destination, destination, offset, "Calculate the offset address")
+            .addi(destination, .stackPointer, offset, "Find the address of the variable located \(offset) from the stack pointer")
         
     }
     
