@@ -20,6 +20,11 @@ extension String {
         build("ldfr r\(dst), r\(addressRegister)", comment)
     }
     
+    /// Store the value in register `valAddress` at the raw address pointed to by the `dstAddress` register.
+    func st(_ dstAddress: Int, _ valAddress: Int, _ comment: String? = nil) -> String {
+        build("st r\(dstAddress), r\(valAddress)", comment)
+    }
+    
     func build(_ instruction: String, _ comment: String?) -> String {
         
         var instruction = "\t" + instruction

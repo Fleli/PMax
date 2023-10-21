@@ -12,7 +12,19 @@ extension TACStatement {
             
         case .assign(let lhs, let rhs, let words):
             
-            assembly = load_register_with_value(at: rhs, register: 0)
+            let scratch = 1
+            let dataRegister = 0
+            
+            // For data types larger than 1 word, we need to move multiple consecutive words in memory.
+            for i in 0 ..< words {
+                
+                // First, we load the `dataRegister` with the value of the right-hand side.
+                assembly = load_register_with_value(at: rhs, register: dataRegister, i)
+                
+                // Then, we store that value at the location specified by the left-hand side.
+                assembly += assign_to_location(lhs, dataRegister, scratch)
+                
+            }
             
         default:
             return ""
