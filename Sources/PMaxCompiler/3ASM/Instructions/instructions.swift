@@ -45,4 +45,9 @@ extension String {
         build("neg r\(dst), r\(src)", comment)
     }
     
+    /// Tell the assembler to call a function and to which label it should return afterwards. The assembler calculates the raw return address and inserts code to store this address at `[fp - 1]`.
+    func call(_ callee: String, _ returnLabel: String, _ comment: String? = nil) -> String {
+        build("call \(callee) -> \(returnLabel)", comment)
+    }
+    
 }
