@@ -40,9 +40,11 @@ extension PILExpression {
             let lhs = lowerer.newInternalVariable("call to \(pILCall.name)", self.type)
             let returnLabel = lowerer.newLabel("\(pILCall.name):ret")
             
+            let callLabel = lowerer.functionLabels[pILCall.name]!.name
+            
             let retType = lowerer.functions[pILCall.name]!.type
             let retSize = lowerer.sizeOf(retType)
-            let callStatement = TACStatement.call(lhs: lhs, function: pILCall.name, returnLabel: returnLabel.name, words: retSize)
+            let callStatement = TACStatement.call(lhs: lhs, functionLabel: callLabel, returnLabel: returnLabel.name, words: retSize)
             
             lowerer.activeLabel.newStatement(callStatement)
             

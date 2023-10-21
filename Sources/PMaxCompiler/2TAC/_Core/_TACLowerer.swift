@@ -13,6 +13,8 @@ class TACLowerer {
     
     private var structs: [String : PILStruct] = [:]
     
+    private(set) var functionLabels: [String : Label] = [:]
+    
     private(set) var functions: [String : PILFunction] = [:]
     
     private(set) var errors: [PMaxError] = []
@@ -53,6 +55,15 @@ class TACLowerer {
     
     func lower() {
         
+        for function in functions {
+            
+            let function = function.value
+            
+            let newLabel = newLabel("fn=\(function.name)")
+            functionLabels[function.name] = newLabel
+            
+        }
+        
         for function in functions.values {
             
             push()
@@ -61,8 +72,7 @@ class TACLowerer {
                 local.declare(parameter.type, parameter.label)
             }
             
-            let newLabel = newLabel("fn=\(function.name)")
-            activeLabel = newLabel
+            activeLabel = functionLabels[function.name]!
             
             for statement in function.body {
                 statement.lowerToTAC(self)

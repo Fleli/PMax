@@ -9,7 +9,7 @@ enum TACStatement: CustomStringConvertible {
     case jump(label: String)
     case jumpIfNonZero(label: String, variable: Location)
     
-    case call(lhs: Location, function: String, returnLabel: String, words: Int)
+    case call(lhs: Location, functionLabel: String, returnLabel: String, words: Int)
     case pushParameter(at: Location, words: Int)
     
     case dereference(lhs: Location, arg: Location, words: Int)

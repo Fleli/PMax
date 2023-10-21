@@ -34,6 +34,10 @@ extension TACStatement {
             assembly += perform_arithmetic(0, 0, operation)
             assembly += assign_to_location(lhs, 0, 1, 0)
             
+        case .call(let lhs, let function, let returnLabel, let words):
+            
+            return ""
+            
         default:
             return ""
         }
