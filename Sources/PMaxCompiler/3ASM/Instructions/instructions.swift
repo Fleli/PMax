@@ -50,4 +50,9 @@ extension String {
         build("call \(callee) -> \(returnLabel)", comment)
     }
     
+    /// Perform an unconditional jump to the address stored in `rawAddressRegister`
+    func j(_ rawAddressRegister: Int, _ comment: String? = nil) -> String {
+        build("j r\(rawAddressRegister)", comment)
+    }
+    
 }
