@@ -40,6 +40,8 @@ public class Compiler {
             return
         }
         
+        print("\n\nLOWERING TO THREE ADDRESS CODE\n\n")
+        
         let tacLowerer = TACLowerer(pilLowerer)
         tacLowerer.lower()
         
@@ -47,6 +49,8 @@ public class Compiler {
             print("Errors were found. Terminating compilation before ASM lowering.")
             return
         }
+        
+        print("\n\nLOWERING TO ASSEMBLY CODE\n\n")
         
         let labels = tacLowerer.labels
         let asmLowerer = AssemblyLowerer(labels)

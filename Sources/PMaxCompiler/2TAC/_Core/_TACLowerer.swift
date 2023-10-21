@@ -21,8 +21,6 @@ class TACLowerer {
     
     init(_ pilLowerer: PILLowerer) {
         
-        print("\n\n")
-        
         self.pilLowerer = pilLowerer
         self.structs = pilLowerer.structs
         self.functions = pilLowerer.functions

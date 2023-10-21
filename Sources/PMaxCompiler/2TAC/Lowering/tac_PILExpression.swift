@@ -28,16 +28,33 @@ extension PILExpression {
             
         case .call(let pILCall):
             
+            var loweredArguments: [(name: Location, size: Int)] = []
+            
+            // We first calculate each argument and remember their names.
             for argument in pILCall.arguments {
-                
                 let name = argument.lowerToTAC(lowerer)
                 let words = lowerer.sizeOf(argument.type)
-                let statement = TACStatement.pushParameter(at: name, words: words)
-                lowerer.activeLabel.newStatement(statement)
-                
+                loweredArguments.append((name, words))
             }
             
+            // Then, we declare the name of the variable representing the returned value.
             let lhs = lowerer.newInternalVariable("call to \(pILCall.name)", self.type)
+            
+            guard case .framePointer(let returnValueOffset) = lhs else {
+                fatalError("\(lhs)")
+            }
+            
+            // We keep track of the next argument's position relative to the frame pointer.
+            let returnSize = lowerer.sizeOf(lowerer.functions[pILCall.name]!.type)
+            var argumentOffsetToOldFramePointer = returnValueOffset + returnSize + 2
+            
+            // Then, since the return value's offset is known, we can push each argument with the correct offset.
+            for (name, words) in loweredArguments {
+                let statement = TACStatement.pushParameter(at: name, words: words, framePointerOffset: argumentOffsetToOldFramePointer)
+                argumentOffsetToOldFramePointer += words
+                lowerer.activeLabel.newStatement(statement)
+            }
+            
             let returnLabel = lowerer.newLabel("\(pILCall.name):ret")
             
             let callLabel = lowerer.functionLabels[pILCall.name]!.name

@@ -10,7 +10,7 @@ enum TACStatement: CustomStringConvertible {
     case jumpIfNonZero(label: String, variable: Location)
     
     case call(lhs: Location, functionLabel: String, returnLabel: String, words: Int)
-    case pushParameter(at: Location, words: Int)
+    case pushParameter(at: Location, words: Int, framePointerOffset: Int)
     
     case dereference(lhs: Location, arg: Location, words: Int)
     case addressOf(lhs: Location, arg: Location)
@@ -33,8 +33,8 @@ enum TACStatement: CustomStringConvertible {
             return "jump \(label) if \(variable) != 0"
         case .call(let lhs, let function, let returnLabel, let words):
             return "[\(words)]  \(lhs) = call \(function) - resume @ \(returnLabel)"
-        case .pushParameter(let name, let words): // TODO: We may need to specify a number of words here.
-            return "[\(words)]  param \(name)"
+        case .pushParameter(let name, let words, let framePointerOffset):
+            return "[\(words)]  param \(name) @ fp + \(framePointerOffset)"
         case .dereference(let lhs, let arg, let words):
             return "[\(words)]  \(lhs) = *\(arg)"
         case .addressOf(let lhs, let arg):
