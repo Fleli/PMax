@@ -20,7 +20,7 @@ extension String {
         build("ldfr r\(dst), r\(addressRegister)", comment)
     }
     
-    private func build(_ instruction: String, _ comment: String?) -> String {
+    func build(_ instruction: String, _ comment: String?) -> String {
         
         var instruction = "\t" + instruction
         
@@ -30,7 +30,7 @@ extension String {
             instruction += spacing + "; " + comment
         }
         
-        return instruction + "\n"
+        return self + instruction + "\n"
         
     }
     
