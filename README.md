@@ -1,8 +1,8 @@
 # PMaxCompiler
 
-PMax is a work-in-progress programming language. It is intended to be used for programming a breadboard computer that I and four others at [Hackerspace NTNU](https://github.com/hackerspace-ntnu/BreadboardComputer) work on. The language has many similarities with C.
+Welcome to the PMax repository. PMax is a programming language that draws inspiration from C. It is built specifically with Hackerspace NTNU's [breadboard computer](https://github.com/hackerspace-ntnu/BreadboardComputer) in mind. While it might not match the sheer elegance of C or the power of Swift, PMax aims to provide an easy-to-use platform to make breadboard computer programming accessible. 
 
-This compiler will be used to translate PMax source code into assembly language for our breadboard computer.
+Within this repository, you will find the PMax compiler and a standard library implementation. The compiler translates PMax source code into breadboard computer assembly code, while the standard library implements a collection of high-performance functions and tools. Although it is functional, the language and compiler still has a long way to go in terms of performance and usability. Optimizations like constant folding, common subexpressions eliminitation, proper register allocation and function inlining is not yet implemented. Language features like `for`-loops, array subscripting with `[]` and custom operator definitions are hopefully on their way, but do not have the highest priority. Your feedback is invaluable and greatly appreciated as I continue to develop PMax.
 
 ## Structure
 
