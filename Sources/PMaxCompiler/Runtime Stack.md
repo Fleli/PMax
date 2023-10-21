@@ -7,7 +7,7 @@
  local 2        | `Q`           |
  local 1        | `Q`           |
  param M        | `Q`           |
- ...            | `Q`           |
+ ...            |  ...          |
  param 1        | `Q`           |
  frame pointer  | `Q`           |
  return address | `Q`           |

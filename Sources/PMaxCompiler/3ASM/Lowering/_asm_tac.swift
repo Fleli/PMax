@@ -42,6 +42,10 @@ extension TACStatement {
             
             assembly += push_parameter(location, words, parameterOffset)
             
+        case .return(let value, let words):
+            
+            assembly += return_from_function(value, words)
+            
         default:
             return ""
         }

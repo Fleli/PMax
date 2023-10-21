@@ -14,7 +14,7 @@ class TACScope {
         self.parent = nil
         self.lowerer = lowerer
         self.dataSectionCounter = 0
-        self.framePointerOffset = 0
+        self.framePointerOffset = 1
         
     }
     

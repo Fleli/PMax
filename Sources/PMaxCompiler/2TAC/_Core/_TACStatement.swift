@@ -15,7 +15,6 @@ enum TACStatement: CustomStringConvertible {
     case dereference(lhs: Location, arg: Location, words: Int)
     case addressOf(lhs: Location, arg: Location)
     
-    /// A `.assign` represents an assignment from one location to another.
     case assign(lhs: Location, rhs: Location, words: Int)
     
     case `return`(value: Location?, words: Int)
