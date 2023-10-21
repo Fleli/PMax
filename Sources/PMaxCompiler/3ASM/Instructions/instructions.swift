@@ -35,4 +35,14 @@ extension String {
         build("sub r\(dst), r\(srcA) r\(srcB)", comment)
     }
     
+    /// Perform a bitwise `NOT` on the operand `src`. Store the result in `dst`.
+    func not(_ dst: Int, _ src: Int, _ comment: String? = nil) -> String {
+        build("not r\(dst), r\(src)", comment)
+    }
+    
+    /// Perform a negation on the operand `src`. Store the result in `dst`.
+    func neg(_ dst: Int, _ src: Int, _ comment: String? = nil) -> String {
+        build("neg r\(dst), r\(src)", comment)
+    }
+    
 }

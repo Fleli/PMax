@@ -28,6 +28,12 @@ extension TACStatement {
             assembly += perform_arithmetic(0, 0, 1, operation)
             assembly += assign_to_location(lhs, 0, 1, 0)
             
+        case .assignUnaryOperation(let lhs, let operation, let arg):
+            
+            assembly = load_register_with_value(at: arg, register: 0, 0)
+            assembly += perform_arithmetic(0, 0, operation)
+            assembly += assign_to_location(lhs, 0, 1, 0)
+            
         default:
             return ""
         }
