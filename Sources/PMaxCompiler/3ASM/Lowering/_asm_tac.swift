@@ -22,7 +22,7 @@ extension TACStatement {
                 assembly = load_register_with_value(at: rhs, register: dataRegister, i)
                 
                 // Then, we store that value at the location specified by the left-hand side.
-                assembly += assign_to_location(lhs, dataRegister, scratch)
+                assembly += assign_to_location(lhs, dataRegister, scratch, i)
                 
             }
             
