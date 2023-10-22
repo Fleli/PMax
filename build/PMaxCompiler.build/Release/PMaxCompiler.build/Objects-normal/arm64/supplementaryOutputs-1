@@ -1,9 +1,0 @@
-"/Users/frederikedvardsen/Desktop/PMaxCompiler/Sources/PMaxCompiler/0Frontend/Argument.swift":
-  swiftmodule: "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/arm64/PMaxCompiler.swiftmodule"
-  abi-baseline-json: "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/arm64/PMaxCompiler.abi.json"
-  swiftsourceinfo: "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/arm64/PMaxCompiler.swiftsourceinfo"
-  const-values: "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/arm64/PMaxCompiler-master.swiftconstvalues"
-  dependencies: "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/arm64/PMaxCompiler-master.d"
-  objc-header: "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/arm64/PMaxCompiler-Swift.h"
-  swiftdoc: "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/arm64/PMaxCompiler.swiftdoc"
-  diagnostics: "/Users/frederikedvardsen/Desktop/PMaxCompiler/build/PMaxCompiler.build/Release/PMaxCompiler.build/Objects-normal/arm64/PMaxCompiler-master.dia"

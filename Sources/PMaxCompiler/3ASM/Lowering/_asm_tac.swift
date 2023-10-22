@@ -47,7 +47,9 @@ extension TACStatement {
             assembly += return_from_function(value, words)
             
         default:
-            return ""
+            
+            break
+            
         }
         
         return "\n ; \(self.description)\n" + assembly

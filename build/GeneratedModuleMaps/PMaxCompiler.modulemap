@@ -1,4 +1,0 @@
-module PMaxCompiler {
-header "PMaxCompiler-Swift.h"
-export *
-}

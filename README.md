@@ -28,27 +28,27 @@ Lexical analysis touches on every single character in the input and results in a
 <details>
     <summary>Generated tokens</summary>
     <code>
-    identifier         int                   ln 1 col 0 -> ln 1 col 2    <br>
-    identifier         main                  ln 1 col 4 -> ln 1 col 7    <br>
-    (                  (                     ln 1 col 8 -> ln 1 col 8    <br>
-    )                  )                     ln 1 col 9 -> ln 1 col 9    <br>
-    {                  {                     ln 1 col 11 -> ln 1 col 11  <br>
-    identifier         int                   ln 3 col 4 -> ln 3 col 6    <br>
-    identifier         a                     ln 3 col 8 -> ln 3 col 8    <br>
-    =                  =                     ln 3 col 10 -> ln 3 col 10  <br>
-    integer            5                     ln 3 col 12 -> ln 3 col 12  <br>
-    ;                  ;                     ln 3 col 13 -> ln 3 col 13  <br>
-    identifier         int                   ln 4 col 4 -> ln 4 col 6    <br>
-    identifier         b                     ln 4 col 8 -> ln 4 col 8    <br>
-    =                  =                     ln 4 col 10 -> ln 4 col 10  <br>
-    integer            6                     ln 4 col 12 -> ln 4 col 12  <br>
-    ;                  ;                     ln 4 col 13 -> ln 4 col 13  <br>
-    return             return                ln 6 col 4 -> ln 6 col 9    <br>
-    identifier         a                     ln 6 col 11 -> ln 6 col 11  <br>
-    +                  +                     ln 6 col 13 -> ln 6 col 13  <br>
-    identifier         b                     ln 6 col 15 -> ln 6 col 15  <br>
-    ;                  ;                     ln 6 col 16 -> ln 6 col 16  <br>
-    }                  }                     ln 8 col 0 -> ln 8 col 0    <br>
+    identifier         int                   ln 1 col 0 -> ln 1 col 2   
+    identifier         main                  ln 1 col 4 -> ln 1 col 7   
+    (                  (                     ln 1 col 8 -> ln 1 col 8   
+    )                  )                     ln 1 col 9 -> ln 1 col 9   
+    {                  {                     ln 1 col 11 -> ln 1 col 11 
+    identifier         int                   ln 3 col 4 -> ln 3 col 6   
+    identifier         a                     ln 3 col 8 -> ln 3 col 8   
+    =                  =                     ln 3 col 10 -> ln 3 col 10 
+    integer            5                     ln 3 col 12 -> ln 3 col 12 
+    ;                  ;                     ln 3 col 13 -> ln 3 col 13 
+    identifier         int                   ln 4 col 4 -> ln 4 col 6   
+    identifier         b                     ln 4 col 8 -> ln 4 col 8   
+    =                  =                     ln 4 col 10 -> ln 4 col 10 
+    integer            6                     ln 4 col 12 -> ln 4 col 12 
+    ;                  ;                     ln 4 col 13 -> ln 4 col 13 
+    return             return                ln 6 col 4 -> ln 6 col 9   
+    identifier         a                     ln 6 col 11 -> ln 6 col 11 
+    +                  +                     ln 6 col 13 -> ln 6 col 13 
+    identifier         b                     ln 6 col 15 -> ln 6 col 15 
+    ;                  ;                     ln 6 col 16 -> ln 6 col 16 
+    }                  }                     ln 8 col 0 -> ln 8 col 0   
     </code>
 </details>
 
@@ -57,82 +57,82 @@ Then comes the parsing stage, which uses an SLR parser to parse the tokens and r
 <details>
     <summary>Raw parse tree</summary>
     <code>
-    TopLevelStatements                                                              <br>
-    | TopLevelStatement                                                             <br>
-    | | Function                                                                    <br>
-    | | | Type                                                                      <br>
-    | | | | identifier                                                              <br>
-    | | | identifier                                                                <br>
-    | | | (                                                                         <br>
-    | | | Parameters                                                                <br>
-    | | | )                                                                         <br>
-    | | | {                                                                         <br>
-    | | | FunctionBodyStatements                                                    <br>
-    | | | | FunctionBodyStatements                                                  <br>
-    | | | | | FunctionBodyStatements                                                <br>
-    | | | | | | FunctionBodyStatement                                               <br>
-    | | | | | | | Declaration                                                       <br>
-    | | | | | | | | Type                                                            <br>
-    | | | | | | | | | identifier                                                    <br>
-    | | | | | | | | identifier                                                      <br>
-    | | | | | | | | =                                                               <br>
-    | | | | | | | | Expression                                                      <br>
-    | | | | | | | | | CASEBExpression                                               <br>
-    | | | | | | | | | | CASECExpression                                             <br>
-    | | | | | | | | | | | CASEDExpression                                           <br>
-    | | | | | | | | | | | | CASEEExpression                                         <br>
-    | | | | | | | | | | | | | CASEFExpression                                       <br>
-    | | | | | | | | | | | | | | CASEGExpression                                     <br>
-    | | | | | | | | | | | | | | | CASEHExpression                                   <br>
-    | | | | | | | | | | | | | | | | CASEIExpression                                 <br>
-    | | | | | | | | | | | | | | | | | CASEJExpression                               <br>
-    | | | | | | | | | | | | | | | | | | CASEKExpression                             <br>
-    | | | | | | | | | | | | | | | | | | | CASELExpression                           <br>
-    | | | | | | | | | | | | | | | | | | | | integer                                 <br>
-    | | | | | | | | ;                                                               <br>
-    | | | | | FunctionBodyStatement                                                 <br>
-    | | | | | | Declaration                                                         <br>
-    | | | | | | | Type                                                              <br>
-    | | | | | | | | identifier                                                      <br>
-    | | | | | | | identifier                                                        <br>
-    | | | | | | | =                                                                 <br>
-    | | | | | | | Expression                                                        <br>
-    | | | | | | | | CASEBExpression                                                 <br>
-    | | | | | | | | | CASECExpression                                               <br>
-    | | | | | | | | | | CASEDExpression                                             <br>
-    | | | | | | | | | | | CASEEExpression                                           <br>
-    | | | | | | | | | | | | CASEFExpression                                         <br>
-    | | | | | | | | | | | | | CASEGExpression                                       <br>
-    | | | | | | | | | | | | | | CASEHExpression                                     <br>
-    | | | | | | | | | | | | | | | CASEIExpression                                   <br>
-    | | | | | | | | | | | | | | | | CASEJExpression                                 <br>
-    | | | | | | | | | | | | | | | | | CASEKExpression                               <br>
-    | | | | | | | | | | | | | | | | | | CASELExpression                             <br>
-    | | | | | | | | | | | | | | | | | | | integer                                   <br>
-    | | | | | | | ;                                                                 <br>
-    | | | | FunctionBodyStatement                                                   <br>
-    | | | | | Return                                                                <br>
-    | | | | | | return                                                              <br>
-    | | | | | | Expression                                                          <br>
-    | | | | | | | CASEBExpression                                                   <br>
-    | | | | | | | | CASECExpression                                                 <br>
-    | | | | | | | | | CASEDExpression                                               <br>
-    | | | | | | | | | | CASEEExpression                                             <br>
-    | | | | | | | | | | | CASEFExpression                                           <br>
-    | | | | | | | | | | | | CASEGExpression                                         <br>
-    | | | | | | | | | | | | | CASEHExpression                                       <br>
-    | | | | | | | | | | | | | | CASEIExpression                                     <br>
-    | | | | | | | | | | | | | | | CASEIExpression                                   <br>
-    | | | | | | | | | | | | | | | | CASEJExpression                                 <br>
-    | | | | | | | | | | | | | | | | | CASEKExpression                               <br>
-    | | | | | | | | | | | | | | | | | | CASELExpression                             <br>
-    | | | | | | | | | | | | | | | | | | | identifier                                <br>
-    | | | | | | | | | | | | | | | +                                                 <br>
-    | | | | | | | | | | | | | | | CASEJExpression                                   <br>
-    | | | | | | | | | | | | | | | | CASEKExpression                                 <br>
-    | | | | | | | | | | | | | | | | | CASELExpression                               <br>
-    | | | | | | | | | | | | | | | | | | identifier                                  <br>
-    | | | | | | ;                                                                   <br>
+    TopLevelStatements                                       
+    | TopLevelStatement                                      
+    | | Function                                             
+    | | | Type                                               
+    | | | | identifier                                       
+    | | | identifier                                         
+    | | | (                                                  
+    | | | Parameters                                         
+    | | | )                                                  
+    | | | {                                                  
+    | | | FunctionBodyStatements                             
+    | | | | FunctionBodyStatements                           
+    | | | | | FunctionBodyStatements                         
+    | | | | | | FunctionBodyStatement                        
+    | | | | | | | Declaration                                
+    | | | | | | | | Type                                     
+    | | | | | | | | | identifier                             
+    | | | | | | | | identifier                               
+    | | | | | | | | =                                        
+    | | | | | | | | Expression                               
+    | | | | | | | | | CASEBExpression                        
+    | | | | | | | | | | CASECExpression                      
+    | | | | | | | | | | | CASEDExpression                    
+    | | | | | | | | | | | | CASEEExpression                  
+    | | | | | | | | | | | | | CASEFExpression                
+    | | | | | | | | | | | | | | CASEGExpression              
+    | | | | | | | | | | | | | | | CASEHExpression            
+    | | | | | | | | | | | | | | | | CASEIExpression          
+    | | | | | | | | | | | | | | | | | CASEJExpression        
+    | | | | | | | | | | | | | | | | | | CASEKExpression      
+    | | | | | | | | | | | | | | | | | | | CASELExpression    
+    | | | | | | | | | | | | | | | | | | | | integer          
+    | | | | | | | | ;                                        
+    | | | | | FunctionBodyStatement                          
+    | | | | | | Declaration                                  
+    | | | | | | | Type                                       
+    | | | | | | | | identifier                               
+    | | | | | | | identifier                                 
+    | | | | | | | =                                          
+    | | | | | | | Expression                                 
+    | | | | | | | | CASEBExpression                          
+    | | | | | | | | | CASECExpression                        
+    | | | | | | | | | | CASEDExpression                      
+    | | | | | | | | | | | CASEEExpression                    
+    | | | | | | | | | | | | CASEFExpression                  
+    | | | | | | | | | | | | | CASEGExpression                
+    | | | | | | | | | | | | | | CASEHExpression              
+    | | | | | | | | | | | | | | | CASEIExpression            
+    | | | | | | | | | | | | | | | | CASEJExpression          
+    | | | | | | | | | | | | | | | | | CASEKExpression        
+    | | | | | | | | | | | | | | | | | | CASELExpression      
+    | | | | | | | | | | | | | | | | | | | integer            
+    | | | | | | | ;                                          
+    | | | | FunctionBodyStatement                            
+    | | | | | Return                                         
+    | | | | | | return                                       
+    | | | | | | Expression                                   
+    | | | | | | | CASEBExpression                            
+    | | | | | | | | CASECExpression                          
+    | | | | | | | | | CASEDExpression                        
+    | | | | | | | | | | CASEEExpression                      
+    | | | | | | | | | | | CASEFExpression                    
+    | | | | | | | | | | | | CASEGExpression                  
+    | | | | | | | | | | | | | CASEHExpression                
+    | | | | | | | | | | | | | | CASEIExpression              
+    | | | | | | | | | | | | | | | CASEIExpression            
+    | | | | | | | | | | | | | | | | CASEJExpression          
+    | | | | | | | | | | | | | | | | | CASEKExpression        
+    | | | | | | | | | | | | | | | | | | CASELExpression      
+    | | | | | | | | | | | | | | | | | | | identifier         
+    | | | | | | | | | | | | | | | +                          
+    | | | | | | | | | | | | | | | CASEJExpression            
+    | | | | | | | | | | | | | | | | CASEKExpression          
+    | | | | | | | | | | | | | | | | | CASELExpression        
+    | | | | | | | | | | | | | | | | | | identifier           
+    | | | | | | ;                                            
     | | | }
     </code>
 </details>
