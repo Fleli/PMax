@@ -23,7 +23,7 @@ int main() {
 }
 ```
 
-Lexical analysis touches on every single character in the input and results in an array of _tokens_, represented internally by the `Token` class.
+Lexical analysis touches on every single character in the input and results in an array of _tokens_, represented internally by the `Token` class. Each `Token` has a _type_ (first column) and some _content_ (second column). The class also stores information about where in the input it was found. This will become useful later for syntax highlighting and precise error messages.
 
 <details>
     <summary>Generated tokens</summary>
@@ -137,35 +137,38 @@ Then comes the parsing stage, which uses an SLR parser to parse the tokens and r
     </code>
 </details>
 
-From the tree, it is visible that expressions are deeply nested. This is because the grammar contains extremely many levels of indirection due to operator precedence rules.
+From the tree, it is apparent that expressions are deeply nested. This is because the grammar contains a high number of indirections due to operator precedence rules.
 
 The parse tree is then converted into classes and enumerations that can be used by later parts of the compiler. Most of the important constructs get their own class or enum. For example, declarations look like this:
 
-```
-public class Declaration: CustomStringConvertible {
-    
-    let type: `Type`
-    let name: String
-    let value: Expression?
-    
-    init(_ type: `Type`, _ name: String, _ value: Expression) {
-        self.type = type
-        self.name = name
-        self.value = value
-    }
-    
-    init(_ type: `Type`, _ name: String) {
-        self.type = type
-        self.name = name
-        self.value = nil
-    }
-
-    public var description: String {
-        type.description + " " + name.description + " " + (value == nil ? "" : "= " + value!.description + " ") + "; "
-    }
-    
-}
-```
+<details>
+    <summary>The <code>Declaration</code> class</summary>
+    <code>
+    public class Declaration: CustomStringConvertible {<br>
+        <br>
+        let type: `Type`<br>
+        let name: String<br>
+        let value: Expression?<br>
+        <br>
+        init(_ type: `Type`, _ name: String, _ value: Expression) {<br>
+            self.type = type<br>
+            self.name = name<br>
+            self.value = value<br>
+        }<br>
+        <br>
+        init(_ type: `Type`, _ name: String) {<br>
+            self.type = type<br>
+            self.name = name<br>
+            self.value = nil<br>
+        }<br>
+<br>
+        public var description: String {<br>
+            type.description + " " + name.description + " " + (value == nil ? "" : "= " + value!.description + " ") + "; "<br>
+        }<br>
+        <br>
+    }
+    </code>
+</details>
 
 The whole process of lexing, parsing and converting to a usable form is done automatically by [SwiftLex](https://github.com/Fleli/SwiftLex) and [SwiftParse](https://github.com/Fleli/SwiftParse).
 
