@@ -23,9 +23,10 @@ extension TACStatement {
                 calculate_data_offset(index, index + extraOffset)
                 .ldfr(index, index, "Load the variable in the data section pointed to by r\(index)")
             
-        case .rawPointer(let offset):
+        case .rawPointer(_):
             
-            return ""
+            // TODO: Not implemented
+            fatalError()
             
         }
         

@@ -1,4 +1,4 @@
-class TACLowerer {
+class TACLowerer: CustomStringConvertible {
     
     var global: TACScope!
     var local: TACScope!
@@ -7,8 +7,6 @@ class TACLowerer {
     
     let pilLowerer: PILLowerer
     
-    private(set) var labels: [Label] = []
-    
     private var internalCounter = 0
     
     private var structs: [String : PILStruct] = [:]
@@ -16,6 +14,8 @@ class TACLowerer {
     private(set) var functionLabels: [String : Label] = [:]
     
     private(set) var functions: [String : PILFunction] = [:]
+    
+    private(set) var labels: [Label] = []
     
     private(set) var errors: [PMaxError] = []
     
@@ -80,13 +80,17 @@ class TACLowerer {
             
         }
         
-        for label in labels {
-            print(label)
+        guard Compiler.allowPrinting else {
+            return
         }
         
-        for error in errors {
-            print("-", error)
+        print("\n\nRESULT FROM LOWERING TO THREE-ADDRESS CODE (TAC):\n")
+        
+        for label in labels {
+            print(label.description)
         }
+        
+        print("\n")
         
     }
     
@@ -139,5 +143,10 @@ class TACLowerer {
         local = local.parent!
     }
     
+    var description: String {
+        
+        return labels.reduce("", {$0 + $1.description + "\n"})
+        
+    }
     
 }

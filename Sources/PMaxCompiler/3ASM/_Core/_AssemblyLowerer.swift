@@ -3,21 +3,21 @@ class AssemblyLowerer {
     
     private var tacLabels: [Label]
     
-    private var output: String = ""
-    
     
     init(_ labels: [Label]) {
         self.tacLabels = labels
     }
     
     
-    func lower() {
+    func lower() -> String {
+        
+        var output = ""
         
         for label in tacLabels {
             output += label.lowerToBreadboardAssembly()
         }
         
-        print(output)
+        return output
         
     }
     

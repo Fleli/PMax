@@ -15,7 +15,7 @@ extension PILExpression {
         case .dereference(let dereferenced):
             
             guard case .framePointer(let offset) = dereferenced.lowerToTAC(lowerer) else {
-                // TODO: The assumption that this guard never fails may not be right. Double-check this.
+                // TODO: The assumption that this guard never fails may be incorrect. Double-check this.
                 fatalError()
             }
             

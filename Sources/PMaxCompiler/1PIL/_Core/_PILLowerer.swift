@@ -35,8 +35,8 @@ class PILLowerer {
         lowerFunctionBodies()
         findMemoryLayouts()
         
-        errors.forEach { error in
-            print("- \(error)")
+        for error in errors {
+            Compiler.print(error.description)
         }
         
     }
@@ -47,13 +47,16 @@ class PILLowerer {
             
             switch syntacticStatement {
             case .struct(let `struct`):
+                
                 let newStruct = PILStruct(`struct`, self)
                 structs[newStruct.name] = newStruct
-                print(newStruct)
+                
             case .function(let function):
+                
                 let name = function.name
                 let pilFunction = PILFunction(function, self)
                 functions[name] = pilFunction
+                
             }
             
         }
@@ -61,13 +64,23 @@ class PILLowerer {
     }
     
     private func lowerFunctionBodies() {
+        
         for function in functions.values {
+            
             function.lowerToPIL(self)
+            
+            guard Compiler.allowPrinting else {
+                continue
+            }
+            
             print("\(function.name)")
+            
             function.body.forEach {
                 $0._print(1)
             }
+            
         }
+        
     }
     
     private func findMemoryLayouts() {
@@ -79,7 +92,7 @@ class PILLowerer {
                 continue
             }
             
-            print("Memory layout for '\(`struct`.name)': \(layout)")
+            Compiler.print("Memory layout for '\(`struct`.name)': \(layout)")
             
         }
     }

@@ -21,7 +21,6 @@ class LiteralPool {
         integerLiterals[literal] = newVariable
         
         let success = lowerer.global.declare(.int, newVariable)
-        assert(success)
         
         return newVariable
         

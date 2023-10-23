@@ -34,13 +34,7 @@ class TACScope {
         variables[name] = (type, location)
         framePointerOffset += lowerer.sizeOf(type)
         
-        var message = "\(type) \(name)"
-        
-        while message.count < 30 {
-            message.append(" ")
-        }
-        
-        print(message + "@\(location)")
+        printIfAllowed("\(type) \(name)", 40, "@ \(location)")
         
         return location
         
@@ -59,13 +53,7 @@ class TACScope {
         variables[name] = (type, location)
         dataSectionCounter += lowerer.sizeOf(type)
         
-        var message = "\(type) \(name)"
-        
-        while message.count < 30 {
-            message.append(" ")
-        }
-        
-        print(message + "@\(location)")
+        printIfAllowed("\(type) \(name)", 40, "@ \(location)")
         
     }
     
@@ -92,6 +80,17 @@ class TACScope {
         }
         
         return v
+        
+    }
+    
+    private func printIfAllowed(_ left: String, _ beginRight: Int, _ right: String) {
+        
+        guard Compiler.allowPrinting else {
+            return
+        }
+        
+        let message = left + String(repeating: " ", count: beginRight - left.count) + right
+        print(message)
         
     }
     
