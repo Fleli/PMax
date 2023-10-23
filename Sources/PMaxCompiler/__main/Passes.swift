@@ -36,6 +36,7 @@ extension Compiler {
         pilLowerer.lower()
         
         guard pilLowerer.errors.count == 0 else {
+            write(.errors, pilLowerer.errors.readableFormat)
             return
         }
         
@@ -50,6 +51,7 @@ extension Compiler {
         tacLowerer.lower()
         
         guard tacLowerer.errors.count == 0 else {
+            write(.errors, tacLowerer.errors.readableFormat)
             return
         }
         

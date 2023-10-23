@@ -3,6 +3,7 @@ import Foundation
 public final class Compiler {
     
     
+    public static var allowMeta = true
     public static var allowPrinting = true
     
     
@@ -15,7 +16,20 @@ public final class Compiler {
     
     
     public func compile(_ sourceCode: String) throws {
-        try lex(sourceCode)
+        
+        write(.errors, "\nSuccess!\n")
+        
+        do {
+            
+            try lex(sourceCode)
+            
+        } catch {
+            
+            Self.print("Compilation failed. Error: \(error)")
+            write(.errors, error.localizedDescription)
+            
+        }
+        
     }
     
     

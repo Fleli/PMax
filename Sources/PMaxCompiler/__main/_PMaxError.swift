@@ -20,6 +20,7 @@ enum PMaxError: CustomStringConvertible {
     case doesNotReturnOnAllPaths(function: String)
     case structIsRecursive(structName: String)
     case unassignableLHS(lhs: PILExpression)
+    case hasNoValidMain
     
     var description: String {
         switch self {
@@ -63,7 +64,36 @@ enum PMaxError: CustomStringConvertible {
             return "The struct '\(structName)' is recursive."
         case .unassignableLHS(let lhs):
             return "The expression \(lhs.readableDescription) is unassignable because it is not a local variable, pointer dereference or member access."
+        case .hasNoValidMain:
+            return "The exectuable must contain a valid int main() function."
         }
+        
+    }
+    
+}
+
+
+extension ParseError: CustomStringConvertible {
+    
+    public var description: String {
+        
+        switch self {
+        case .unexpected(let nonTerminal, let found, let expected):
+            return "Expected \(expected) in \(nonTerminal) but found '\(found)'."
+        case .abruptEnd(let nonTerminal, let expected):
+            return "Expected \(expected) in \(nonTerminal) but found end of file."
+        }
+        
+    }
+    
+}
+
+
+extension [PMaxError] {
+    
+    var readableFormat: String {
+        
+        reduce("", {$0 + $1.description + "\n"})
         
     }
     

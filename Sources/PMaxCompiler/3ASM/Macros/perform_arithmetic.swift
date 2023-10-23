@@ -16,7 +16,7 @@ extension TACStatement {
         default:
             
             // TODO: Handle this better
-            fatalError()
+            return ""
             
         }
         

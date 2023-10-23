@@ -5,7 +5,7 @@ extension String {
         var instruction = "\t" + instruction
         
         if let comment {
-            let missing = 50 - instruction.count
+            let missing = 100 - instruction.count
             let spacing = String(repeating: " ", count: missing)
             instruction += spacing + "; " + comment
         }

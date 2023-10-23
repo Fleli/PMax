@@ -62,9 +62,15 @@ class TACLowerer: CustomStringConvertible {
             
         }
         
+        var containsValidMain = false
+        
         for function in functions.values {
             
             push()
+            
+            if function.name == "main" && function.type == .int && function.parameters.count == 0 {
+                containsValidMain = true
+            }
             
             for parameter in function.parameters {
                 local.declare(parameter.type, parameter.label)
@@ -79,6 +85,15 @@ class TACLowerer: CustomStringConvertible {
             pop()
             
         }
+        
+        if !containsValidMain {
+            submitError(.hasNoValidMain)
+        }
+        
+        let mainLabel = Label("__main")
+        let fnMainLabel = functionLabels["main"]!
+        mainLabel.newStatement(.jump(label: fnMainLabel.name))
+        labels.insert(mainLabel, at: 0)
         
         guard Compiler.allowPrinting else {
             return
