@@ -144,28 +144,28 @@ The parse tree is then converted into classes and enumerations that can be used 
 <details>
     <summary>The <code>Declaration</code> class</summary>
     <code>
-    public class Declaration: CustomStringConvertible {<br>
-        <br>
-        let type: `Type`<br>
-        let name: String<br>
-        let value: Expression?<br>
-        <br>
+    public class Declaration: CustomStringConvertible {           <br>
+                                                                  <br>
+        let type: `Type`                                          <br>
+        let name: String                                          <br>
+        let value: Expression?                                    <br>
+                                                                  <br>
         init(_ type: `Type`, _ name: String, _ value: Expression) {<br>
-            self.type = type<br>
-            self.name = name<br>
-            self.value = value<br>
-        }<br>
-        <br>
-        init(_ type: `Type`, _ name: String) {<br>
-            self.type = type<br>
-            self.name = name<br>
-            self.value = nil<br>
-        }<br>
-<br>
-        public var description: String {<br>
+            self.type = type                                      <br>
+            self.name = name                                      <br>
+            self.value = value                                    <br>
+        }                                                         <br>
+                                                                  <br>
+        init(_ type: `Type`, _ name: String) {                    <br>
+            self.type = type                                      <br>
+            self.name = name                                      <br>
+            self.value = nil                                      <br>
+        }                                                         <br>
+                                                                  <br>
+        public var description: String {                          <br>
             type.description + " " + name.description + " " + (value == nil ? "" : "= " + value!.description + " ") + "; "<br>
-        }<br>
-        <br>
+        }                                                         <br>
+                                                                  <br>
     }
     </code>
 </details>

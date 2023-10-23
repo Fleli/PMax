@@ -55,4 +55,9 @@ extension String {
         build("j r\(rawAddressRegister)", comment)
     }
     
+    /// Jump if a certain register is _not_ equal to zero.
+    func jnz(_ register: Int, _ label: String, _ comment: String? = nil) -> String {
+        build("jnz r\(register) \(label)", comment)
+    }
+    
 }

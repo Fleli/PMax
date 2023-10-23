@@ -55,7 +55,7 @@ extension PILExpression {
                 lowerer.activeLabel.newStatement(statement)
             }
             
-            let returnLabel = lowerer.newLabel("\(pILCall.name):ret")
+            let returnLabel = lowerer.newLabel("\(pILCall.name)_ret")
             
             let callLabel = lowerer.functionLabels[pILCall.name]!.name
             

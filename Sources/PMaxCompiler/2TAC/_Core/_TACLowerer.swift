@@ -57,7 +57,7 @@ class TACLowerer {
             
             let function = function.value
             
-            let newLabel = newLabel("fn=\(function.name)")
+            let newLabel = newLabel("fn_\(function.name)")
             functionLabels[function.name] = newLabel
             
         }
@@ -101,7 +101,7 @@ class TACLowerer {
         
         internalCounter += 1
         
-        let newLabel = Label("$label\(internalCounter):\(context)")
+        let newLabel = Label("label\(internalCounter)_\(context)")
         labels.append(newLabel)
         
         return newLabel

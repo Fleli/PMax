@@ -52,7 +52,8 @@ extension TACStatement {
             
         case .jumpIfNonZero(let label, let variable):
             
-            break
+            assembly += load_register_with_value(at: variable, register: 0, 0)
+                .jnz(0, label, "Jump to \(label) if r0 != 0")
             
         case .dereference(let lhs, let arg, let words):
             
