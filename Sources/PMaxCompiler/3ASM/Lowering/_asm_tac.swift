@@ -46,6 +46,10 @@ extension TACStatement {
             
             assembly += return_from_function(value, words)
             
+        case .addressOf(let lhs, let arg):
+            
+            assembly += address_of(lhs, arg)
+            
         default:
             
             break
