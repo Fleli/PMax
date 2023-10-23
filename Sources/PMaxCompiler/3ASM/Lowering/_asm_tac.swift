@@ -50,9 +50,13 @@ extension TACStatement {
             
             assembly += address_of(lhs, arg)
             
-        default:
+        case .jumpIfNonZero(let label, let variable):
             
             break
+            
+        case .dereference(let lhs, let arg, let words):
+            
+            assembly += dereference(lhs, arg, words)
             
         }
         
