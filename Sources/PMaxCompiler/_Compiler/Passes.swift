@@ -7,6 +7,7 @@ extension Compiler {
         
         let tokensFileContent = tokens.map {$0.description}.reduce("", {$0 + $1 + "\n"})
         write(.tokens, tokensFileContent)
+        profiler.register(.tokens)
         
         try parse(tokens)
         
@@ -25,6 +26,8 @@ extension Compiler {
         write(.parseTree, slrNodeTreeFileContent)
         
         let converted = slrNodeTree.convertToTopLevelStatements()
+        profiler.register(.parseTree)
+        
         lowerToPIL(converted)
         
     }
@@ -56,6 +59,7 @@ extension Compiler {
         }
         
         write(.threeAddressCode, tacLowerer.description)
+        profiler.register(.threeAddressCode)
         
         generateAssembly(tacLowerer)
         
@@ -69,6 +73,7 @@ extension Compiler {
         
         let code = asmLowerer.lower()
         write(.assemblyCode, code)
+        profiler.register(.assemblyCode)
         
     }
     

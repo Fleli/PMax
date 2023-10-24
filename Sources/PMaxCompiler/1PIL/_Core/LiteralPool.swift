@@ -20,7 +20,7 @@ class LiteralPool {
         
         integerLiterals[literal] = newVariable
         
-        let success = lowerer.global.declare(.int, newVariable)
+        lowerer.global.declare(.int, newVariable)
         
         return newVariable
         

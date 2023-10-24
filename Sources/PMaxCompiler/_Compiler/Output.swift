@@ -3,7 +3,7 @@ import Foundation
 extension Compiler {
     
     
-    func write(_ result: CompilerIntermediateResult, _ content: String) {
+    func write(_ result: DebugOption, _ content: String) {
         
         for option in self.fileOptions where option.result == result {
             writeToFile(option.path, content)

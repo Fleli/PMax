@@ -10,6 +10,9 @@ public final class Compiler {
     var fileOptions: [FileOption]
     
     
+    var profiler: CompilerProfiler!
+    
+    
     public init(_ fileOptions: FileOption ...) {
         self.fileOptions = fileOptions
     }
@@ -18,6 +21,8 @@ public final class Compiler {
     public func compile(_ sourceCode: String) throws {
         
         write(.errors, "\nSuccess!\n")
+        
+        self.profiler = CompilerProfiler()
         
         do {
             
@@ -29,6 +34,9 @@ public final class Compiler {
             write(.errors, error.localizedDescription)
             
         }
+        
+        let profileDescription = profiler.description
+        write(.profile, profileDescription)
         
     }
     

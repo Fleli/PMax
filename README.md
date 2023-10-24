@@ -4,174 +4,28 @@ Welcome to the PMax repository. PMax is a programming language that draws inspir
 
 Within this repository, you will find the PMax compiler and a standard library implementation. The compiler translates PMax source code into breadboard computer assembly code, while the standard library implements a collection of high-performance functions and tools. Although it is functional, the language and compiler still has a long way to go in terms of performance and usability. Optimizations like constant folding, common subexpressions eliminitation, proper register allocation and function inlining are not yet implemented. Language features like `for`-loops, array subscripting with `[]` and custom operator definitions are hopefully on their way, but do not have the highest priority. Your feedback is invaluable and greatly appreciated as I continue to develop PMax.
 
-## Structure
+## Language
 
-PMax is organized into 3 parts, each responsible for different tasks during the compilation process.
+The PMax programming language shares a lot of syntax and semantics with C. Some key similarities include:
+- The `int` type being built in to the language
+- Allowing the user to define _structs_ that group data together
+- The widespread use of pointers for dynamic memory management
+- The language is statically typed, but its typing system is weak and obeys the programmer's type casts
 
-### Frontend
+A more elaborate description of the language is in the works.
 
-The `Frontend` folder represents the compiler's syntactic frontend. It contains infrastructure for performing lexical analysis, creating a raw parse tree and converting that parse tree into a form that is more usable by the next stage. Consider, as an example, the source code
+## Compiler
 
-```
-int main() {
-    
-    int a = 5;
-    int b = 6;
-    
-    return a + b;
-    
-}
-```
+The compiler is a large and complex system, so it is best explained section by section. However, a short summary is provided here.
+- The compiler receives _source code_ written by the programmer. This is a `String`. It is turned into an array of `Token` instances by the _lexer_. Each `Token` represents a lexical "word", for instance `int`, `512` or `x` in the source code. It also contains a _type_ that is used to distinguish control symbols (e.g. `{`) from integer literals (`integer`).
+- The array of tokens is _parsed_ by an SLR parser. This results in a tree that conveys the structure of the input. In other words, the linear `[Token]` is now converted into a _tree_ that explicitly expresses nesting. Each node in the tree is an `SLRNode` instance. An `SLRNode` can have an arbitrary number of child `SLRNode`s. It also has a `String` that describes its _type_ (for example `Assignment`, `Expression` or `Function`).
+- The tree of `SLRNode` objects is converted into another tree of designated classes for each type. Now, the `Assignment` node from the parsing stage is stored in its own `Assignment` class, with fields `lhs: Expression` and `rhs: Expression` (`Expression` is an `enum` with cases for unary and binary expressions, pure variable references and so on). This is much easier to work with for later stages of the compiler that an unspecialized `SLRNode` tree.
+- The tree of designated objects, for example `Assignment` and `While`, is then lowered to the _PMax Intermediate Language_, shortened to _PIL_. PIL type-checks all expressions and synthesizes types from subexpressions where inference is needed. It also generates memory layouts for struct types. In addition, PIL verifies the existence of variables where they are used. PIL emits an intermediate representation similar to what it received from the previous step, but (type) annotated, verified and some meta information.
+- After receiving a well-typed and (probably) meaningful program from PIL, we wish to remove the tree structure so that the program becomes closer to the machine. The flat structure we wish to convert to is called _Three-Address Code_ (TAC), because it deals with at most three addresses (operands) per statement. The TAC lowerer walks the PIL tree in order to flatten it. It also submits errors for some semantic issues in the code, like assigning an unassignable expression (e.g. `a + b`). The TAC stage outputs a number of _labels_, each containing a linear list of TAC Statements.
+- The last stage is lowering to (breadboard) assembly. Lowering to assembly code involves translating each TAC statement into its corresponing list of assembly instructions. There is a quite direct mapping between the two. The result from this stage is a `String` that can be assembled by an assembler to create a binary.
 
-Lexical analysis touches on every single character in the input and results in an array of _tokens_, represented internally by the `Token` class. Each `Token` has a _type_ (first column) and some _content_ (second column). The class also stores information about where in the input it was found. This will become useful later for syntax highlighting and precise error messages.
+## Standard Library
 
-<details>
-    <summary>Generated tokens</summary>
-    <code>
-    identifier         int                   ln 1 col 0 -> ln 1 col 2   
-    identifier         main                  ln 1 col 4 -> ln 1 col 7   
-    (                  (                     ln 1 col 8 -> ln 1 col 8   
-    )                  )                     ln 1 col 9 -> ln 1 col 9   
-    {                  {                     ln 1 col 11 -> ln 1 col 11 
-    identifier         int                   ln 3 col 4 -> ln 3 col 6   
-    identifier         a                     ln 3 col 8 -> ln 3 col 8   
-    =                  =                     ln 3 col 10 -> ln 3 col 10 
-    integer            5                     ln 3 col 12 -> ln 3 col 12 
-    ;                  ;                     ln 3 col 13 -> ln 3 col 13 
-    identifier         int                   ln 4 col 4 -> ln 4 col 6   
-    identifier         b                     ln 4 col 8 -> ln 4 col 8   
-    =                  =                     ln 4 col 10 -> ln 4 col 10 
-    integer            6                     ln 4 col 12 -> ln 4 col 12 
-    ;                  ;                     ln 4 col 13 -> ln 4 col 13 
-    return             return                ln 6 col 4 -> ln 6 col 9   
-    identifier         a                     ln 6 col 11 -> ln 6 col 11 
-    +                  +                     ln 6 col 13 -> ln 6 col 13 
-    identifier         b                     ln 6 col 15 -> ln 6 col 15 
-    ;                  ;                     ln 6 col 16 -> ln 6 col 16 
-    }                  }                     ln 8 col 0 -> ln 8 col 0   
-    </code>
-</details>
+The standard library is not implemented yet. It will be written in PMax and provide implementations of some common and useful tools.
 
-Then comes the parsing stage, which uses an SLR parser to parse the tokens and return a tree that represents the input.
-
-<details>
-    <summary>Raw parse tree</summary>
-    <code>
-    TopLevelStatements                                       
-    | TopLevelStatement                                      
-    | | Function                                             
-    | | | Type                                               
-    | | | | identifier                                       
-    | | | identifier                                         
-    | | | (                                                  
-    | | | Parameters                                         
-    | | | )                                                  
-    | | | {                                                  
-    | | | FunctionBodyStatements                             
-    | | | | FunctionBodyStatements                           
-    | | | | | FunctionBodyStatements                         
-    | | | | | | FunctionBodyStatement                        
-    | | | | | | | Declaration                                
-    | | | | | | | | Type                                     
-    | | | | | | | | | identifier                             
-    | | | | | | | | identifier                               
-    | | | | | | | | =                                        
-    | | | | | | | | Expression                               
-    | | | | | | | | | CASEBExpression                        
-    | | | | | | | | | | CASECExpression                      
-    | | | | | | | | | | | CASEDExpression                    
-    | | | | | | | | | | | | CASEEExpression                  
-    | | | | | | | | | | | | | CASEFExpression                
-    | | | | | | | | | | | | | | CASEGExpression              
-    | | | | | | | | | | | | | | | CASEHExpression            
-    | | | | | | | | | | | | | | | | CASEIExpression          
-    | | | | | | | | | | | | | | | | | CASEJExpression        
-    | | | | | | | | | | | | | | | | | | CASEKExpression      
-    | | | | | | | | | | | | | | | | | | | CASELExpression    
-    | | | | | | | | | | | | | | | | | | | | integer          
-    | | | | | | | | ;                                        
-    | | | | | FunctionBodyStatement                          
-    | | | | | | Declaration                                  
-    | | | | | | | Type                                       
-    | | | | | | | | identifier                               
-    | | | | | | | identifier                                 
-    | | | | | | | =                                          
-    | | | | | | | Expression                                 
-    | | | | | | | | CASEBExpression                          
-    | | | | | | | | | CASECExpression                        
-    | | | | | | | | | | CASEDExpression                      
-    | | | | | | | | | | | CASEEExpression                    
-    | | | | | | | | | | | | CASEFExpression                  
-    | | | | | | | | | | | | | CASEGExpression                
-    | | | | | | | | | | | | | | CASEHExpression              
-    | | | | | | | | | | | | | | | CASEIExpression            
-    | | | | | | | | | | | | | | | | CASEJExpression          
-    | | | | | | | | | | | | | | | | | CASEKExpression        
-    | | | | | | | | | | | | | | | | | | CASELExpression      
-    | | | | | | | | | | | | | | | | | | | integer            
-    | | | | | | | ;                                          
-    | | | | FunctionBodyStatement                            
-    | | | | | Return                                         
-    | | | | | | return                                       
-    | | | | | | Expression                                   
-    | | | | | | | CASEBExpression                            
-    | | | | | | | | CASECExpression                          
-    | | | | | | | | | CASEDExpression                        
-    | | | | | | | | | | CASEEExpression                      
-    | | | | | | | | | | | CASEFExpression                    
-    | | | | | | | | | | | | CASEGExpression                  
-    | | | | | | | | | | | | | CASEHExpression                
-    | | | | | | | | | | | | | | CASEIExpression              
-    | | | | | | | | | | | | | | | CASEIExpression            
-    | | | | | | | | | | | | | | | | CASEJExpression          
-    | | | | | | | | | | | | | | | | | CASEKExpression        
-    | | | | | | | | | | | | | | | | | | CASELExpression      
-    | | | | | | | | | | | | | | | | | | | identifier         
-    | | | | | | | | | | | | | | | +                          
-    | | | | | | | | | | | | | | | CASEJExpression            
-    | | | | | | | | | | | | | | | | CASEKExpression          
-    | | | | | | | | | | | | | | | | | CASELExpression        
-    | | | | | | | | | | | | | | | | | | identifier           
-    | | | | | | ;                                            
-    | | | }
-    </code>
-</details>
-
-From the tree, it is apparent that expressions are deeply nested. This is because the grammar contains a high number of indirections due to operator precedence rules.
-
-The parse tree is then converted into classes and enumerations that can be used by later parts of the compiler. Most of the important constructs get their own class or enum. For example, declarations look like this:
-
-<details>
-    <summary>The <code>Declaration</code> class</summary>
-    <code>
-    public class Declaration: CustomStringConvertible {           <br>
-                                                                  <br>
-        let type: `Type`                                          <br>
-        let name: String                                          <br>
-        let value: Expression?                                    <br>
-                                                                  <br>
-        init(_ type: `Type`, _ name: String, _ value: Expression) {<br>
-            self.type = type                                      <br>
-            self.name = name                                      <br>
-            self.value = value                                    <br>
-        }                                                         <br>
-                                                                  <br>
-        init(_ type: `Type`, _ name: String) {                    <br>
-            self.type = type                                      <br>
-            self.name = name                                      <br>
-            self.value = nil                                      <br>
-        }                                                         <br>
-                                                                  <br>
-        public var description: String {                          <br>
-            type.description + " " + name.description + " " + (value == nil ? "" : "= " + value!.description + " ") + "; "<br>
-        }                                                         <br>
-                                                                  <br>
-    }
-    </code>
-</details>
-
-The whole process of lexing, parsing and converting to a usable form is done automatically by [SwiftLex](https://github.com/Fleli/SwiftLex) and [SwiftParse](https://github.com/Fleli/SwiftParse).
-
-### The PMax Intermediate Language (PIL)
-
-
+Before the standard library can be used, the compiler needs to support an `import` statement and some infrastructure to "talk" to code outside the current source file.
