@@ -57,7 +57,7 @@ class TACScope {
         
     }
     
-    // Recursively search all scopes to check if a variable with a given name exists. Used when declaring new literals.
+    /// Recursively search all scopes to check if a variable with a given name exists. Used when declaring new literals.
     func variableExists(_ name: String) -> Bool {
         
         if variables[name] != nil {
