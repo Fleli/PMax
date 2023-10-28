@@ -9,9 +9,7 @@ extension TACStatement {
         switch lhs {
         case .framePointer(let offset):
             
-            return
-                calculate_stack_pointer_offset(scratch, offset + extraOffset)
-                .st(scratch, rhs, "Store the value in r\(rhs) at the address in r\(scratch)")
+            return "".stio(.stackPointer, offset + extraOffset, rhs, "Store the value in r\(rhs) in the address \(Int.stackPointer) + \(offset + extraOffset)")
             
         case .dataSection(let index):
             

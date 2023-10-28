@@ -20,6 +20,20 @@ extension String {
         build("ldfr r\(dst), r\(addressRegister)", comment)
     }
     
+    /// The following pattern often occurs:
+    /// add offset to stack pointer -> load at that address -> manipulate data -> store at some offset from stack pointer
+    /// The `ldio` and `stio` instructions combine `sp` offsetting with `load` and `store` operations, which helps eliminate cycles.
+    
+    /// Add an immediate to a register and treat this sum as an address. Load the data at this address. (`LoaD Immediate Offset`)
+    func ldio(_ dst: Int, _ src: Int, _ imm: Int, _ comment: String? = nil) -> String {
+        build("ldio r\(dst), r\(src), \(imm)", comment)
+    }
+    
+    /// Add an immediate to a register and treat this sum as an address. Store the data in `rd` at this address. (`STore Immediate Offset`)
+    func stio(_ rs: Int, _ imm: Int, _ rd: Int, _ comment: String? = nil) -> String {
+        build("stio r\(rs), \(imm), r\(rd)", comment)
+    }
+    
     /// Store the value in register `valAddress` at the raw address pointed to by the `dstAddress` register.
     func st(_ dstAddress: Int, _ valAddress: Int, _ comment: String? = nil) -> String {
         build("st r\(dstAddress), r\(valAddress)", comment)

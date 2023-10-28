@@ -13,9 +13,12 @@ extension TACStatement {
             
         case .framePointer(let offset):
             
-            return
-                calculate_stack_pointer_offset(index, offset + extraOffset)
-                .ldfr(index, index, "Load the variable located at the value in r\(index)")
+            // .addi(destination, .stackPointer, offset, "Find the address of the variable located \(offset) from the stack pointer")
+            // .ldfr(index, index, "Load the variable located at the value in r\(index)")
+            
+            
+            
+            return "".ldio(index, .stackPointer, offset, "r\(index) = [fp + \(offset)]")
             
         case .dataSection(let index):
             
