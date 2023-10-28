@@ -18,7 +18,7 @@ extension TACStatement {
             
             
             
-            return "".ldio(index, .stackPointer, offset, "r\(index) = [fp + \(offset)] @@")
+            return "".ldio(index, .stackPointer, offset, "r\(index) = [fp + \(offset)]")
             
         case .dataSection(let index):
             
