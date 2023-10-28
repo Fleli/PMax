@@ -10,9 +10,20 @@ extension String {
         build("li r\(register), \(immediate)", comment)
     }
     
+    /// Copy (move) the value in `src` to `dst`.
+    func mv(_ dst: Int, _ src: Int, _ comment: String? = nil) -> String {
+        build("mv r\(dst) r\(src)", comment)
+    }
+    
     /// Add immediate
     func addi(_ dst: Int, _ src: Int, _ imm: Int, _ comment: String? = nil) -> String {
-        build("addi r\(dst), r\(src), \(imm)", comment)
+        
+        if imm == 0 {
+            return mv(dst, src, comment == nil ? nil : comment! + " [Optimization: r\(src) + 0 == r\(src)]")
+        } else {
+            return build("addi r\(dst), r\(src), \(imm)", comment)
+        }
+        
     }
     
     /// Load with register as address
@@ -26,7 +37,13 @@ extension String {
     
     /// Add an immediate to a register and treat this sum as an address. Load the data at this address. (`LoaD Immediate Offset`)
     func ldio(_ dst: Int, _ src: Int, _ imm: Int, _ comment: String? = nil) -> String {
-        build("ldio r\(dst), r\(src), \(imm)", comment)
+        
+        if imm == 0 {
+            return ldfr(dst, src, comment == nil ? nil : comment! + " [Optimization: r\(src) + 0 == r\(src)]")
+        } else {
+            return build("ldio r\(dst), r\(src), \(imm)", comment)
+        }
+        
     }
     
     /// Add an immediate to a register and treat this sum as an address. Store the data in `rd` at this address. (`STore Immediate Offset`)
