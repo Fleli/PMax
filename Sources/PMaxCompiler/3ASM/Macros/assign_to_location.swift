@@ -9,7 +9,7 @@ extension TACStatement {
         switch lhs {
         case .framePointer(let offset):
             
-            return "".stio(.stackPointer, offset + extraOffset, rhs, "Store the value in r\(rhs) in the address r\(Int.stackPointer) + \(offset + extraOffset)")
+            return "".stio(.stackPointer, offset + extraOffset, rhs, "[fp + \(offset + extraOffset)] = r\(rhs)")
             
         case .dataSection(let index):
             
@@ -26,7 +26,7 @@ extension TACStatement {
                 load_register_with_value(at: varContainingAddress, register: scratch, 0)
                 
             // Then, store `rhs` at the value that is in `scratch` (which we use as an address).
-                .st(scratch, rhs, "Store the value in r\(rhs) at the address in r\(scratch)")
+                .st(scratch, rhs, "[r\(scratch)] = r\(rhs)")
             
         }
         

@@ -51,7 +51,7 @@ int add(int a, int b) {
 
 int main() {
     
-    ((int, int) -> int)* p;     // Forskjellen er altså syntaktisk: I stedet for at * tilhører p, tilhører den typen ((int, int) -> int). 
+    ((int, int) -> int)* p;     // I stedet for at * tilhører p, tilhører den typen ((int, int) -> int). 
     p = &add;
     
     int c = (*p)(2, 3);
