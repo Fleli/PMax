@@ -35,6 +35,14 @@ extension TACStatement {
             
             return "".neg(dst, src, "Negate: r\(dst) = -r\(src)")
             
+        case "<<":
+            
+            return "".add(dst, src, src, "r\(dst) = r\(src) << 1")
+            
+        case ">>":
+            
+            return "".sr(dst, src, "r\(dst) = r\(src) >> 1")
+            
         default:
             
             // TODO: Handle this better

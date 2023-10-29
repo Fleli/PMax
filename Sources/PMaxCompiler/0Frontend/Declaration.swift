@@ -9,16 +9,16 @@ public class Declaration: CustomStringConvertible {
 	let name: String
 	let value: Expression?
 	
-	init(_ type: `Type`, _ name: String, _ value: Expression) {
-		self.type = type
-		self.name = name
-		self.value = value
-	}
-	
 	init(_ type: `Type`, _ name: String) {
 		self.type = type
 		self.name = name
 		self.value = nil
+	}
+	
+	init(_ type: `Type`, _ name: String, _ value: Expression) {
+		self.type = type
+		self.name = name
+		self.value = value
 	}
 
 	public var description: String {

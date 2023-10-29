@@ -12,7 +12,7 @@ extension String {
     
     /// Copy (move) the value in `src` to `dst`.
     func mv(_ dst: Int, _ src: Int, _ comment: String? = nil) -> String {
-        build("mv r\(dst) r\(src)", comment)
+        build("mv r\(dst), r\(src)", comment)
     }
     
     /// Add immediate
@@ -89,6 +89,11 @@ extension String {
     /// Jump if a certain register is _not_ equal to zero.
     func jnz(_ register: Int, _ label: String, _ comment: String? = nil) -> String {
         build("jnz r\(register) \(label)", comment)
+    }
+    
+    /// Shift right
+    func sr(_ dst: Int, _ src: Int, _ comment: String) -> String {
+        build("sr r\(dst), r\(src)", comment)
     }
     
 }

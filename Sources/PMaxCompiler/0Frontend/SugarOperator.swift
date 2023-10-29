@@ -10,8 +10,6 @@ public enum SugarOperator: CustomStringConvertible {
 	case _verticalBar_
 	case _94
 	case _ampersand_x
-	case _lessThan_lessThan_
-	case _greaterThan_greaterThan_
 	case _plusSign_
 	case _hyphen_
 	case _asterisk_
@@ -26,8 +24,6 @@ public enum SugarOperator: CustomStringConvertible {
 		case ._verticalBar_: return "|"
 		case ._94: return "^"
 		case ._ampersand_x: return "&x"
-		case ._lessThan_lessThan_: return "<<"
-		case ._greaterThan_greaterThan_: return ">>"
 		case ._plusSign_: return "+"
 		case ._hyphen_: return "-"
 		case ._asterisk_: return "*"

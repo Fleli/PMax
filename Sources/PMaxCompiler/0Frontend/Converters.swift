@@ -5,47 +5,22 @@
 
 public extension SLRNode {
     
-    func convertToParameters() -> Parameters {
+    func convertToTopLevelStatements() -> TopLevelStatements {
         
         if children.count == 0 {
             return []
         }
         
         if children.count == 1 {
-            return [children[0].convertToParameter()]
+            return [children[0].convertToTopLevelStatement()]
         }
         
         if children.count == 2 {
-            return children[0].convertToParameters() + [children[1].convertToParameter()]
+            return children[0].convertToTopLevelStatements() + [children[1].convertToTopLevelStatement()]
         }
         
         if children.count == 3 {
-            return children[0].convertToParameters() + [children[2].convertToParameter()]
-        }
-        
-        fatalError()
-        
-    }
-    
-}
-public extension SLRNode {
-    
-    func convertToFunctionBodyStatements() -> FunctionBodyStatements {
-        
-        if children.count == 0 {
-            return []
-        }
-        
-        if children.count == 1 {
-            return [children[0].convertToFunctionBodyStatement()]
-        }
-        
-        if children.count == 2 {
-            return children[0].convertToFunctionBodyStatements() + [children[1].convertToFunctionBodyStatement()]
-        }
-        
-        if children.count == 3 {
-            return children[0].convertToFunctionBodyStatements() + [children[2].convertToFunctionBodyStatement()]
+            return children[0].convertToTopLevelStatements() + [children[2].convertToTopLevelStatement()]
         }
         
         fatalError()
@@ -80,22 +55,22 @@ public extension SLRNode {
 }
 public extension SLRNode {
     
-    func convertToTopLevelStatements() -> TopLevelStatements {
+    func convertToFunctionBodyStatements() -> FunctionBodyStatements {
         
         if children.count == 0 {
             return []
         }
         
         if children.count == 1 {
-            return [children[0].convertToTopLevelStatement()]
+            return [children[0].convertToFunctionBodyStatement()]
         }
         
         if children.count == 2 {
-            return children[0].convertToTopLevelStatements() + [children[1].convertToTopLevelStatement()]
+            return children[0].convertToFunctionBodyStatements() + [children[1].convertToFunctionBodyStatement()]
         }
         
         if children.count == 3 {
-            return children[0].convertToTopLevelStatements() + [children[2].convertToTopLevelStatement()]
+            return children[0].convertToFunctionBodyStatements() + [children[2].convertToFunctionBodyStatement()]
         }
         
         fatalError()
@@ -121,6 +96,31 @@ public extension SLRNode {
         
         if children.count == 3 {
             return children[0].convertToArguments() + [children[2].convertToArgument()]
+        }
+        
+        fatalError()
+        
+    }
+    
+}
+public extension SLRNode {
+    
+    func convertToParameters() -> Parameters {
+        
+        if children.count == 0 {
+            return []
+        }
+        
+        if children.count == 1 {
+            return [children[0].convertToParameter()]
+        }
+        
+        if children.count == 2 {
+            return children[0].convertToParameters() + [children[1].convertToParameter()]
+        }
+        
+        if children.count == 3 {
+            return children[0].convertToParameters() + [children[2].convertToParameter()]
         }
         
         fatalError()
@@ -196,14 +196,6 @@ public extension SLRNode {
         
         if type == "SugarOperator" && children[0].type == "&x" {
             return SugarOperator._ampersand_x
-        }
-        
-        if type == "SugarOperator" && children[0].type == "<<" {
-            return SugarOperator._lessThan_lessThan_
-        }
-        
-        if type == "SugarOperator" && children[0].type == ">>" {
-            return SugarOperator._greaterThan_greaterThan_
         }
         
         if type == "SugarOperator" && children[0].type == "+" {
@@ -385,7 +377,7 @@ public extension SLRNode {
 
 	func convertToExpression() -> Expression {
 		
-		if type == "Expression" && children.count == 3 && children[0].type == "Expression" && children[1].type == "||" && children[2].type == "CASEBExpression" {
+		if type == "Expression" && children.count == 3 && children[0].type == "Expression" && children[1].type == "|" && children[2].type == "CASEBExpression" {
 			
 			let arg1 = children[0].convertToExpression()
 			let arg2 = children[2].convertToExpression()
@@ -399,7 +391,7 @@ public extension SLRNode {
 			
 		}
 		
-		if type == "CASEBExpression" && children.count == 3 && children[0].type == "CASEBExpression" && children[1].type == "&&" && children[2].type == "CASECExpression" {
+		if type == "CASEBExpression" && children.count == 3 && children[0].type == "CASEBExpression" && children[1].type == "^" && children[2].type == "CASECExpression" {
 			
 			let arg1 = children[0].convertToExpression()
 			let arg2 = children[2].convertToExpression()
@@ -413,7 +405,7 @@ public extension SLRNode {
 			
 		}
 		
-		if type == "CASECExpression" && children.count == 3 && children[0].type == "CASECExpression" && children[1].type == "|" && children[2].type == "CASEDExpression" {
+		if type == "CASECExpression" && children.count == 3 && children[0].type == "CASECExpression" && children[1].type == "&" && children[2].type == "CASEDExpression" {
 			
 			let arg1 = children[0].convertToExpression()
 			let arg2 = children[2].convertToExpression()
@@ -427,7 +419,7 @@ public extension SLRNode {
 			
 		}
 		
-		if type == "CASEDExpression" && children.count == 3 && children[0].type == "CASEDExpression" && children[1].type == "^" && children[2].type == "CASEEExpression" {
+		if type == "CASEDExpression" && children.count == 3 && children[0].type == "CASEDExpression" && children[1].type == "==" && children[2].type == "CASEEExpression" {
 			
 			let arg1 = children[0].convertToExpression()
 			let arg2 = children[2].convertToExpression()
@@ -441,11 +433,25 @@ public extension SLRNode {
 			
 		}
 		
-		if type == "CASEEExpression" && children.count == 3 && children[0].type == "CASEEExpression" && children[1].type == "&" && children[2].type == "CASEFExpression" {
+		if type == "CASEDExpression" && children.count == 3 && children[0].type == "CASEDExpression" && children[1].type == "!=" && children[2].type == "CASEEExpression" {
 			
 			let arg1 = children[0].convertToExpression()
 			let arg2 = children[2].convertToExpression()
 			return .infixOperator(.operator_4, arg1, arg2)
+			
+		}
+		
+		if type == "CASEDExpression" && children.count == 1 && children[0].type == "CASEEExpression" {
+			
+			return children[0].convertToExpression()
+			
+		}
+		
+		if type == "CASEEExpression" && children.count == 3 && children[0].type == "CASEEExpression" && children[1].type == "<" && children[2].type == "CASEFExpression" {
+			
+			let arg1 = children[0].convertToExpression()
+			let arg2 = children[2].convertToExpression()
+			return .infixOperator(.operator_5, arg1, arg2)
 			
 		}
 		
@@ -455,21 +461,7 @@ public extension SLRNode {
 			
 		}
 		
-		if type == "CASEFExpression" && children.count == 3 && children[0].type == "CASEFExpression" && children[1].type == "==" && children[2].type == "CASEGExpression" {
-			
-			let arg1 = children[0].convertToExpression()
-			let arg2 = children[2].convertToExpression()
-			return .infixOperator(.operator_5, arg1, arg2)
-			
-		}
-		
-		if type == "CASEFExpression" && children.count == 1 && children[0].type == "CASEGExpression" {
-			
-			return children[0].convertToExpression()
-			
-		}
-		
-		if type == "CASEFExpression" && children.count == 3 && children[0].type == "CASEFExpression" && children[1].type == "!=" && children[2].type == "CASEGExpression" {
+		if type == "CASEEExpression" && children.count == 3 && children[0].type == "CASEEExpression" && children[1].type == ">" && children[2].type == "CASEFExpression" {
 			
 			let arg1 = children[0].convertToExpression()
 			let arg2 = children[2].convertToExpression()
@@ -477,13 +469,13 @@ public extension SLRNode {
 			
 		}
 		
-		if type == "CASEFExpression" && children.count == 1 && children[0].type == "CASEGExpression" {
+		if type == "CASEEExpression" && children.count == 1 && children[0].type == "CASEFExpression" {
 			
 			return children[0].convertToExpression()
 			
 		}
 		
-		if type == "CASEGExpression" && children.count == 3 && children[0].type == "CASEGExpression" && children[1].type == "<" && children[2].type == "CASEHExpression" {
+		if type == "CASEEExpression" && children.count == 3 && children[0].type == "CASEEExpression" && children[1].type == "<=" && children[2].type == "CASEFExpression" {
 			
 			let arg1 = children[0].convertToExpression()
 			let arg2 = children[2].convertToExpression()
@@ -491,13 +483,13 @@ public extension SLRNode {
 			
 		}
 		
-		if type == "CASEGExpression" && children.count == 1 && children[0].type == "CASEHExpression" {
+		if type == "CASEEExpression" && children.count == 1 && children[0].type == "CASEFExpression" {
 			
 			return children[0].convertToExpression()
 			
 		}
 		
-		if type == "CASEGExpression" && children.count == 3 && children[0].type == "CASEGExpression" && children[1].type == ">" && children[2].type == "CASEHExpression" {
+		if type == "CASEEExpression" && children.count == 3 && children[0].type == "CASEEExpression" && children[1].type == ">=" && children[2].type == "CASEFExpression" {
 			
 			let arg1 = children[0].convertToExpression()
 			let arg2 = children[2].convertToExpression()
@@ -505,13 +497,13 @@ public extension SLRNode {
 			
 		}
 		
-		if type == "CASEGExpression" && children.count == 1 && children[0].type == "CASEHExpression" {
+		if type == "CASEEExpression" && children.count == 1 && children[0].type == "CASEFExpression" {
 			
 			return children[0].convertToExpression()
 			
 		}
 		
-		if type == "CASEGExpression" && children.count == 3 && children[0].type == "CASEGExpression" && children[1].type == "<=" && children[2].type == "CASEHExpression" {
+		if type == "CASEFExpression" && children.count == 3 && children[0].type == "CASEFExpression" && children[1].type == "+" && children[2].type == "CASEGExpression" {
 			
 			let arg1 = children[0].convertToExpression()
 			let arg2 = children[2].convertToExpression()
@@ -519,13 +511,13 @@ public extension SLRNode {
 			
 		}
 		
-		if type == "CASEGExpression" && children.count == 1 && children[0].type == "CASEHExpression" {
+		if type == "CASEFExpression" && children.count == 1 && children[0].type == "CASEGExpression" {
 			
 			return children[0].convertToExpression()
 			
 		}
 		
-		if type == "CASEGExpression" && children.count == 3 && children[0].type == "CASEGExpression" && children[1].type == ">=" && children[2].type == "CASEHExpression" {
+		if type == "CASEFExpression" && children.count == 3 && children[0].type == "CASEFExpression" && children[1].type == "-" && children[2].type == "CASEGExpression" {
 			
 			let arg1 = children[0].convertToExpression()
 			let arg2 = children[2].convertToExpression()
@@ -533,13 +525,13 @@ public extension SLRNode {
 			
 		}
 		
-		if type == "CASEGExpression" && children.count == 1 && children[0].type == "CASEHExpression" {
+		if type == "CASEFExpression" && children.count == 1 && children[0].type == "CASEGExpression" {
 			
 			return children[0].convertToExpression()
 			
 		}
 		
-		if type == "CASEHExpression" && children.count == 3 && children[0].type == "CASEHExpression" && children[1].type == "<<" && children[2].type == "CASEIExpression" {
+		if type == "CASEGExpression" && children.count == 3 && children[0].type == "CASEGExpression" && children[1].type == "*" && children[2].type == "CASEHExpression" {
 			
 			let arg1 = children[0].convertToExpression()
 			let arg2 = children[2].convertToExpression()
@@ -547,13 +539,13 @@ public extension SLRNode {
 			
 		}
 		
-		if type == "CASEHExpression" && children.count == 1 && children[0].type == "CASEIExpression" {
+		if type == "CASEGExpression" && children.count == 1 && children[0].type == "CASEHExpression" {
 			
 			return children[0].convertToExpression()
 			
 		}
 		
-		if type == "CASEHExpression" && children.count == 3 && children[0].type == "CASEHExpression" && children[1].type == ">>" && children[2].type == "CASEIExpression" {
+		if type == "CASEGExpression" && children.count == 3 && children[0].type == "CASEGExpression" && children[1].type == "/" && children[2].type == "CASEHExpression" {
 			
 			let arg1 = children[0].convertToExpression()
 			let arg2 = children[2].convertToExpression()
@@ -561,13 +553,13 @@ public extension SLRNode {
 			
 		}
 		
-		if type == "CASEHExpression" && children.count == 1 && children[0].type == "CASEIExpression" {
+		if type == "CASEGExpression" && children.count == 1 && children[0].type == "CASEHExpression" {
 			
 			return children[0].convertToExpression()
 			
 		}
 		
-		if type == "CASEIExpression" && children.count == 3 && children[0].type == "CASEIExpression" && children[1].type == "+" && children[2].type == "CASEJExpression" {
+		if type == "CASEGExpression" && children.count == 3 && children[0].type == "CASEGExpression" && children[1].type == "%" && children[2].type == "CASEHExpression" {
 			
 			let arg1 = children[0].convertToExpression()
 			let arg2 = children[2].convertToExpression()
@@ -575,121 +567,78 @@ public extension SLRNode {
 			
 		}
 		
-		if type == "CASEIExpression" && children.count == 1 && children[0].type == "CASEJExpression" {
+		if type == "CASEGExpression" && children.count == 1 && children[0].type == "CASEHExpression" {
 			
 			return children[0].convertToExpression()
 			
 		}
 		
-		if type == "CASEIExpression" && children.count == 3 && children[0].type == "CASEIExpression" && children[1].type == "-" && children[2].type == "CASEJExpression" {
-			
-			let arg1 = children[0].convertToExpression()
-			let arg2 = children[2].convertToExpression()
-			return .infixOperator(.operator_14, arg1, arg2)
-			
-		}
-		
-		if type == "CASEIExpression" && children.count == 1 && children[0].type == "CASEJExpression" {
-			
-			return children[0].convertToExpression()
-			
-		}
-		
-		if type == "CASEJExpression" && children.count == 3 && children[0].type == "CASEJExpression" && children[1].type == "*" && children[2].type == "CASEKExpression" {
-			
-			let arg1 = children[0].convertToExpression()
-			let arg2 = children[2].convertToExpression()
-			return .infixOperator(.operator_15, arg1, arg2)
-			
-		}
-		
-		if type == "CASEJExpression" && children.count == 1 && children[0].type == "CASEKExpression" {
-			
-			return children[0].convertToExpression()
-			
-		}
-		
-		if type == "CASEJExpression" && children.count == 3 && children[0].type == "CASEJExpression" && children[1].type == "/" && children[2].type == "CASEKExpression" {
-			
-			let arg1 = children[0].convertToExpression()
-			let arg2 = children[2].convertToExpression()
-			return .infixOperator(.operator_16, arg1, arg2)
-			
-		}
-		
-		if type == "CASEJExpression" && children.count == 1 && children[0].type == "CASEKExpression" {
-			
-			return children[0].convertToExpression()
-			
-		}
-		
-		if type == "CASEJExpression" && children.count == 3 && children[0].type == "CASEJExpression" && children[1].type == "%" && children[2].type == "CASEKExpression" {
-			
-			let arg1 = children[0].convertToExpression()
-			let arg2 = children[2].convertToExpression()
-			return .infixOperator(.operator_17, arg1, arg2)
-			
-		}
-		
-		if type == "CASEJExpression" && children.count == 1 && children[0].type == "CASEKExpression" {
-			
-			return children[0].convertToExpression()
-			
-		}
-		
-		if type == "CASEKExpression" && children.count == 2 && children[0].type == "sizeof" && children[1].type == "CASELExpression" {
+		if type == "CASEHExpression" && children.count == 2 && children[0].type == "<<" && children[1].type == "CASEIExpression" {
 			
 			let arg = children[1].convertToExpression()
 			return .singleArgumentOperator(.operator_0, arg)
 			
 		}
 		
-		if type == "CASEKExpression" && children.count == 1 && children[0].type == "CASELExpression" {
+		if type == "CASEHExpression" && children.count == 1 && children[0].type == "CASEIExpression" {
 			
 			return children[0].convertToExpression()
 			
 		}
 		
-		if type == "CASEKExpression" && children.count == 2 && children[0].type == "!" && children[1].type == "CASELExpression" {
+		if type == "CASEHExpression" && children.count == 2 && children[0].type == ">>" && children[1].type == "CASEIExpression" {
 			
 			let arg = children[1].convertToExpression()
 			return .singleArgumentOperator(.operator_1, arg)
 			
 		}
 		
-		if type == "CASEKExpression" && children.count == 1 && children[0].type == "CASELExpression" {
+		if type == "CASEHExpression" && children.count == 1 && children[0].type == "CASEIExpression" {
 			
 			return children[0].convertToExpression()
 			
 		}
 		
-		if type == "CASEKExpression" && children.count == 2 && children[0].type == "~" && children[1].type == "CASELExpression" {
+		if type == "CASEIExpression" && children.count == 2 && children[0].type == "!" && children[1].type == "CASEJExpression" {
 			
 			let arg = children[1].convertToExpression()
 			return .singleArgumentOperator(.operator_2, arg)
 			
 		}
 		
-		if type == "CASEKExpression" && children.count == 1 && children[0].type == "CASELExpression" {
+		if type == "CASEIExpression" && children.count == 1 && children[0].type == "CASEJExpression" {
 			
 			return children[0].convertToExpression()
 			
 		}
 		
-		if type == "CASEKExpression" && children.count == 2 && children[0].type == "-" && children[1].type == "CASELExpression" {
+		if type == "CASEIExpression" && children.count == 2 && children[0].type == "~" && children[1].type == "CASEJExpression" {
 			
 			let arg = children[1].convertToExpression()
 			return .singleArgumentOperator(.operator_3, arg)
 			
 		}
 		
-		if type == "CASEKExpression" && children.count == 1 && children[0].type == "CASELExpression" {
+		if type == "CASEIExpression" && children.count == 1 && children[0].type == "CASEJExpression" {
 			
 			return children[0].convertToExpression()
 			
 		}
 		
-		if type == "CASELExpression" && children.count == 3 && children[0].type == "(" && children[1].type == "Expression" && children[2].type == ")" {
+		if type == "CASEIExpression" && children.count == 2 && children[0].type == "-" && children[1].type == "CASEJExpression" {
+			
+			let arg = children[1].convertToExpression()
+			return .singleArgumentOperator(.operator_4, arg)
+			
+		}
+		
+		if type == "CASEIExpression" && children.count == 1 && children[0].type == "CASEJExpression" {
+			
+			return children[0].convertToExpression()
+			
+		}
+		
+		if type == "CASEJExpression" && children.count == 3 && children[0].type == "(" && children[1].type == "Expression" && children[2].type == ")" {
 			
 			let arg0 = children[0].convertToTerminal()
 			let arg1 = children[1].convertToExpression()
@@ -698,7 +647,7 @@ public extension SLRNode {
 			
 		}
 		
-		if type == "CASELExpression" && children.count == 4 && children[0].type == "TypeCast" && children[1].type == "(" && children[2].type == "Expression" && children[3].type == ")" {
+		if type == "CASEJExpression" && children.count == 4 && children[0].type == "TypeCast" && children[1].type == "(" && children[2].type == "Expression" && children[3].type == ")" {
 			
 			let arg0 = children[0].convertToTypeCast()
 			let arg1 = children[1].convertToTerminal()
@@ -708,21 +657,21 @@ public extension SLRNode {
 			
 		}
 		
-		if type == "CASELExpression" && children.count == 1 && children[0].type == "integer" {
+		if type == "CASEJExpression" && children.count == 1 && children[0].type == "integer" {
 			
 			let arg0 = children[0].convertToTerminal()
 			return .integer(arg0)
 			
 		}
 		
-		if type == "CASELExpression" && children.count == 1 && children[0].type == "identifier" {
+		if type == "CASEJExpression" && children.count == 1 && children[0].type == "identifier" {
 			
 			let arg0 = children[0].convertToTerminal()
 			return .identifier(arg0)
 			
 		}
 		
-		if type == "CASELExpression" && children.count == 4 && children[0].type == "identifier" && children[1].type == "(" && children[2].type == "Arguments" && children[3].type == ")" {
+		if type == "CASEJExpression" && children.count == 4 && children[0].type == "identifier" && children[1].type == "(" && children[2].type == "Arguments" && children[3].type == ")" {
 			
 			let arg0 = children[0].convertToTerminal()
 			let arg1 = children[1].convertToTerminal()
@@ -732,7 +681,7 @@ public extension SLRNode {
 			
 		}
 		
-		if type == "CASELExpression" && children.count == 5 && children[0].type == "(" && children[1].type == "Expression" && children[2].type == ")" && children[3].type == "." && children[4].type == "identifier" {
+		if type == "CASEJExpression" && children.count == 5 && children[0].type == "(" && children[1].type == "Expression" && children[2].type == ")" && children[3].type == "." && children[4].type == "identifier" {
 			
 			let arg0 = children[0].convertToTerminal()
 			let arg1 = children[1].convertToExpression()
@@ -743,7 +692,7 @@ public extension SLRNode {
 			
 		}
 		
-		if type == "CASELExpression" && children.count == 5 && children[0].type == "(" && children[1].type == "Expression" && children[2].type == ")" && children[3].type == "->" && children[4].type == "identifier" {
+		if type == "CASEJExpression" && children.count == 5 && children[0].type == "(" && children[1].type == "Expression" && children[2].type == ")" && children[3].type == "->" && children[4].type == "identifier" {
 			
 			let arg0 = children[0].convertToTerminal()
 			let arg1 = children[1].convertToExpression()
@@ -754,7 +703,7 @@ public extension SLRNode {
 			
 		}
 		
-		if type == "CASELExpression" && children.count == 2 && children[0].type == "&" && children[1].type == "Expression" {
+		if type == "CASEJExpression" && children.count == 2 && children[0].type == "&" && children[1].type == "Expression" {
 			
 			let arg0 = children[0].convertToTerminal()
 			let arg1 = children[1].convertToExpression()
@@ -762,7 +711,7 @@ public extension SLRNode {
 			
 		}
 		
-		if type == "CASELExpression" && children.count == 2 && children[0].type == "*" && children[1].type == "Expression" {
+		if type == "CASEJExpression" && children.count == 2 && children[0].type == "*" && children[1].type == "Expression" {
 			
 			let arg0 = children[0].convertToTerminal()
 			let arg1 = children[1].convertToExpression()
@@ -783,21 +732,6 @@ public extension SLRNode {
 		if type == "TypeCast" && children.count == 4 && children[0].type == "(" && children[1].type == "as" && children[2].type == "Type" && children[3].type == ")" {
 			let arg2 = children[2].convertToType()
 			return .init(arg2)
-		}
-		
-		fatalError()
-		
-	}
-
-}
-
-public extension SLRNode {
-
-	func convertToMember() -> Member {
-		
-		if type == "Member" && children.count == 2 && children[0].type == "." && children[1].type == "identifier" {
-			let arg1 = children[1].convertToTerminal()
-			return .init(arg1)
 		}
 		
 		fatalError()
