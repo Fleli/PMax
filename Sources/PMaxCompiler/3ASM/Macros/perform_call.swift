@@ -17,7 +17,7 @@ extension TACStatement {
         return
             calculate_stack_pointer_offset(0, offset)                           // find fp + offset
             .addi(0, 0, words + 1, "Find the new frame pointer's address")      // find (fp + offset) + (words + 1). This is the address for the new frame pointer.
-            .ld(.stackPointer, 0, "Store the value of the old frame pointer in the new one")
+            .ldraw(.stackPointer, 0, "Store the value of the old frame pointer in the new one")
             .addi(.stackPointer, .stackPointer, words + 1, "Increment the stack pointer so it points to the new frame pointer")
             .call(functionLabel, returnLabel, "Call \(functionLabel)")
         

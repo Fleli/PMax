@@ -1,8 +1,8 @@
 extension String {
     
-    /// Load from immediate address
-    func ld(_ register: Int, _ rawAddress: Int, _ comment: String? = nil) -> String {
-        build("ld r\(register), \(rawAddress)", comment)
+    /// Load from a raw address
+    func ldraw(_ register: Int, _ rawAddress: Int, _ comment: String? = nil) -> String {
+        build("ldraw r\(register), \(rawAddress)", comment)
     }
     
     /// Load immediate value

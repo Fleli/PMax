@@ -5,6 +5,31 @@
 
 public extension SLRNode {
     
+    func convertToArguments() -> Arguments {
+        
+        if children.count == 0 {
+            return []
+        }
+        
+        if children.count == 1 {
+            return [children[0].convertToArgument()]
+        }
+        
+        if children.count == 2 {
+            return children[0].convertToArguments() + [children[1].convertToArgument()]
+        }
+        
+        if children.count == 3 {
+            return children[0].convertToArguments() + [children[2].convertToArgument()]
+        }
+        
+        fatalError()
+        
+    }
+    
+}
+public extension SLRNode {
+    
     func convertToTopLevelStatements() -> TopLevelStatements {
         
         if children.count == 0 {
@@ -30,22 +55,22 @@ public extension SLRNode {
 }
 public extension SLRNode {
     
-    func convertToStructBodyStatements() -> StructBodyStatements {
+    func convertToParameters() -> Parameters {
         
         if children.count == 0 {
             return []
         }
         
         if children.count == 1 {
-            return [children[0].convertToDeclaration()]
+            return [children[0].convertToParameter()]
         }
         
         if children.count == 2 {
-            return children[0].convertToStructBodyStatements() + [children[1].convertToDeclaration()]
+            return children[0].convertToParameters() + [children[1].convertToParameter()]
         }
         
         if children.count == 3 {
-            return children[0].convertToStructBodyStatements() + [children[2].convertToDeclaration()]
+            return children[0].convertToParameters() + [children[2].convertToParameter()]
         }
         
         fatalError()
@@ -80,47 +105,22 @@ public extension SLRNode {
 }
 public extension SLRNode {
     
-    func convertToArguments() -> Arguments {
+    func convertToStructBodyStatements() -> StructBodyStatements {
         
         if children.count == 0 {
             return []
         }
         
         if children.count == 1 {
-            return [children[0].convertToArgument()]
+            return [children[0].convertToDeclaration()]
         }
         
         if children.count == 2 {
-            return children[0].convertToArguments() + [children[1].convertToArgument()]
+            return children[0].convertToStructBodyStatements() + [children[1].convertToDeclaration()]
         }
         
         if children.count == 3 {
-            return children[0].convertToArguments() + [children[2].convertToArgument()]
-        }
-        
-        fatalError()
-        
-    }
-    
-}
-public extension SLRNode {
-    
-    func convertToParameters() -> Parameters {
-        
-        if children.count == 0 {
-            return []
-        }
-        
-        if children.count == 1 {
-            return [children[0].convertToParameter()]
-        }
-        
-        if children.count == 2 {
-            return children[0].convertToParameters() + [children[1].convertToParameter()]
-        }
-        
-        if children.count == 3 {
-            return children[0].convertToParameters() + [children[2].convertToParameter()]
+            return children[0].convertToStructBodyStatements() + [children[2].convertToDeclaration()]
         }
         
         fatalError()
@@ -178,14 +178,6 @@ public extension SLRNode {
 
 	func convertToSugarOperator() -> SugarOperator {
 		
-        if type == "SugarOperator" && children[0].type == "||" {
-            return SugarOperator._verticalBar_verticalBar_
-        }
-        
-        if type == "SugarOperator" && children[0].type == "&&" {
-            return SugarOperator._ampersand_ampersand_
-        }
-        
         if type == "SugarOperator" && children[0].type == "|" {
             return SugarOperator._verticalBar_
         }
@@ -194,8 +186,8 @@ public extension SLRNode {
             return SugarOperator._94
         }
         
-        if type == "SugarOperator" && children[0].type == "&x" {
-            return SugarOperator._ampersand_x
+        if type == "SugarOperator" && children[0].type == "&" {
+            return SugarOperator._ampersand_
         }
         
         if type == "SugarOperator" && children[0].type == "+" {
@@ -638,7 +630,35 @@ public extension SLRNode {
 			
 		}
 		
-		if type == "CASEJExpression" && children.count == 3 && children[0].type == "(" && children[1].type == "Expression" && children[2].type == ")" {
+		if type == "CASEJExpression" && children.count == 3 && children[0].type == "CASEJExpression" && children[1].type == "->" && children[2].type == "CASEKExpression" {
+			
+			let arg1 = children[0].convertToExpression()
+			let arg2 = children[2].convertToExpression()
+			return .infixOperator(.operator_14, arg1, arg2)
+			
+		}
+		
+		if type == "CASEJExpression" && children.count == 1 && children[0].type == "CASEKExpression" {
+			
+			return children[0].convertToExpression()
+			
+		}
+		
+		if type == "CASEJExpression" && children.count == 3 && children[0].type == "CASEJExpression" && children[1].type == "." && children[2].type == "CASEKExpression" {
+			
+			let arg1 = children[0].convertToExpression()
+			let arg2 = children[2].convertToExpression()
+			return .infixOperator(.operator_15, arg1, arg2)
+			
+		}
+		
+		if type == "CASEJExpression" && children.count == 1 && children[0].type == "CASEKExpression" {
+			
+			return children[0].convertToExpression()
+			
+		}
+		
+		if type == "CASEKExpression" && children.count == 3 && children[0].type == "(" && children[1].type == "Expression" && children[2].type == ")" {
 			
 			let arg0 = children[0].convertToTerminal()
 			let arg1 = children[1].convertToExpression()
@@ -647,7 +667,7 @@ public extension SLRNode {
 			
 		}
 		
-		if type == "CASEJExpression" && children.count == 4 && children[0].type == "TypeCast" && children[1].type == "(" && children[2].type == "Expression" && children[3].type == ")" {
+		if type == "CASEKExpression" && children.count == 4 && children[0].type == "TypeCast" && children[1].type == "(" && children[2].type == "Expression" && children[3].type == ")" {
 			
 			let arg0 = children[0].convertToTypeCast()
 			let arg1 = children[1].convertToTerminal()
@@ -657,21 +677,21 @@ public extension SLRNode {
 			
 		}
 		
-		if type == "CASEJExpression" && children.count == 1 && children[0].type == "integer" {
+		if type == "CASEKExpression" && children.count == 1 && children[0].type == "integer" {
 			
 			let arg0 = children[0].convertToTerminal()
 			return .integer(arg0)
 			
 		}
 		
-		if type == "CASEJExpression" && children.count == 1 && children[0].type == "identifier" {
+		if type == "CASEKExpression" && children.count == 1 && children[0].type == "identifier" {
 			
 			let arg0 = children[0].convertToTerminal()
 			return .identifier(arg0)
 			
 		}
 		
-		if type == "CASEJExpression" && children.count == 4 && children[0].type == "identifier" && children[1].type == "(" && children[2].type == "Arguments" && children[3].type == ")" {
+		if type == "CASEKExpression" && children.count == 4 && children[0].type == "identifier" && children[1].type == "(" && children[2].type == "Arguments" && children[3].type == ")" {
 			
 			let arg0 = children[0].convertToTerminal()
 			let arg1 = children[1].convertToTerminal()
@@ -681,29 +701,7 @@ public extension SLRNode {
 			
 		}
 		
-		if type == "CASEJExpression" && children.count == 5 && children[0].type == "(" && children[1].type == "Expression" && children[2].type == ")" && children[3].type == "." && children[4].type == "identifier" {
-			
-			let arg0 = children[0].convertToTerminal()
-			let arg1 = children[1].convertToExpression()
-			let arg2 = children[2].convertToTerminal()
-			let arg3 = children[3].convertToTerminal()
-			let arg4 = children[4].convertToTerminal()
-			return .leftParenthesis_ExpressionrightParenthesis_period_identifier(arg0, arg1, arg2, arg3, arg4)
-			
-		}
-		
-		if type == "CASEJExpression" && children.count == 5 && children[0].type == "(" && children[1].type == "Expression" && children[2].type == ")" && children[3].type == "->" && children[4].type == "identifier" {
-			
-			let arg0 = children[0].convertToTerminal()
-			let arg1 = children[1].convertToExpression()
-			let arg2 = children[2].convertToTerminal()
-			let arg3 = children[3].convertToTerminal()
-			let arg4 = children[4].convertToTerminal()
-			return .leftParenthesis_ExpressionrightParenthesis_hyphen_greaterThan_identifier(arg0, arg1, arg2, arg3, arg4)
-			
-		}
-		
-		if type == "CASEJExpression" && children.count == 2 && children[0].type == "&" && children[1].type == "Expression" {
+		if type == "CASEKExpression" && children.count == 2 && children[0].type == "&" && children[1].type == "Expression" {
 			
 			let arg0 = children[0].convertToTerminal()
 			let arg1 = children[1].convertToExpression()
@@ -711,7 +709,7 @@ public extension SLRNode {
 			
 		}
 		
-		if type == "CASEJExpression" && children.count == 2 && children[0].type == "*" && children[1].type == "Expression" {
+		if type == "CASEKExpression" && children.count == 2 && children[0].type == "*" && children[1].type == "Expression" {
 			
 			let arg0 = children[0].convertToTerminal()
 			let arg1 = children[1].convertToExpression()

@@ -13,6 +13,7 @@ extension TACStatement {
         case .dataSection(_):
             
             // TODO: &literal is not allowed.
+            // TODO: Consider actually allowing this (_could_ be useful for debugging in certain cases), but submitting a warning (not an issue).
             fatalError()
             
         case .rawPointer(_):

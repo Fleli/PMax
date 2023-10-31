@@ -6,7 +6,7 @@ extension TACStatement {
     func calculate_data_offset(_ destination: Int, _ offset: Int) -> String {
         
         return ""
-            .ld(destination, Self.dataSectionAddress, "Load the data section pointer")
+            .ldraw(destination, Self.dataSectionAddress, "Load the data section pointer")
             .addi(destination, destination, offset, "Calculate the offset address")
         
     }
