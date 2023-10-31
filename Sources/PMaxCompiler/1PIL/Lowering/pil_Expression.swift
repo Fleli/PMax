@@ -79,8 +79,10 @@ extension Expression {
     func lowerToPILAsMemberThroughPointer(_ lowerer: PILLowerer, _ expression: Expression, _ memberExpression: Expression) -> PILExpression {
         
         guard case .identifier(let member) = memberExpression else {
-            // TODO: Should not crash here. Submit error that a->E is invalid for non-strings E
-            fatalError()
+            lowerer.submitError(.invalidMember(invalid: memberExpression.lowerToPIL(lowerer)))
+            let placeholder = expression.lowerToPIL(lowerer)
+            placeholder.type = .error
+            return placeholder
         }
         
         let loweredExpression = expression.lowerToPIL(lowerer)
@@ -97,8 +99,10 @@ extension Expression {
     func lowerToPILAsMember(_ lowerer: PILLowerer, _ main: Expression, _ memberExpression: Expression) -> PILExpression {
         
         guard case .identifier(let member) = memberExpression else {
-            // TODO: See similar comment above
-            fatalError()
+            lowerer.submitError(.invalidMember(invalid: memberExpression.lowerToPIL(lowerer)))
+            let placeholder = main.lowerToPIL(lowerer)
+            placeholder.type = .error
+            return placeholder
         }
         
         let loweredMain = main.lowerToPIL(lowerer)

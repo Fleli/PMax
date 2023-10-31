@@ -46,7 +46,13 @@ enum PILOperation: CustomStringConvertible {
         case .call(let pILCall):
             return "\(pILCall.name)(\(pILCall.arguments.reduce("", {$0 + $1.readableDescription}).dropFirst().dropLast()))"
         case .variable(let string):
+            
+            if string.contains("literal=") {
+                return String(string.dropFirst("literal=".count))
+            }
+            
             return string
+            
         case .dereference(let pILExpression):
             return "*\(pILExpression.readableDescription)"
         case .addressOf(let pILExpression):

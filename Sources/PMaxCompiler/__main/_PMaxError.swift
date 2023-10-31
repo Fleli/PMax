@@ -21,6 +21,7 @@ enum PMaxError: CustomStringConvertible {
     case structIsRecursive(structName: String)
     case unassignableLHS(lhs: PILExpression)
     case hasNoValidMain
+    case invalidMember(invalid: PILExpression)
     
     var description: String {
         switch self {
@@ -66,6 +67,8 @@ enum PMaxError: CustomStringConvertible {
             return "The expression \(lhs.readableDescription) is unassignable because it is not a local variable, pointer dereference or member access."
         case .hasNoValidMain:
             return "The exectuable must contain a valid int main() function."
+        case .invalidMember(let invalid):
+            return "Members must be referred to by name. The expression '\(invalid.readableDescription)' is not a valid member."
         }
         
     }
