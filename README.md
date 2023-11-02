@@ -2,7 +2,7 @@
 
 Welcome to the PMax repository. PMax is a programming language that draws inspiration from C. It is built specifically with Hackerspace NTNU's [breadboard computer](https://github.com/hackerspace-ntnu/BreadboardComputer) in mind. While it might not match the sheer elegance of C or the power of Swift, PMax aims to provide an easy-to-use platform to make breadboard computer programming accessible. 
 
-Within this repository, you will find the PMax compiler and a standard library implementation. The compiler translates PMax source code into breadboard computer assembly code, while the standard library implements a collection of high-performance functions and tools. Although it is functional, the language and compiler still has a long way to go in terms of performance and usability. Several optimizations passes will be added later on to improve performance of the generated code. In addition, new language features that make the code more readable and "user-friendly" are on their way.
+Within this repository, you will find the PMax compiler. The compiler translates PMax source code into breadboard computer assembly code. Although it is functional, the language and compiler still has a long way to go in terms of performance and usability. Several optimizations passes will be added later on to improve performance of the generated code. In addition, new language features that make the code more readable and "user-friendly" are on their way.
 
 ## Repository Structure
 
@@ -45,9 +45,7 @@ The compiler is a large and complex system, so it is best explained section by s
 
 ## Standard Library
 
-The standard library is not implemented yet. It will be written in PMax and provide implementations of some common and useful tools.
-
-Before the standard library can be used, the compiler needs to support an `import` statement and some infrastructure to "talk" to code outside the current source file.
+The standard library is being implemented in its own [repository](https://github.com/Fleli/PMax-StdLib). It will contain frequently used algorithms and data structures. Before the standard library can be used, however, the compiler needs to support an `import` statement and some infrastructure to "talk" to code outside the current source file.
 
 ## Separation of Concerns
 
