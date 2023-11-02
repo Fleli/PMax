@@ -1,5 +1,7 @@
 import Foundation
 
+// TODO: Consider enforcing that the argument label matches the parameter label. This increases consistency, but using different labels _may_ increase clarity in some cases
+
 public final class Compiler {
     
     
@@ -8,8 +10,6 @@ public final class Compiler {
     
     
     var fileOptions: [FileOption]
-    
-    
     var profiler: CompilerProfiler!
     
     
@@ -42,9 +42,7 @@ public final class Compiler {
     
     
     static func print(_ string: String) {
-        if Self.allowPrinting {
-            Swift.print(string)
-        }
+        (Self.allowPrinting ? {Swift.print(string)} : {})()
     }
     
     

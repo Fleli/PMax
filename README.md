@@ -4,6 +4,16 @@ Welcome to the PMax repository. PMax is a programming language that draws inspir
 
 Within this repository, you will find the PMax compiler and a standard library implementation. The compiler translates PMax source code into breadboard computer assembly code, while the standard library implements a collection of high-performance functions and tools. Although it is functional, the language and compiler still has a long way to go in terms of performance and usability. Several optimizations passes will be added later on to improve performance of the generated code. In addition, new language features that make the code more readable and "user-friendly" are on their way.
 
+## Repository Structure
+
+All code is found within `Sources/PMaxCompiler`. 
+
+The folder `__main` provides the `Compiler` class, which represents the external interface for this repository. The `_Compiler` folder contains several definitions and functions that help the compilation, for example `FileOption`, a profiler and a pass manager.
+
+The four folders `0Frontend`, `1PIL`, `2TAC`, and `3ASM` are found here. These contain the actual code for source-to-assembly transformation. For further documentation on each of these passes, please refer to the `_Docs` folder. Once finished, the `.md` files there will provide an in-depth view into each step.
+
+Finally, the `_Extensions` folder is used for extensions to existing types. An `SLRNode` extension is placed there in order to preserve it when SwiftParse and SwiftLex overwrites the frontend files.
+
 ## Language
 
 The PMax programming language shares a lot of syntax and semantics with C. Some key similarities include:
