@@ -14,6 +14,15 @@ The four folders `0Frontend`, `1PIL`, `2TAC`, and `3ASM` are also found within `
 
 Finally, the `_Extensions` folder is used to extend existing types. An `SLRNode` extension is placed there in order to preserve it when SwiftParse and SwiftLex overwrites the frontend files.
 
+## Coming Features
+
+Some important and useful features are not implemented yet, but are on their way:
+1. **Calling functions outside of expressions**. Right now, the grammar only allows for calling functions on the right-hand side of a declaration or an assignment, or in expression evaluations in `if`s, `while`s and so on. The option to simply call a function as the whole statement, like `function(a, b, c);`, is very important. This has high priority and will be implemented shortly.
+2. **Instance methods**. A nice feature that all modern languages have, is the ability to define _instance methods_, functions defined within a type defintion (class, struct, enum etc.) that can use an instance of that type, usually called `self` or `this`, and operate on it. See the [discussion](https://github.com/Fleli/PMax-StdLib) on the standard library page for more about this.
+3. **Imports**. A crucial feature in a programming language is the ability to import other files and link them together. This has very high priority.
+4. **Enumerations**. It is often desirable to use a very restricted set of possible values. Enumerations (`enum`s) have good support in most languages and solve this problem well. Swift's `enum` model with the option to use associated and raw values is very nice, and considerably more useful than Java's and C's models. It is preferable to implement something similar to that of Swift's model, but it does not have extremely high priority.
+5. **Custom operators**. Adding support for custom operators (`+`, `-`, `<<`, etc.) on derived types (structs) would significantly improve the ergonomics of the language. For example, being able to add two `Point`s together with the `+` operator (`p1 + p2`) is signifantly clearer and less verbose that `add_points(p1, p2)`. This is especially useful since PMax does not allow function overloading. Another useful operator is subscripting, `[...]`, which could be defined on arbitrary types as specified by the user.  
+
 ## Language
 
 The PMax programming language shares a lot of syntax and semantics with C. Some key similarities include:
