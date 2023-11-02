@@ -22,7 +22,7 @@ public class Assignment: CustomStringConvertible {
 	}
 
 	public var description: String {
-		"assign " + lhs.description + " " + (`operator` == nil ? "" : "@ " + `operator`!.description + " ") + "= " + rhs.description + " " + "; "
+		"assign " + lhs.description + " " + (operator == nil ? "" : "@ " + `operator`!.description + " ") + "= " + rhs.description + " " + "; "
 	}
 	
 }

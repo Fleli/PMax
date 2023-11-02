@@ -8,13 +8,13 @@ public class Argument: CustomStringConvertible {
 	let label: String?
 	let expression: Expression
 	
-	init(_ expression: Expression) {
-		self.label = nil
+	init(_ label: String, _ expression: Expression) {
+		self.label = label
 		self.expression = expression
 	}
 	
-	init(_ label: String, _ expression: Expression) {
-		self.label = label
+	init(_ expression: Expression) {
+		self.label = nil
 		self.expression = expression
 	}
 

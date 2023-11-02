@@ -10,9 +10,9 @@ All code is found within `Sources/PMaxCompiler`.
 
 The folder `__main` provides the `Compiler` class, which represents the external interface for this repository. The `_Compiler` folder contains several definitions and functions that help the compilation, for example `FileOption`, a profiler and a pass manager.
 
-The four folders `0Frontend`, `1PIL`, `2TAC`, and `3ASM` are found here. These contain the actual code for source-to-assembly transformation. For further documentation on each of these passes, please refer to the `_Docs` folder. Once finished, the `.md` files there will provide an in-depth view into each step.
+The four folders `0Frontend`, `1PIL`, `2TAC`, and `3ASM` are also found within `Sources/PMaxCompiler`. These contain the actual code for source-to-assembly transformation. For further documentation on each of these passes, please refer to the `_Docs` folder. Once finished, the `.md` files there will provide an in-depth view into each step.
 
-Finally, the `_Extensions` folder is used for extensions to existing types. An `SLRNode` extension is placed there in order to preserve it when SwiftParse and SwiftLex overwrites the frontend files.
+Finally, the `_Extensions` folder is used to extend existing types. An `SLRNode` extension is placed there in order to preserve it when SwiftParse and SwiftLex overwrites the frontend files.
 
 ## Language
 
