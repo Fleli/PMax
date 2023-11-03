@@ -34,7 +34,7 @@ enum PILStatement {
             }
             
             if !returnedType.assignable(to: expectedType) {
-                lowerer.submitError(.incorrectReturnType(expected: expectedType, given: returnedType))
+                lowerer.submitError(PMaxIssue.incorrectReturnType(expected: expectedType, given: returnedType))
             }
             
             return true

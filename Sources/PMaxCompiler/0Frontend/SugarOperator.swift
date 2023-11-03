@@ -13,7 +13,6 @@ public enum SugarOperator: CustomStringConvertible {
 	case _asterisk_
 	case _slash_
 	case _percentSign_
-	case _tilde_
 	
 	public var description: String {
 		switch self {
@@ -25,7 +24,6 @@ public enum SugarOperator: CustomStringConvertible {
 		case ._asterisk_: return "*"
 		case ._slash_: return "/"
 		case ._percentSign_: return "%"
-		case ._tilde_: return "~"
 		}
 	}
 	

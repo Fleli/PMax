@@ -6,7 +6,7 @@ extension PILStruct: Hashable {
         var layout = MemoryLayout()
         
         if history.contains(self) {
-            lowerer.submitError(.structIsRecursive(structName: name))
+            lowerer.submitError(PMaxIssue.structIsRecursive(structName: name))
             return nil
         }
         

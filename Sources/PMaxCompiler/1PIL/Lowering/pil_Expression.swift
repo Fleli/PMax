@@ -79,7 +79,7 @@ extension Expression {
     func lowerToPILAsMemberThroughPointer(_ lowerer: PILLowerer, _ expression: Expression, _ memberExpression: Expression) -> PILExpression {
         
         guard case .identifier(let member) = memberExpression else {
-            lowerer.submitError(.invalidMember(invalid: memberExpression.lowerToPIL(lowerer)))
+            lowerer.submitError(PMaxIssue.invalidMember(invalid: memberExpression.lowerToPIL(lowerer)))
             let placeholder = expression.lowerToPIL(lowerer)
             placeholder.type = .error
             return placeholder
@@ -99,7 +99,7 @@ extension Expression {
     func lowerToPILAsMember(_ lowerer: PILLowerer, _ main: Expression, _ memberExpression: Expression) -> PILExpression {
         
         guard case .identifier(let member) = memberExpression else {
-            lowerer.submitError(.invalidMember(invalid: memberExpression.lowerToPIL(lowerer)))
+            lowerer.submitError(PMaxIssue.invalidMember(invalid: memberExpression.lowerToPIL(lowerer)))
             let placeholder = main.lowerToPIL(lowerer)
             placeholder.type = .error
             return placeholder

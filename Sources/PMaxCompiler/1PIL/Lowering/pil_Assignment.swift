@@ -13,13 +13,17 @@ extension Assignment {
                 let newOperation = PILOperation.binary(operator: infix, arg1: lhs, arg2: rhs)
                 rhs = PILExpression(newOperation, lowerer)
             } else {
-                lowerer.submitError(.invalidSugaredAssignment(operator: rw))
+                lowerer.submitError(PMaxIssue.invalidSugaredAssignment(operator: rw))
             }
             
         }
         
         if !rhs.type.assignable(to: lhs.type) {
-            lowerer.submitError(.assignmentTypeMismatch(lhs: lhs, actual: rhs.type))
+            lowerer.submitError(PMaxIssue.assignmentTypeMismatch(lhs: lhs, actual: rhs.type))
+        }
+        
+        if lhs.type == .void {
+            lowerer.submitError(PMaxWarning.assignToVoid(lhs: lhs))
         }
         
         return PILStatement.assignment(lhs: lhs, rhs: rhs)

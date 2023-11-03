@@ -43,6 +43,8 @@ indirect enum PILType: CustomStringConvertible, Hashable {
         
         switch (self, other) {
             
+        case (.void, .void):
+            return true
         case (_, .void), (.void, _):                // void cannot be assigned to anything and is not assignable itself
             return false
         case (_, .error), (.error, _):              // we allow errors to be assigned since an error message is already submitted if we have an error

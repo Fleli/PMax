@@ -15,11 +15,11 @@ class PILStruct: CustomStringConvertible {
             let type = PILType(stmt.type, lowerer)
             
             if stmt.value != nil {
-                lowerer.submitError(.structMembersCannotHaveDefaultValues(structName: self.name, field: fieldName))
+                lowerer.submitError(PMaxIssue.structMembersCannotHaveDefaultValues(structName: self.name, field: fieldName))
             }
             
             guard fields[fieldName] == nil else {
-                lowerer.submitError(.redeclarationOfField(structName: name, field: fieldName))
+                lowerer.submitError(PMaxIssue.redeclarationOfField(structName: name, field: fieldName))
                 // Continue the loop so we still get all other fields.
                 continue
             }

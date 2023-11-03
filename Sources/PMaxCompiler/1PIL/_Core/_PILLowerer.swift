@@ -113,17 +113,17 @@ class PILLowerer {
         }
         
         guard case .struct(let name) = type else {
-            submitError(.cannotFindMemberOfNonStructType(member: field, type: type))
+            submitError(PMaxIssue.cannotFindMemberOfNonStructType(member: field, type: type))
             return .error
         }
         
         guard let pilStruct = structs[name] else {
-            submitError(.typeDoesNotExist(typeName: name))
+            submitError(PMaxIssue.typeDoesNotExist(typeName: name))
             return .error
         }
         
         guard let type = pilStruct.fields[field] else {
-            submitError(.fieldDoesNotExist(structName: name, field: field))
+            submitError(PMaxIssue.fieldDoesNotExist(structName: name, field: field))
             return .error
         }
         

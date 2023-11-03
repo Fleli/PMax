@@ -21,7 +21,7 @@ class PILScope {
     func declare(_ type: PILType, _ name: String) -> Bool {
         
         if let existing = variables[name] {
-            lowerer!.submitError(.redeclarationOfVariable(varName: name, existing: existing, new: type))
+            lowerer!.submitError(PMaxIssue.redeclarationOfVariable(varName: name, existing: existing, new: type))
             return false
         }
         

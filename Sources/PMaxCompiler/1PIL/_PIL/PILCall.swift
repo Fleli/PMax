@@ -24,7 +24,7 @@ class PILCall: CustomStringConvertible {
         
         guard let function = lowerer.functions[name] else {
             // TODO: Verify that we should actually submit an error here. We probably shouldn't.
-            lowerer.submitError(.functionDoesNotExist(name: name))
+            lowerer.submitError(PMaxIssue.functionDoesNotExist(name: name))
             return
         }
         
@@ -32,7 +32,7 @@ class PILCall: CustomStringConvertible {
         let parameterCount = function.parameters.count
         
         guard argumentCount == parameterCount else {
-            lowerer.submitError(.incorrectNumberOfArguments(functionName: name, expected: parameterCount, given: argumentCount))
+            lowerer.submitError(PMaxIssue.incorrectNumberOfArguments(functionName: name, expected: parameterCount, given: argumentCount))
             return
         }
         
@@ -42,7 +42,7 @@ class PILCall: CustomStringConvertible {
             let parameterType = function.parameters[i].type
             
             guard argumentType == parameterType else {
-                lowerer.submitError(.incorrectTypeInFunctionCall(functionName: name, expected: parameterType, given: argumentType, position: i + 1))
+                lowerer.submitError(PMaxIssue.incorrectTypeInFunctionCall(functionName: name, expected: parameterType, given: argumentType, position: i + 1))
                 continue
             }
             

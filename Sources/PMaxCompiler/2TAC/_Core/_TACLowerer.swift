@@ -110,7 +110,7 @@ class TACLowerer: CustomStringConvertible {
     }
     
     
-    func submitError(_ newError: PMaxError) {
+    func submitError(_ newError: PMaxIssue) {
         errors.append(newError)
     }
     

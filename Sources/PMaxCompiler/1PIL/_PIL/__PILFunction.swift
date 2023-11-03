@@ -63,7 +63,7 @@ class PILFunction: CustomStringConvertible {
         let returnsOnAllPaths = body.reduce(false, {$0 || $1.returnsOnAllPaths(type, lowerer)})
         
         if !returnsOnAllPaths {
-            lowerer.submitError(.doesNotReturnOnAllPaths(function: name))
+            lowerer.submitError(PMaxIssue.doesNotReturnOnAllPaths(function: name))
         }
         
     }
