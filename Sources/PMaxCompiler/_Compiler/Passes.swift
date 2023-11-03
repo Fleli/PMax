@@ -3,7 +3,34 @@ extension Compiler {
     
     func lex(_ sourceCode: String) throws {
         
-        let tokens = try Lexer().lex(sourceCode)
+        let rawTokens = try Lexer().lex(sourceCode)
+        
+        var tokens: [Token] = []
+        
+        var index = 0
+        
+        // Extra lexing stage added due to limitations with SwiftLex.
+        while index < rawTokens.count {
+            
+            if rawTokens[index].type == "comment" {
+                
+                while index < rawTokens.count, rawTokens[index].type != "newline" {
+                    index += 1
+                }
+                
+            } else if rawTokens[index].type != "space" && rawTokens[index].type != "newline" {
+                
+                tokens.append(rawTokens[index])
+                
+            }
+            
+            index += 1
+            
+        }
+        
+        tokens.forEach {
+            Swift.print($0)
+        }
         
         let tokensFileContent = tokens.map {$0.description}.reduce("", {$0 + $1 + "\n"})
         write(.tokens, tokensFileContent)
