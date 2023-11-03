@@ -38,8 +38,9 @@ extension Compiler {
         let pilLowerer = PILLowerer(converted)
         pilLowerer.lower()
         
-        guard pilLowerer.errors.count == 0 else {
-            write(.errors, pilLowerer.errors.readableFormat)
+        encounteredErrors += pilLowerer.errors
+        
+        guard pilLowerer.noIssues else {
             return
         }
         
@@ -53,8 +54,9 @@ extension Compiler {
         let tacLowerer = TACLowerer(pilLowerer)
         tacLowerer.lower()
         
-        guard tacLowerer.errors.count == 0 else {
-            write(.errors, tacLowerer.errors.readableFormat)
+        encounteredErrors += tacLowerer.errors
+        
+        guard tacLowerer.noIssues else {
             return
         }
         

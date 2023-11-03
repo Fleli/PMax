@@ -13,6 +13,9 @@ public final class Compiler {
     var profiler: CompilerProfiler!
     
     
+    var encounteredErrors: [PMaxError] = []
+    
+    
     public init(_ fileOptions: FileOption ...) {
         self.fileOptions = fileOptions
     }
@@ -20,13 +23,15 @@ public final class Compiler {
     
     public func compile(_ sourceCode: String) throws {
         
-        write(.errors, "\nSuccess!\n")
-        
+        self.encounteredErrors.removeAll()
         self.profiler = CompilerProfiler()
         
         do {
             
             try lex(sourceCode)
+            
+            let errorInformation = (encounteredErrors.count == 0) ? "\nSuccess!\n" : encounteredErrors.readableFormat
+            write(.errors, errorInformation)
             
         } catch {
             

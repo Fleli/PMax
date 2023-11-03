@@ -2,6 +2,10 @@ enum PMaxWarning: PMaxError {
     
     case assignToVoid(lhs: PILExpression)
     
+    var allowed: Bool {
+        return true
+    }
+    
     var description: String {
         switch self {
         case .assignToVoid(let lhs):

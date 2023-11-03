@@ -1,5 +1,7 @@
 protocol PMaxError: CustomStringConvertible {
     
+    var allowed: Bool { get }
+    
 }
 
 extension [PMaxError] {

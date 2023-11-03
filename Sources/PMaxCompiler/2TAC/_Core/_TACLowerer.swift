@@ -7,6 +7,10 @@ class TACLowerer: CustomStringConvertible {
     
     let pilLowerer: PILLowerer
     
+    var noIssues: Bool {
+        return errors.reduce(false, {$0 || $1.allowed})
+    }
+    
     private var internalCounter = 0
     
     private var structs: [String : PILStruct] = [:]

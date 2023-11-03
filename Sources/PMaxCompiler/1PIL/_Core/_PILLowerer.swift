@@ -9,6 +9,10 @@ class PILLowerer {
     /// The `local` scope is used to notify the `PILLowerer`'s environment of declarations, and to verify the existence of variables when they are referenced.
     var local: PILScope!
     
+    var noIssues: Bool {
+        return errors.reduce(false, {$0 || $1.allowed})
+    }
+    
     private(set) var errors: [PMaxError] = []
     
     private let topLevelStatements: TopLevelStatements

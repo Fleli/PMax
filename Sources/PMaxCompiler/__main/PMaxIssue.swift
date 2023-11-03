@@ -23,6 +23,10 @@ enum PMaxIssue: PMaxError {
     case hasNoValidMain
     case invalidMember(invalid: PILExpression)
     
+    var allowed: Bool {
+        return false
+    }
+    
     var description: String {
         switch self {
         case .cannotFindMemberOfNonStructType(let member, let type):
