@@ -17,6 +17,7 @@ extension Compiler {
         let succeeded = FileManager.default.createFile(atPath: path, contents: content.data(using: .utf16))
         
         if Self.allowMeta {
+            Swift.print("[Content: \(content)]")
             Swift.print("Writing to '\(path)' \(succeeded ? "succeeded" : "failed").")
         }
         

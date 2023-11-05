@@ -29,8 +29,11 @@ indirect enum PILType: CustomStringConvertible, Hashable {
             self = .int
         case .basic(Builtin.void):
             self = .void
-        case .basic(let id):
+        case .basic(let id) where lowerer.structs[id] != nil:
             self = .struct(name: id)
+        case .basic(let undefined):
+            lowerer.submitError(PMaxIssue.typeDoesNotExist(typeName: undefined))
+            self = .error
         case .pointer(let wrapped, _):
             let pilWrapped = PILType(wrapped, lowerer)
             self = .pointer(pointee: pilWrapped)
