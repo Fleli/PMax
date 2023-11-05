@@ -8,6 +8,9 @@ public final class Compiler {
     public static var allowMeta = true
     public static var allowPrinting = false
     
+    public func printErrors() {
+        Swift.print(encounteredErrors.readableFormat)
+    }
     
     var fileOptions: [FileOption]
     var profiler: CompilerProfiler!
@@ -29,15 +32,17 @@ public final class Compiler {
             
             try lex(sourceCode)
             
-            let errorInformation = (encounteredErrors.readableFormat.count > 0) ? (encounteredErrors.readableFormat) : "\nSuccess!\n"
-            write(.errors, errorInformation)
+        } catch let error as ParseError {
+            
+            encounteredErrors.append(PMaxIssue.grammaticalIssue(description: error.description))
             
         } catch {
             
-            Self.print("Compilation failed. Error: \(error)")
-            write(.errors, error.localizedDescription)
+            encounteredErrors.append(PMaxIssue.grammaticalIssue(description: "Unknown grammatical issue: \(error.localizedDescription)"))
             
         }
+        
+        write(.errors, encounteredErrors.readableFormat)
         
         let profileDescription = profiler.description
         write(.profile, profileDescription)

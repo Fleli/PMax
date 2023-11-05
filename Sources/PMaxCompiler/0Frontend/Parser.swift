@@ -6772,8 +6772,10 @@ class SLRParser {
 }
 
 public enum ParseError: Error {
+    
     case unexpected(_ nonTerminal: String, _ content: String, _ expected: String)
     case abruptEnd(_ nonTerminal: String, _ expected: String)
+    
 }
 
 public class SLRNode: CustomStringConvertible {
