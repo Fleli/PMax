@@ -6,12 +6,11 @@ public final class Compiler {
     
     
     public static var allowMeta = true
-    public static var allowPrinting = true
+    public static var allowPrinting = false
     
     
     var fileOptions: [FileOption]
     var profiler: CompilerProfiler!
-    
     
     var encounteredErrors: [PMaxError] = []
     
@@ -30,7 +29,7 @@ public final class Compiler {
             
             try lex(sourceCode)
             
-            let errorInformation = (encounteredErrors.count == 0) ? "\nSuccess!\n" : encounteredErrors.readableFormat
+            let errorInformation = (encounteredErrors.readableFormat.count > 0) ? (encounteredErrors.readableFormat) : "\nSuccess!\n"
             write(.errors, errorInformation)
             
         } catch {

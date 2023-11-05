@@ -3,7 +3,7 @@ enum PMaxWarning: PMaxError {
     case assignToVoid(lhs: PILExpression)
     
     var allowed: Bool {
-        return true
+        true
     }
     
     var description: String {

@@ -10,7 +10,7 @@ class PILLowerer {
     var local: PILScope!
     
     var noIssues: Bool {
-        return errors.reduce(false, {$0 || $1.allowed})
+        return errors.reduce(true, {$0 && $1.allowed})
     }
     
     private(set) var errors: [PMaxError] = []

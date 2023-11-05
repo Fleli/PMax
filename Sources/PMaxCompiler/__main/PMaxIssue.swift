@@ -24,7 +24,7 @@ enum PMaxIssue: PMaxError {
     case invalidMember(invalid: PILExpression)
     
     var allowed: Bool {
-        return false
+        false
     }
     
     var description: String {
