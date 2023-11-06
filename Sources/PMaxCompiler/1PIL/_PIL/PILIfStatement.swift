@@ -27,19 +27,23 @@ class PILIfStatement {
         return body.reduce(false, {$0 || $1.returnsOnAllPaths(expectedType, lowerer)})
     }
     
-    func _print(_ indent: Int) {
+    func printableDescription(_ indent: Int) -> String {
         
-        let prefix = String(repeating: "|   ", count: indent)
+        let prefix = String(repeating: "    ", count: indent)
         
-        print(prefix + "if \(condition.description) {")
+        var string = prefix + "if \(condition.description) {\n"
         
         for stmt in body {
-            stmt._print(indent + 1)
+            string += stmt.printableDescription(indent + 1)
         }
         
-        print(prefix + "}")
+        string += prefix + "}\n"
         
-        `else`?._print(indent)
+        if let `else` {
+            string += `else`.printableDescription(indent)
+        }
+        
+        return string
         
     }
     

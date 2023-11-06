@@ -31,7 +31,7 @@ class PILStruct: CustomStringConvertible {
     }
     
     var description: String {
-        return "struct \(name) {\n" + fields.map { "\($0.key) \($0.value)" } . reduce("", {$0 + "\t" + $1 + ";\n"}) + "}"
+        return "struct \(name) {\n" + fields.map { "\($0.value) \($0.key)" } . reduce("", {$0 + "\t" + $1 + ";\n"}) + "}"
     }
     
 }

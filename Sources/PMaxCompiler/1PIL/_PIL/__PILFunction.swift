@@ -7,7 +7,13 @@ class PILFunction: CustomStringConvertible {
     var body: [PILStatement] = []
     
     var description: String {
-        "PILFunction \(name): \(parameters.map {$0.type}) -> \(type)"
+        "\(name): \(parameters.map {$0.type}) -> \(type)"
+    }
+    
+    var fullDescription: String {
+        "\(type) \(name) (\(parameters.description.dropFirst().dropLast())) {\n"
+        +   body.reduce("") { $0 + $1.printableDescription(1) }
+        +   "}\n"
     }
     
     let underlyingFunction: Function

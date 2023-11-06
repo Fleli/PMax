@@ -48,23 +48,23 @@ enum PILStatement {
     }
     
     
-    func _print(_ indent: Int = 0) {
+    func printableDescription(_ indent: Int = 0) -> String {
         
-        let prefix = String(repeating: "|   ", count: indent)
+        let prefix = String(repeating: "    ", count: indent)
         
         switch self {
         case .declaration(let type, let name):
-            print(prefix + type.description + " " + name + ";")
+            return prefix + type.description + " " + name + ";\n"
         case .assignment(let lhs, let rhs):
-            print(prefix + lhs.description + " = " + rhs.description + ";")
+            return prefix + lhs.description + " = " + rhs.description + ";\n"
         case .return(let expression):
-            print(prefix + "return \(expression?.description ?? "[void]");")
+            return prefix + "return \(expression?.description ?? "[void]");\n"
         case .if(let pILIfStatement):
-            pILIfStatement._print(indent)
+            return pILIfStatement.printableDescription(indent)
         case .while(let condition, let body):
-            print(prefix + "while \(condition.description) {")
-            body.forEach { $0._print(indent + 1) }
-            print(prefix + "}")
+            return prefix + "while \(condition.description) {\n"
+            +   body.reduce("") { $0 + $1.printableDescription(indent + 1) + "\n" }
+            +   prefix + "}\n"
         }
         
     }

@@ -13,6 +13,11 @@ class PILLowerer {
         return errors.reduce(true, {$0 && $1.allowed})
     }
     
+    var readableDescription: String {
+        functions.reduce("") { $0 + $1.value.fullDescription + "\n" }
+        + structs.reduce("") { $0 + $1.value.description + "\n" }
+    }
+    
     private(set) var errors: [PMaxError] = []
     
     private let topLevelStatements: TopLevelStatements
@@ -21,6 +26,7 @@ class PILLowerer {
     private(set) var functions: [String : PILFunction] = [:]
     
     private(set) var structLayouts: [String : MemoryLayout] = [:]
+    
     
     init(_ topLevelStatements: TopLevelStatements) {
         
@@ -80,7 +86,7 @@ class PILLowerer {
             print("\(function.name)")
             
             function.body.forEach {
-                $0._print(1)
+                print($0.printableDescription(1))
             }
             
         }

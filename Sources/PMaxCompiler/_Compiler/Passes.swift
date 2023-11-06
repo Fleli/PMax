@@ -45,6 +45,9 @@ extension Compiler {
             return
         }
         
+        write(.pmaxIntermediateLanguage, pilLowerer.readableDescription)
+        profiler.register(.pmaxIntermediateLanguage)
+        
         lowerToTAC(pilLowerer)
         
     }
