@@ -8,18 +8,25 @@ public final class Compiler {
     public static var allowMeta = true
     public static var allowPrinting = false
     
-    public func printErrors() {
-        Swift.print(encounteredErrors.readableFormat)
-    }
     
-    var fileOptions: [FileOption]
+    var fileOptions: [FileOption] = []
     var profiler: CompilerProfiler!
     
     var encounteredErrors: [PMaxError] = []
     
     
-    public init(_ fileOptions: FileOption ...) {
-        self.fileOptions = fileOptions
+    public init() {
+        
+    }
+    
+    
+    public func addFileOption(_ option: FileOption) {
+        fileOptions.append(option)
+    }
+    
+    
+    public func printErrors() {
+        Swift.print(encounteredErrors.readableFormat)
     }
     
     
