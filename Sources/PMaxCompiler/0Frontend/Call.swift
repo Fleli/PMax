@@ -5,14 +5,16 @@
 
 public class Call: CustomStringConvertible {
 	
-	let expression: Expression
+	let function: String
+	let args: Arguments
 	
-	init(_ expression: Expression) {
-		self.expression = expression
+	init(_ function: String, _ args: Arguments) {
+		self.function = function
+		self.args = args
 	}
 
 	public var description: String {
-		"call " + expression.description + " " + "; "
+		"call " + function.description + " " + "( " + args.description + " " + ") " + "; "
 	}
 	
 }

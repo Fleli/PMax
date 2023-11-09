@@ -5,6 +5,8 @@ import Foundation
 public final class Compiler {
     
     
+    public static let version: String = "0.1.1"
+    
     public static var allowMeta = true
     public static var allowPrinting = false
     

@@ -23,6 +23,7 @@ Parameter -> Type #identifier
 Struct -> #struct #identifier #{ StructBodyStatements #} 
 Type -> #identifier 
 Type -> Type #* 
+Call -> #call #identifier #( Arguments #) #; 
 TopLevelStatement -> Struct
 TopLevelStatement -> Function
 FunctionBodyStatement -> Declaration
@@ -30,6 +31,7 @@ FunctionBodyStatement -> Assignment
 FunctionBodyStatement -> Return
 FunctionBodyStatement -> If
 FunctionBodyStatement -> While
+FunctionBodyStatement -> Call
 Expression -> Expression #| CASEBExpression
 Expression -> CASEBExpression
 CASEBExpression -> CASEBExpression #^ CASECExpression
@@ -74,18 +76,18 @@ Argument -> Expression
 Argument -> #identifier #: Expression 
 Declaration -> Type #identifier #; 
 Declaration -> Type #identifier #= Expression #; 
+FunctionBodyStatements -> FunctionBodyStatements FunctionBodyStatement
+FunctionBodyStatements -> FunctionBodyStatement
+FunctionBodyStatements ->
 StructBodyStatements -> StructBodyStatements Declaration
 StructBodyStatements -> Declaration
 StructBodyStatements ->
+TopLevelStatements -> TopLevelStatements TopLevelStatement
+TopLevelStatements -> TopLevelStatement
+TopLevelStatements ->
 Arguments -> Arguments #, Argument
 Arguments -> Argument
 Arguments ->
 Parameters -> Parameters #, Parameter
 Parameters -> Parameter
 Parameters ->
-FunctionBodyStatements -> FunctionBodyStatements FunctionBodyStatement
-FunctionBodyStatements -> FunctionBodyStatement
-FunctionBodyStatements ->
-TopLevelStatements -> TopLevelStatements TopLevelStatement
-TopLevelStatements -> TopLevelStatement
-TopLevelStatements ->

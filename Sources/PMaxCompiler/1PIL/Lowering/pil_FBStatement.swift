@@ -5,36 +5,7 @@ extension FunctionBodyStatement {
         switch self {
         case .declaration(let declaration):
             
-            let type = PILType(declaration.type, lowerer)
-            let name = declaration.name
-            
-            let declarationSucceeded = lowerer.local.declare(type, name)
-            
-            guard declarationSucceeded else {
-                return []
-            }
-            
-            let pilDeclaration = PILStatement.declaration(type: type, name: name)
-            
-            var statements: [PILStatement] = [pilDeclaration]
-            
-            if let defaultValue = declaration.value {
-                
-                // TODO: Consider reordering and generating an intermediate variable here since default values in declarations shouldn't really be able to refer to themselves. In other words, we change the order to:
-                // (1) Declare a new non-colliding variable
-                // (2) Assign the default value to that new variable
-                // (3) Declare the variable we're interested in (`name`)
-                // (4) Assign the intermediate variable to the actual variable
-                // That way, use of `name` in the default value will refer to `name` in outer scopes and can be used unambiguously.
-                
-                let syntacticEquivalentAssignment = Assignment(.identifier(name), defaultValue)
-                let loweredAssignment = syntacticEquivalentAssignment.lowerToPIL(lowerer)
-                
-                statements.append(loweredAssignment)
-                
-            }
-            
-            return statements
+            return declaration.lowerToPIL(lowerer)
             
         case .assignment(let assignment):
             
@@ -69,6 +40,23 @@ extension FunctionBodyStatement {
             let pilWhile = PILStatement.`while`(condition: condition, body: body)
             
             return [pilWhile]
+            
+        case .call(let call):
+            
+            // FIXME: This might introduce some hard-to-understand bugs in cases where the called function returns non-void types. Find a way around this.
+            
+            let type = `Type`.basic(Builtin.void)
+            let anonymous = lowerer.newAnonymousVariable
+            
+            let declaration = Declaration(type, anonymous)
+            let loweredDeclaration = declaration.lowerToPIL(lowerer)
+            
+            let lhsExpression = Expression.identifier(anonymous)
+            let rhsExpression = Expression.identifierleftParenthesis_ArgumentsrightParenthesis_(call.function, "(", call.args, ")")
+            
+            let assignment = Assignment(lhsExpression, rhsExpression)
+            let loweredAssignment = assignment.lowerToPIL(lowerer)
+            return loweredDeclaration + [loweredAssignment]
             
         }
         

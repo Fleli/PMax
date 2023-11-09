@@ -16,7 +16,6 @@ enum PILStatement {
     /// A lowered `while` statement, including its `condition` and `body`
     case `while`(condition: PILExpression, body: [PILStatement])
     
-    
     /// The `returnsOnAllPaths` method examines whether a statement returns a value on all paths. It also _checks_ whether the returned type is correct, but it still returns `true` if a return is _present_ (even though the return statement may be semantically meaningless because of type mistmatch). Note: This method may be somewhat _too_ restrictive: It always returns `false` for `while` loops in case they never run, even though we may theoretically be able to determine at compile-time that it will.
     func returnsOnAllPaths(_ expectedType: PILType, _ lowerer: PILLowerer) -> Bool {
         

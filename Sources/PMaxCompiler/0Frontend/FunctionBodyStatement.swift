@@ -10,6 +10,7 @@ public enum FunctionBodyStatement: CustomStringConvertible {
 	case `return`(Return)
 	case `if`(If)
 	case `while`(While)
+	case call(Call)
 	
 	public var description: String {
 		switch self {
@@ -18,6 +19,7 @@ public enum FunctionBodyStatement: CustomStringConvertible {
 		case .`return`(let `return`): return `return`.description
 		case .`if`(let `if`): return `if`.description
 		case .`while`(let `while`): return `while`.description
+		case .call(let call): return call.description
 		}
 	}
 	

@@ -18,6 +18,13 @@ class PILLowerer {
         + structs.reduce("") { $0 + $1.value.description + "\n" }
     }
     
+    var newAnonymousVariable: String {
+        self.anonymousVariableCounter += 1
+        return "%\(anonymousVariableCounter)"
+    }
+    
+    private var anonymousVariableCounter = 0
+    
     private(set) var errors: [PMaxError] = []
     
     private let topLevelStatements: TopLevelStatements

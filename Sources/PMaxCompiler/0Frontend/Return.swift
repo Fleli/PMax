@@ -7,12 +7,12 @@ public class Return: CustomStringConvertible {
 	
 	let expression: Expression?
 	
-	init(_ expression: Expression) {
-		self.expression = expression
-	}
-	
 	init() {
 		self.expression = nil
+	}
+	
+	init(_ expression: Expression) {
+		self.expression = expression
 	}
 
 	public var description: String {
