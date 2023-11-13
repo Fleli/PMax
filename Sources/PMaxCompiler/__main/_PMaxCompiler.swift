@@ -6,6 +6,7 @@ public final class Compiler {
     
     
     public static let version: String = "0.1.1"
+    public static let date: String = "2023-11-10"
     
     public static var allowMeta = true
     public static var allowPrinting = false

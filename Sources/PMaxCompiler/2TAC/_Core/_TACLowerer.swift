@@ -44,8 +44,11 @@ class TACLowerer: CustomStringConvertible {
             let name = globalVariable.key
             let type = globalVariable.value
             
-            guard case .int = type else {
-                fatalError("Global variables can only be 'int', not '\(type)'.")
+            switch type {
+            case .int, .char:
+                break
+            default:
+                fatalError("Global variable cannot be of type '\(type.description)'.")
             }
             
             global.declareInDataSection(type, name)
@@ -143,7 +146,7 @@ class TACLowerer: CustomStringConvertible {
     func sizeOf(_ type: PILType) -> Int {
         
         switch type {
-        case .int, .pointer(_):
+        case .int, .pointer(_), .char:
             return 1
         case .void, .error:
             return 0

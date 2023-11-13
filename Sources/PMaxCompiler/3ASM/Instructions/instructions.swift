@@ -12,7 +12,11 @@ extension String {
     
     /// Copy (move) the value in `src` to `dst`.
     func mv(_ dst: Int, _ src: Int, _ comment: String? = nil) -> String {
-        build("mv r\(dst), r\(src)", comment)
+        if dst == src {
+            build("", (comment == nil) ? nil : comment! + " [Optimization: Moving from r\(src) to r\(dst)]")
+        } else {
+            build("mv r\(dst), r\(src)", comment)
+        }
     }
     
     /// Add immediate
