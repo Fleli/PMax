@@ -1,5 +1,12 @@
+
+#warning("Referring to values as 'locations' is somewhat unprecise. See TODO below.")
+
+// TODO: Consider instead using a clear distinction between LValues (left-hand side values, i.e. assignable expressions) and RValues (right-hand side values)
+// TODO: Clearly separating between the two would greatly increase clarity and readability, remove many (unreachable) fatalError() calls and generally reduce the probability of errors. Carrying around information about the value's context may also increase the quality of error messages.
+
 indirect enum Location: CustomStringConvertible {
     
+    /// A `.framePointer` case represents a certain offset from the current frame pointer. This is used for referring to local variables.
     case framePointer(offset: Int)
     
     /// A `.literalValue` case does not really represent a memory location, but rather the direct use of a literal integer. This is (for example) used to offset in member references or to add literals to values.

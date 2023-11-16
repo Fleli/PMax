@@ -17,7 +17,7 @@ extension TACStatement {
             
         case .rawPointer(_):
             
-            // TODO: Not implemented
+            // Not reachable
             fatalError()
             
         }
