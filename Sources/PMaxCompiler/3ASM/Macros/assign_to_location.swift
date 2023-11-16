@@ -11,10 +11,10 @@ extension TACStatement {
             
             return "".stio(.stackPointer, offset + extraOffset, rhs, "[fp + \(offset + extraOffset)] = r\(rhs)")
             
-        case .dataSection(let index):
+        case .literalValue(_):
             
-            // Should never assign to anything in the data section.
-            fatalError("\(lhs), \(index)")
+            #warning("Get back to this.")
+            fatalError()
             
         case .rawPointer(let offset):
             

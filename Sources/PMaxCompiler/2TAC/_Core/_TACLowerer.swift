@@ -1,6 +1,5 @@
 class TACLowerer: CustomStringConvertible {
     
-    var global: TACScope!
     var local: TACScope!
     
     var activeLabel: Label!
@@ -29,31 +28,7 @@ class TACLowerer: CustomStringConvertible {
         self.structs = pilLowerer.structs
         self.functions = pilLowerer.functions
         
-        self.global = TACScope(self)
-        self.local = global
-        
-        registerGlobalVariables()
-        
-    }
-    
-    
-    private func registerGlobalVariables() {
-        
-        for globalVariable in pilLowerer.global.variables {
-            
-            let name = globalVariable.key
-            let type = globalVariable.value
-            
-            switch type {
-            case .int:
-                break
-            default:
-                fatalError("Global variable cannot be of type '\(type.description)'.")
-            }
-            
-            global.declareInDataSection(type, name)
-            
-        }
+        self.local = TACScope(self)
         
     }
     

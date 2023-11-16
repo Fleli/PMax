@@ -38,9 +38,7 @@ extension Expression {
             
         case .integer(let literal):
             
-            let varName = lowerer.literalPool.integerLiteral(literal)
-            let operation = PILOperation.variable(varName)
-            
+            let operation = PILOperation.integerLiteral(literal)
             return PILExpression(operation, lowerer)
             
         case .TypeCastleftParenthesis_ExpressionrightParenthesis_(let typeCast, _, let expression, _):

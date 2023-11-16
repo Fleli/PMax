@@ -22,24 +22,17 @@ extension PILExpression {
             let newOffset = offset + memberOffset
             return .framePointer(offset: newOffset)
             
-        case .dataSection(_):
+        case .literalValue(_):
             
-            // Impossible since only magicly named variables appear in the data section, and the programmer does not have access to those names (they won't be interpreted as identifiers by the lexer).
+            #warning("Go over this properly.")
+            // TODO: Do not fatalError() here. Instead, submit a proper error message.
             fatalError()
             
         case .rawPointer(let argumentFramePointerOffset):
             
-            // The `argumentFramePointerOffset` represents the offset from the frame pointer of the variable holding the address that this raw pointer points to.
-            
-            // TODO: This part needs thorough testing. Using the literal pool from PIL in TAC lowering is extremely risky since things may get out of sync. Finding a good solution to this is preferable.
-            
-            // The raw pointer's value (the value stored in [fp + offset]) is unknown at compile-time. But the member-offset is known, so we do an addition between the unknown and the known value.
-            
-            // The known value is converted to a string and treated as a literal addition to the pointer value. We notify the literal pool and fetch the corresponding variable.
-            let memberOffsetLiteral = declareMemberOffsetLiteral(lowerer, argumentFramePointerOffset)
-            let memberOffsetLiteralLocation = lowerer.local.getVariable(memberOffsetLiteral).location
-            
-            let location = declareAddressSum(lowerer, memberOffsetLiteralLocation, argumentFramePointerOffset)
+            #warning("Review this part again, after substantial changes.")
+            let memberOffsetLiteral = Location.literalValue(value: memberOffset)
+            let location = declareAddressSum(lowerer, memberOffsetLiteral, argumentFramePointerOffset)
             
             guard case .framePointer(let offset) = location else {
                 // TODO: Verify that this is unreachable.
@@ -49,23 +42,6 @@ extension PILExpression {
             return .rawPointer(offset: offset)
             
         }
-        
-        
-    }
-    
-    
-    private func declareMemberOffsetLiteral(_ lowerer: TACLowerer, _ memberOffset: Int) -> String {
-        
-        let memberOffsetString = "\(memberOffset)"
-        let memberOffsetLiteral = lowerer.pilLowerer.literalPool.integerLiteral(memberOffsetString)
-        
-        Self.offsetCalculationCount += 1
-        
-        if !lowerer.local.variableExists(memberOffsetLiteral) {
-            lowerer.local.declareInDataSection(.int, memberOffsetLiteral)
-        }
-        
-        return memberOffsetLiteral
         
     }
     

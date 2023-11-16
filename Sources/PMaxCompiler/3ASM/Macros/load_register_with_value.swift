@@ -18,11 +18,10 @@ extension TACStatement {
             
             return "".ldio(index, .stackPointer, offset, "r\(index) = [fp + \(offset)]")
             
-        case .dataSection(let index):
+        case .literalValue(_):
             
-            return
-                calculate_data_offset(index, index + extraOffset)
-                .ldfr(index, index, "Load the variable in the data section pointed to by r\(index)")
+            #warning("Get back to this.")
+            fatalError()
             
         case .rawPointer(_):
             

@@ -10,10 +10,9 @@ extension TACStatement {
             // Adressen til variabelen er sp + offset
             assembly = calculate_stack_pointer_offset(0, offset)
             
-        case .dataSection(_):
+        case .literalValue(_):
             
-            // TODO: &literal is not allowed.
-            // TODO: Consider actually allowing this (_could_ be useful for debugging in certain cases), but submitting a warning (not an issue).
+            #warning("Get back to this.")
             fatalError()
             
         case .rawPointer(_):

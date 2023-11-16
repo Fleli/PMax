@@ -19,18 +19,10 @@ extension TACStatement {
                 
             }
             
-        case .dataSection(let index):
+        case .literalValue(_):
             
-            for i in 0 ..< words {
-                
-                let calculatedArgumentLocation = Location.dataSection(index: index)
-                let locationUsableForCallee = Location.framePointer(offset: parameterOffset)
-                
-                // Load the value of the argument into register 0. Then store it so that it's accessible to the callee (using r1 as scratch register).
-                assembly += self.load_register_with_value(at: calculatedArgumentLocation, register: 0, i)
-                assembly += self.assign_to_location(locationUsableForCallee, 0, 1, i)
-                
-            }
+            #warning("Get back to this.")
+            fatalError()
             
         case .rawPointer(_):
             fatalError("Parameters cannot be raw pointers \(location).")

@@ -23,6 +23,7 @@ enum PMaxIssue: PMaxError {
     case hasNoValidMain
     case invalidMember(invalid: PILExpression)
     case grammaticalIssue(description: String)
+    case illegalIntegerLiteral(literal: String)
     
     var allowed: Bool {
         false
@@ -77,6 +78,8 @@ enum PMaxIssue: PMaxError {
                 return "Members must be referred to by name. The expression '\(invalid.readableDescription)' is not a valid member."
             case .grammaticalIssue(let description):
                 return description
+            case .illegalIntegerLiteral(let literal):
+                return "Illegal integer literal \(literal)."
             }
         }()
         

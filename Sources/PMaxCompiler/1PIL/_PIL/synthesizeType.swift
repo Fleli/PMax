@@ -40,6 +40,10 @@ extension PILOperation {
             
             return type
             
+        case .integerLiteral(_):
+            
+            return .int
+            
         case .dereference(let expression):
             
             switch expression.type {

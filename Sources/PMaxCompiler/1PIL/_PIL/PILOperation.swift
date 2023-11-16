@@ -8,8 +8,11 @@ enum PILOperation: CustomStringConvertible {
     
     case call(PILCall)
     
-    /// Use the `variable` case when we try to access a variable, either local or global.
+    /// Use the `variable` case when we try to access a variable
     case variable(String)
+    
+    /// A literal integer
+    case integerLiteral(String)
     
     case dereference(PILExpression)
     
@@ -28,6 +31,8 @@ enum PILOperation: CustomStringConvertible {
             return call.description
         case .variable(let variable):
             return variable
+        case .integerLiteral(let literal):
+            return literal
         case .dereference(let arg):
             return "(*\(arg))"
         case .addressOf(let arg):
@@ -52,6 +57,10 @@ enum PILOperation: CustomStringConvertible {
             }
             
             return string
+            
+        case .integerLiteral(let literal):
+            
+            return literal
             
         case .dereference(let pILExpression):
             return "*\(pILExpression.readableDescription)"

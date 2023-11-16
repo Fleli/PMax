@@ -75,6 +75,15 @@ extension PILExpression {
             
             return lowerer.local.getVariable(name).1
             
+        case .integerLiteral(let literal):
+            
+            guard let value = Int(literal), 0 <= value, value <= Builtin.intLiteralInclusiveBound else {
+                lowerer.submitError(PMaxIssue.illegalIntegerLiteral(literal: literal))
+                return .literalValue(value: 0)
+            }
+            
+            return Location.literalValue(value: value)
+            
         case .dereference(let pILExpression):
             
             let argument = pILExpression.lowerToTAC(lowerer)

@@ -40,23 +40,6 @@ class TACScope {
         
     }
     
-    func declareInDataSection(_ type: PILType, _ name: String) {
-        
-        // If this scope has a parent, it is not global.
-        if let parent {
-            parent.declareInDataSection(type, name)
-            return
-        }
-        
-        // Otherwise (if it has no parent), it is the global scope.
-        let location = Location.dataSection(index: dataSectionCounter)
-        variables[name] = (type, location)
-        dataSectionCounter += lowerer.sizeOf(type)
-        
-        printIfAllowed("\(type) \(name)", 40, "@ \(location)")
-        
-    }
-    
     /// Recursively search all scopes to check if a variable with a given name exists. Used when declaring new literals.
     func variableExists(_ name: String) -> Bool {
         
