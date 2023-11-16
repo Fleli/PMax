@@ -2,7 +2,6 @@
 indirect enum PILType: CustomStringConvertible, Hashable {
     
     case int
-    case char
     case void
     case `struct`(name: String)
     case pointer(pointee: PILType)
@@ -12,8 +11,6 @@ indirect enum PILType: CustomStringConvertible, Hashable {
         switch self {
         case .int:
             return Builtin.native
-        case .char:
-            return Builtin.char
         case .void:
             return Builtin.void
         case .struct(let name):
@@ -32,8 +29,6 @@ indirect enum PILType: CustomStringConvertible, Hashable {
             self = .int
         case .basic(Builtin.void):
             self = .void
-        case .basic(Builtin.char):
-            self = .char
         case .basic(let id) where lowerer.structs[id] != nil:
             self = .struct(name: id)
         case .basic(let undefined):
@@ -51,8 +46,6 @@ indirect enum PILType: CustomStringConvertible, Hashable {
         
         switch (self, other) {
             
-        case (.char, .char):
-            return true
         case (.void, .void):
             return true
         case (_, .void), (.void, _):                // void cannot be assigned to anything and is not assignable itself

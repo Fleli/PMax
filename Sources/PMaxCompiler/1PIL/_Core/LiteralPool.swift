@@ -19,14 +19,6 @@ class LiteralPool {
         return sharedLiteralGenerator(literal, .int, &integerLiterals)
     }
     
-    func stringLiteral(_ literal: String) -> String {
-        return sharedLiteralGenerator(literal + "\0", .char, &stringLiterals)
-    }
-    
-    func charLiteral(_ literal: String) -> String {
-        return sharedLiteralGenerator(literal, .char, &charLiterals)
-    }
-    
     /// Notify the literal pool that a literal was encountered. If the literal hasn't been seen yet, a new instance is created. Otherwise, the existing literal is simply reused. Also notify the `PILLowerer`'s global scope of the new literal.
     private func sharedLiteralGenerator(_ literal: String, _ type: PILType, _ pool: inout [String : String]) -> String {
         

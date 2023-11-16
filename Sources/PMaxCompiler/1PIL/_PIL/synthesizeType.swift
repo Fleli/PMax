@@ -43,7 +43,7 @@ extension PILOperation {
         case .dereference(let expression):
             
             switch expression.type {
-            case .int, .void, .struct(_), .char:
+            case .int, .void, .struct(_):
                 lowerer.submitError(PMaxIssue.dereferenceNonPointerType(type: expression.type))
                 fallthrough
             case .error:

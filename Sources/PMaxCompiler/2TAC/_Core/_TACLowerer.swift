@@ -45,7 +45,7 @@ class TACLowerer: CustomStringConvertible {
             let type = globalVariable.value
             
             switch type {
-            case .int, .char:
+            case .int:
                 break
             default:
                 fatalError("Global variable cannot be of type '\(type.description)'.")
@@ -146,7 +146,7 @@ class TACLowerer: CustomStringConvertible {
     func sizeOf(_ type: PILType) -> Int {
         
         switch type {
-        case .int, .pointer(_), .char:
+        case .int, .pointer(_):
             return 1
         case .void, .error:
             return 0

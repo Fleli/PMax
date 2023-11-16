@@ -39,8 +39,6 @@ public indirect enum Expression: CustomStringConvertible {
 	case leftParenthesis_ExpressionrightParenthesis_(String, Expression, String)
 	case TypeCastleftParenthesis_ExpressionrightParenthesis_(TypeCast, String, Expression, String)
 	case integer(String)
-	case char(String)
-	case string(String)
 	case identifier(String)
 	case identifierleftParenthesis_ArgumentsrightParenthesis_(String, String, Arguments, String)
 	case ampersand_Expression(String, Expression)
@@ -53,8 +51,6 @@ public indirect enum Expression: CustomStringConvertible {
 		case .leftParenthesis_ExpressionrightParenthesis_(_, let expression, _): return "(" + expression.description + ")"
 		case .TypeCastleftParenthesis_ExpressionrightParenthesis_(let typeCast, _, let expression, _): return typeCast.description + "(" + expression.description + ")"
 		case .integer(_): return "integer"
-		case .char(_): return "char"
-		case .string(_): return "string"
 		case .identifier(_): return "identifier"
 		case .identifierleftParenthesis_ArgumentsrightParenthesis_(_, _, let arguments, _): return "identifier" + "(" + arguments.description + ")"
 		case .ampersand_Expression(_, let expression): return "&" + expression.description

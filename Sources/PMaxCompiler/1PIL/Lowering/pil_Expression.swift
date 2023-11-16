@@ -43,20 +43,6 @@ extension Expression {
             
             return PILExpression(operation, lowerer)
             
-        case .string(let string):
-            
-            let varName = lowerer.literalPool.stringLiteral(string)
-            let operation = PILOperation.variable(varName)
-            
-            return PILExpression(operation, lowerer)
-            
-        case .char(let char):
-            
-            let varName = lowerer.literalPool.charLiteral(char)
-            let operation = PILOperation.variable(varName)
-            
-            return PILExpression(operation, lowerer)
-            
         case .TypeCastleftParenthesis_ExpressionrightParenthesis_(let typeCast, _, let expression, _):
             
             // A type cast is like all other expressions, but we modify the type of it to whatever the programmer specified.
