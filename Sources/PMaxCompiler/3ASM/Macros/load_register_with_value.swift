@@ -18,10 +18,9 @@ extension TACStatement {
             
             return "".ldio(index, .stackPointer, offset, "r\(index) = [fp + \(offset)]")
             
-        case .literalValue(_):
+        case .literalValue(let value):
             
-            #warning("Get back to this.")
-            fatalError()
+            return "".li(index, value, "r\(index) = \(value)")
             
         case .rawPointer(_):
             

@@ -12,7 +12,7 @@ extension TACStatement {
             
         case .literalValue(_):
             
-            #warning("Get back to this.")
+            // TODO: This is definitely reachable: &6. Catch this (and submit an error) earlier so that assembly code generation is safe.
             fatalError()
             
         case .rawPointer(_):

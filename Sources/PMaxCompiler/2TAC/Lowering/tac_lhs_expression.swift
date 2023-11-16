@@ -25,7 +25,8 @@ extension PILExpression {
             
             return lowerLHSMember(main, member, lowerer)
             
-        default:
+        // Avoid default cases. Explicitly state which cases submit an error.
+        case .integerLiteral(_), .addressOf(_), .unary(_, _), .binary(_, _, _), .call(_):
             
             lowerer.submitError(.unassignableLHS(lhs: self))
             return .framePointer(offset: 0)

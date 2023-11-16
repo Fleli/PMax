@@ -13,7 +13,7 @@ extension TACStatement {
             
         case .literalValue(_):
             
-            #warning("Get back to this.")
+            // Unreachable: Assignments to literals are caught when trying to lower to TAC.
             fatalError()
             
         case .rawPointer(let offset):

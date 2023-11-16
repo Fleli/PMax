@@ -6,15 +6,13 @@ extension PILExpression {
         let mainLocationAsLHS = main.lowerToTACAsLHS(lowerer)
         
         guard case .struct(let name) = main.type else {
-            // Incorrect attempts to access non-struct member should be caught in PIL.
+            // Incorrect attempts to access non-struct member should have been caught in PIL.
             fatalError()
         }
         
         let structMemoryLayout = lowerer.pilLowerer.structLayouts[name]!
         let memberLocationInformation = structMemoryLayout.fields[member]!
         let memberOffset = memberLocationInformation.start
-        
-        // let memberLength = memberLocationInformation.length
         
         switch mainLocationAsLHS {
         case .framePointer(let offset):
@@ -24,19 +22,16 @@ extension PILExpression {
             
         case .literalValue(_):
             
-            #warning("Go over this properly.")
-            // TODO: Do not fatalError() here. Instead, submit a proper error message.
+            // Errors such as '6.b' are caught in PIL as part of type-checking, so this should be unreachable.
             fatalError()
             
         case .rawPointer(let argumentFramePointerOffset):
             
-            #warning("Review this part again, after substantial changes.")
             let memberOffsetLiteral = Location.literalValue(value: memberOffset)
             let location = declareAddressSum(lowerer, memberOffsetLiteral, argumentFramePointerOffset)
             
             guard case .framePointer(let offset) = location else {
-                // TODO: Verify that this is unreachable.
-                fatalError(location.description)
+                fatalError(location.description)  // Unreachable
             }
             
             return .rawPointer(offset: offset)
