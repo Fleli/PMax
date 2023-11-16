@@ -1,4 +1,4 @@
-## Compiler
+#  Compiler
 
 The compiler is a large and complex system, so it is best explained section by section. However, a short summary is provided here.
 - The compiler receives _source code_ written by the programmer. This is a `String`. It is turned into an array of `Token` instances by the _lexer_. Each `Token` represents a lexical "word", for instance `int`, `512` or `x` in the source code. It also contains a _type_ that is used to distinguish control symbols (e.g. `{`) from integer literals (`integer`).

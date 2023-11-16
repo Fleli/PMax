@@ -1,4 +1,4 @@
-## Separation of Concerns
+#  Separation of Concerns
 
 Today, the compiler is a very monolithic piece of software. This package, `PMaxCompiler`, translates the whole source file into its corresponding assembly code. Separating compilation from assembling is a good thing because it allows for a clear separation of concerns, improving clarity and compartmentalization. It is desirable to further divide the compiler into more standalone repositories because
 (a) it introduces fewer bugs, since each module can be easily tested alone without considering the whole pipeline

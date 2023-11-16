@@ -1,4 +1,4 @@
-## Coming Features
+#  Coming Features
 
 Some important and useful features are not implemented yet, but are on their way:
 1. **Calling functions outside of expressions**. Right now, the grammar only allows for calling functions on the right-hand side of a declaration or an assignment, or in expression evaluations in `if`s, `while`s and so on. The option to simply call a function as the whole statement, like `function(a, b, c);`, is very important. This has high priority and will be implemented shortly.

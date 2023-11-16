@@ -23,7 +23,6 @@ extension PILIfStatement {
         lowerer.activeLabel = bodyInitLabel
         
         // Før vi begynner å lowere body, pusher vi et nytt scope slik at name resolution blir riktig. Vi popper dette etterpå.
-        
         lowerer.push()
         
         for statement in body {
