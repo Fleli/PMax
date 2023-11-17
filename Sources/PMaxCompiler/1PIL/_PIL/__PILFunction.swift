@@ -68,8 +68,19 @@ class PILFunction: CustomStringConvertible {
         
         let returnsOnAllPaths = body.reduce(false, {$0 || $1.returnsOnAllPaths(type, lowerer)})
         
-        if !returnsOnAllPaths {
+        if returnsOnAllPaths {
+            return
+        }
+        
+        if type == .void {
+            
+            let insertedReturn = PILStatement.return(expression: nil)
+            body.append(insertedReturn)
+            
+        } else {
+            
             lowerer.submitError(PMaxIssue.doesNotReturnOnAllPaths(function: name))
+            
         }
         
     }
