@@ -8,13 +8,17 @@ Please refer to the [repository](https://github.com/Fleli/pmax) wrapping the com
 
 ## Repository Structure
 
-All code is found within `Sources/PMaxCompiler`. 
+Code is found inside `Sources/PMaxCompiler`.
 
-The folder `__main` provides the `Compiler` class, which represents the external interface for this repository. The `_Compiler` folder contains several definitions and functions that help the compilation, for example `FileOption`, a profiler and a pass manager.
+The folder `__main` contains the `Compiler` class, which is its external interface, and a `Preprocessor` class which is currently under development and will provide features for working with libraries.
 
-The four folders `0Frontend`, `1PIL`, `2TAC`, and `3ASM` are also found within `Sources/PMaxCompiler`. These contain the actual code for source-to-assembly transformation. For further documentation on each pass, in addition to a future roadmap and a high-level compiler overview, please refer to the `_Docs` folder.
+`_Docs` contains documentation on important aspects of the compiler.
 
-Finally, the `_Extensions` folder is used to extend existing types. An `SLRNode` extension is placed there in order to preserve it when SwiftParse and SwiftLex overwrites the frontend files.
+The `Compiler` folder contains each step in the compilation process, from source code (`0Frontend`) to assembly (`3ASM`).
+
+The `Shared` folder contains some helper functions for the `Compiler` class, some language-specific constraints, infrastructure for profiling, and extensions to classes.
+
+For a deeper dive into how the compiler is organized, you are encouraged to read the files inside `_Docs`. These will also be expanded later on.
 
 ## Standard Library
 
