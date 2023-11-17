@@ -2,7 +2,9 @@ import Foundation
 
 class Preprocessor {
     
-    private let fileManager = Foundation.FileManager()
+    typealias Closure = () -> ()
+    
+    let fileManager = Foundation.FileManager()
     
     private var currentDirectory: String {
         fileManager.currentDirectoryPath
@@ -10,11 +12,35 @@ class Preprocessor {
     
     private var importedLibraries: Set<String> = []
     
+    weak var compiler: Compiler!
     
+    
+    init(_ compiler: Compiler?) {
+        self.compiler = compiler
+        importLibrary("non")
+    }
     
     
     func importLibrary(_ fileName: String) {
         
+        let testFile = """
+        
+        struct Array {
+            int size;
+            int count;
+            void** data;
+        }
+        
+        void array_insert(Array* array, void* data) {
+            assign array->count = array->count + 1;
+            return;
+        }
+        
+        """
+        
+        self.parseImport(fileName, testFile)
+        
+        /*
         let fileName = fileName + ".hmax"
         
         if importedLibraries.contains(fileName) {
@@ -25,42 +51,29 @@ class Preprocessor {
         
         print("Working directory: \(currentDirectory)")
         
-        let content = searchThroughDirectory(for: fileName, in: currentDirectory)
+        guard let content = searchThroughDirectory(for: fileName, in: currentDirectory) else {
+            // TODO: Submit an issue: The library (file) wasn't found.
+            print("No file '\(fileName)' in the current directory or any of its children.")
+            return
+        }
         
-        print("Result of search: {\(content ?? "nil")}")
+        print("Result of search: {\(content)}")
+        */
+    }
+    
+    
+    func newStruct(_ library: String, _ `struct`: Struct) {
+        
+        
         
     }
     
-    func searchThroughDirectory(for fileName: String, in directory: String) -> String? {
+    
+    func newFunction(_ library: String, _ function: Function) {
         
-        let allObjects: [String]
         
-        do {
-            allObjects = try fileManager.contentsOfDirectory(atPath: directory)
-        } catch {
-            return nil
-        }
-        
-        for object in allObjects {
-            
-            if let result = searchThroughDirectory(for: fileName, in: object) {
-                return result
-            }
-            
-            do {
-                
-                return try String(contentsOfFile: directory + "/" + fileName)
-                
-            } catch {
-                
-                continue
-                
-            }
-            
-        }
-        
-        return nil
         
     }
+    
     
 }

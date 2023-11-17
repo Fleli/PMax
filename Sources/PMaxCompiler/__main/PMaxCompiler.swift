@@ -16,6 +16,8 @@ public final class Compiler {
     public static var allowPrinting = false
     
     
+    var preprocessor: Preprocessor!
+    
     var fileOptions: [FileOption] = []
     var profiler: CompilerProfiler!
     
@@ -23,9 +25,6 @@ public final class Compiler {
     
     
     public init() {
-        
-        let preprocessor = Preprocessor()
-        preprocessor.importLibrary("Test")
         
     }
     
@@ -44,6 +43,7 @@ public final class Compiler {
         
         self.encounteredErrors.removeAll()
         self.profiler = CompilerProfiler()
+        self.preprocessor = Preprocessor(self)
         
         do {
             

@@ -18,29 +18,6 @@ When compilation is finished and we want to assemble the executable, we simply p
 
 ## The PMax Header File (`.hmax`) Format
 
-A `.hmax` file contains a list of functions on the following format:
+A `.hmax` file contains is PMax-parsable, so it uses the exact same lexer, parser and tree converter as the main compiler. However, it would be semantically meaningless to a compiler.
 
-```
-RT N (T1 N1, ..., Tn Nn);
-@K
-L {
-    ASM
-}
-```
-
-As we can see, the first line corresponds to a function signature:
-- `RT` is the function's return type
-- `N` is its name
-- `Ti Ni` refers to the type and name of the i-th parameter (if present)
-- We end the signature with a semicolon (`;`)
-
-After the signature comes 
-
-Then, instead of the function's body in PMax, the file contains its body in assembly code.
-- First, the `L` is a placeholder for the function's entry label, which must be visible to other functions calling it.
-- Then comes the function's assembly code (including entry label) in `ASM`.
-- The body is wrapped in `{}`.
-
-Associating each function with its body directly instead of having the whole file's assembly code in one file means the compiler can pick and choose the labels it needs to properly define functions that are used, and discard functions never called. This means a mechanism for transitive reference resolving must be implemented, but this should be doable. The benefit of this approach is that the user can define `void a()` and `void b()` in the same file, and the assembly code for `b` is simply discarded if it is never called. This significantly reduces code size. 
-
-PMax Header Files can also contain `struct` declarations, so that types they define are available externally as well. A struct is declared in PMax Header Files with the exact same syntax as in ordinary PMax source code. They are handled as if they were declared in the file actually being compiled.
+Just like a `.pmax` file, the `.hmax` files' top levels contain function and struct declarations. For it to be valid, the function's first statement must be a declaration on the form `Label l;`, where `l` is a placeholder for the function's entry label. After this, a declaration on the form `Code c = str` where `str` is a placeholder for a string (wrapped in `"`) that contains the full assembly code for the function.
