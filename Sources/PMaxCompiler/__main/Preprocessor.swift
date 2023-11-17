@@ -32,8 +32,16 @@ class Preprocessor {
         }
         
         void array_insert(Array* array, void* data) {
-            assign array->count = array->count + 1;
             return;
+        }
+        
+        void array_removeLast(Array* array) {
+            Label entryp;
+            assign asm = "l
+        kdnf
+        dmsf
+        
+        dmnf\tmfgll";
         }
         
         """
@@ -73,7 +81,7 @@ class Preprocessor {
     /// Notify the preprocessor that a new function was encountered.The `function` parameter is used to verify that calls to it match the name, argument count, and types. `entry` and `body` are used in assembly lowering to create the actual link (upon calls) between the library and the caller.
     func newFunction(_ library: String, _ function: Function, _ entry: String, _ body: String) {
         
-        
+        print("New function: \(function.name) entry @ \(entry) with body {\(body)}")
         
     }
     

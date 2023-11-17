@@ -39,18 +39,24 @@ extension Preprocessor {
         
         guard function.body.count == 2 else {
             // TODO: Submit error (ill-formed hmax-file)
+            print("Expected two statements in body but found \(function.body.count): \(function.body)")
             return
         }
         
         guard let entryPoint = findEntryPoint(function.body[0]) else {
             // TODO: Submit an error.
+            print("No entry point: \(function.body[0]) is ill-formed.")
             return
         }
         
-        guard let assemblyCode = findAssemblyCode(function.body[1]) else {
-            // TODO: Submit an error.
+        guard var assemblyCode = findAssemblyCode(function.body[1]) else {
+            print("No code: \(function.body[1]) is ill-formed.")
             return
         }
+        
+        // Remove enclosing ""
+        assemblyCode.removeFirst()
+        assemblyCode.removeLast()
         
         self.newFunction(library, function, entryPoint, assemblyCode)
         
