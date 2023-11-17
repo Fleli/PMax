@@ -62,6 +62,7 @@ class Preprocessor {
     }
     
     
+    /// Notify the preprocessor that a new `struct` was found in a given library.
     func newStruct(_ library: String, _ `struct`: Struct) {
         
         
@@ -69,7 +70,8 @@ class Preprocessor {
     }
     
     
-    func newFunction(_ library: String, _ function: Function) {
+    /// Notify the preprocessor that a new function was encountered.The `function` parameter is used to verify that calls to it match the name, argument count, and types. `entry` and `body` are used in assembly lowering to create the actual link (upon calls) between the library and the caller.
+    func newFunction(_ library: String, _ function: Function, _ entry: String, _ body: String) {
         
         
         

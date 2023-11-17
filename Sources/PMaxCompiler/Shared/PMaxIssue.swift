@@ -24,6 +24,7 @@ enum PMaxIssue: PMaxError {
     case invalidMember(invalid: PILExpression)
     case grammaticalIssue(description: String)
     case illegalIntegerLiteral(literal: String)
+    case stringsAreNotSupported
     
     var allowed: Bool {
         false
@@ -80,6 +81,8 @@ enum PMaxIssue: PMaxError {
                 return description
             case .illegalIntegerLiteral(let literal):
                 return "Illegal integer literal \(literal)."
+            case .stringsAreNotSupported:
+                return "String literals are not supported by PMax yet."
             }
         }()
         

@@ -47,6 +47,13 @@ extension Preprocessor {
             return
         }
         
+        guard let assemblyCode = findAssemblyCode(function.body[1]) else {
+            // TODO: Submit an error.
+            return
+        }
+        
+        self.newFunction(library, function, entryPoint, assemblyCode)
+        
     }
     
     private func findEntryPoint(_ statement: FunctionBodyStatement) -> String? {
@@ -56,6 +63,20 @@ extension Preprocessor {
         }
         
         return declaration.name
+        
+    }
+    
+    private func findAssemblyCode(_ statement: FunctionBodyStatement) -> String? {
+        
+        guard case .assignment(let assignment) = statement, assignment.operator == nil, case .identifier("asm") = assignment.lhs else {
+            return nil
+        }
+        
+        guard case .string(let str) = assignment.rhs else {
+            return nil
+        }
+        
+        return str
         
     }
     

@@ -20,4 +20,4 @@ When compilation is finished and we want to assemble the executable, we simply p
 
 A `.hmax` file contains is PMax-parsable, so it uses the exact same lexer, parser and tree converter as the main compiler. However, it would be semantically meaningless to a compiler.
 
-Just like a `.pmax` file, the `.hmax` files' top levels contain function and struct declarations. For it to be valid, the function's first statement must be a declaration on the form `Label l;`, where `l` is a placeholder for the function's entry label. After this, a declaration on the form `Code c = str` where `str` is a placeholder for a string (wrapped in `"`) that contains the full assembly code for the function.
+Just like a `.pmax` file, the `.hmax` files' top levels contain function and struct declarations. For it to be valid, the function's first statement must be a declaration on the form `Label l;`, where `l` is a placeholder for the function's entry label. After this, the preprocessor expects an assignment on the form `assign asm = str` where `str` is a placeholder for a string (wrapped in `"`) that contains the full assembly code for the function.
