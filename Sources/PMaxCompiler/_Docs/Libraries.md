@@ -42,3 +42,5 @@ Then, instead of the function's body in PMax, the file contains its body in asse
 - The body is wrapped in `{}`.
 
 Associating each function with its body directly instead of having the whole file's assembly code in one file means the compiler can pick and choose the labels it needs to properly define functions that are used, and discard functions never called. This means a mechanism for transitive reference resolving must be implemented, but this should be doable. The benefit of this approach is that the user can define `void a()` and `void b()` in the same file, and the assembly code for `b` is simply discarded if it is never called. This significantly reduces code size. 
+
+PMax Header Files can also contain `struct` declarations, so that types they define are available externally as well. A struct is declared in PMax Header Files with the exact same syntax as in ordinary PMax source code. They are handled as if they were declared in the file actually being compiled.
