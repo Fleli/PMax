@@ -23,9 +23,11 @@ public final class Compiler {
     
     var encounteredErrors: [PMaxError] = []
     
+    let libraryPaths: [String]
     
-    public init() {
-        
+    /// Initialize a `Compiler` instance with certain `libraryPaths`. These are the paths, in order, that the preprocessor searches in when attempting to import libraries. Using as "exact" paths as possible is recommended, since the preprocessor will literally expand the entire tree in its attempt to find the file that is referred to. 
+    public init(_ libraryPaths: [String]) {
+        self.libraryPaths = libraryPaths
     }
     
     

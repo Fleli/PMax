@@ -4,51 +4,28 @@ class Preprocessor {
     
     typealias Closure = () -> ()
     
-    let fileManager = Foundation.FileManager()
+    let libraryPaths: [String]
     
-    private var currentDirectory: String {
-        fileManager.currentDirectoryPath
-    }
+    let fileManager = Foundation.FileManager()
     
     private var importedLibraries: Set<String> = []
     
     weak var compiler: Compiler!
     
     
-    init(_ compiler: Compiler?) {
+    init(_ compiler: Compiler) {
+        
         self.compiler = compiler
-        importLibrary("non")
+        self.libraryPaths = compiler.libraryPaths
+        
+        // For testing purposes:
+        importLibrary("Stdlib")
+        
     }
     
     
     func importLibrary(_ fileName: String) {
         
-        let testFile = """
-        
-        struct Array {
-            int size;
-            int count;
-            void** data;
-        }
-        
-        void array_insert(Array* array, void* data) {
-            return;
-        }
-        
-        void array_removeLast(Array* array) {
-            Label entryp;
-            assign asm = "l
-        kdnf
-        dmsf
-        
-        dmnf\tmfgll";
-        }
-        
-        """
-        
-        self.parseImport(fileName, testFile)
-        
-        /*
         let fileName = fileName + ".hmax"
         
         if importedLibraries.contains(fileName) {
@@ -57,16 +34,29 @@ class Preprocessor {
             return
         }
         
-        print("Working directory: \(currentDirectory)")
+        print("Search through directories \(libraryPaths)")
         
-        guard let content = searchThroughDirectory(for: fileName, in: currentDirectory) else {
+        var pathIndex = 0
+        var content: String? = nil
+        
+        while (pathIndex < libraryPaths.count) && (content == nil) {
+            
+            let path = libraryPaths[pathIndex]
+            
+            content = searchThroughDirectory(for: fileName, in: path)
+            
+            pathIndex += 1
+            
+        }
+        
+        guard let content else {
             // TODO: Submit an issue: The library (file) wasn't found.
             print("No file '\(fileName)' in the current directory or any of its children.")
             return
         }
         
         print("Result of search: {\(content)}")
-        */
+        
     }
     
     

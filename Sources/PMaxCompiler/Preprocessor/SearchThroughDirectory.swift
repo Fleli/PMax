@@ -14,7 +14,7 @@ extension Preprocessor {
         
         for object in allObjects {
             
-            if let result = searchThroughDirectory(for: fileName, in: object) {
+            if let result = searchThroughDirectory(for: fileName, in: directory + "/" + object) {
                 return result
             }
             
