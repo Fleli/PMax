@@ -4,12 +4,12 @@ extension PILIfStatement {
     func lowerToTAC(_ lowerer: TACLowerer, _ continueLabel: Label) {
         
         // Vi begynner med å hoppe til condition-evalueringen
-        let conditionEvaluationLabel = lowerer.newLabel("if_condition")
+        let conditionEvaluationLabel = lowerer.newLabel("if_condition", false)
         let jump = TACStatement.jump(label: conditionEvaluationLabel.name)
         lowerer.activeLabel.newStatement(jump)
         
         // Så gjør vi klar body-labelen (for true condition)
-        let bodyInitLabel = lowerer.newLabel("if_body")
+        let bodyInitLabel = lowerer.newLabel("if_body", false)
         
         // Så svitsjer vi over til condition-bergeningslabelen.
         lowerer.activeLabel = conditionEvaluationLabel
@@ -40,7 +40,7 @@ extension PILIfStatement {
         if let `else` {
             
             // Siden `if`-en har en tilhørende `else`, lager vi en label som den kan bruke.
-            let elseLabel = lowerer.newLabel("if_else")
+            let elseLabel = lowerer.newLabel("if_else", false)
             
             // Så hopper vi til denne, og lar else-`if`-en utføre sitt. Den skal fortsette på `continueLabel`.
             let jumpToElse = TACStatement.jump(label: elseLabel.name)

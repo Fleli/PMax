@@ -69,6 +69,11 @@ extension Expression {
             
             return PILExpression(operation, lowerer)
             
+        case .string(_):
+            
+            lowerer.submitError(PMaxIssue.stringsAreNotSupported)
+            return PILExpression.init(.integerLiteral("0"), cast: .error)
+            
         }
         
     }

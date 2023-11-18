@@ -19,9 +19,10 @@ class PILLowerer {
     
     private var anonymousVariableCounter = 0
     
-    private(set) var errors: [PMaxError] = []
-    
+    private let preprocessor: Preprocessor
     private let topLevelStatements: TopLevelStatements
+    
+    private(set) var errors: [PMaxError] = []
     
     private(set) var structs: [String : PILStruct] = [:]
     private(set) var functions: [String : PILFunction] = [:]
@@ -29,9 +30,10 @@ class PILLowerer {
     private(set) var structLayouts: [String : MemoryLayout] = [:]
     
     
-    init(_ topLevelStatements: TopLevelStatements) {
+    init(_ topLevelStatements: TopLevelStatements, _ preprocessor: Preprocessor) {
         
         self.topLevelStatements = topLevelStatements
+        self.preprocessor = preprocessor
         self.local = PILScope(self)
         
     }
@@ -56,14 +58,17 @@ class PILLowerer {
             switch syntacticStatement {
             case .struct(let `struct`):
                 
-                let newStruct = PILStruct(`struct`, self)
-                structs[newStruct.name] = newStruct
+                self.newStruct(`struct`)
                 
             case .function(let function):
                 
-                let name = function.name
                 let pilFunction = PILFunction(function, self)
-                functions[name] = pilFunction
+                self.newFunction(pilFunction)
+                
+            case .import(let `import`):
+                
+                let library = `import`.library
+                preprocessor.importLibrary(library, self)
                 
             }
             
@@ -79,12 +84,6 @@ class PILLowerer {
             
             guard Compiler.allowPrinting else {
                 continue
-            }
-            
-            print("\(function.name)")
-            
-            function.body.forEach {
-                print($0.printableDescription(1))
             }
             
         }
@@ -145,6 +144,19 @@ class PILLowerer {
     
     func submitError(_ newError: PMaxError) {
         errors.append(newError)
+    }
+    
+    // TODO: Potential issue: How are collisions handled?
+    /// Take a syntactical `Struct` object and add it to the internal dictionary of structs.
+    func newStruct(_ `struct`: Struct) {
+        let newStruct = PILStruct(`struct`, self)
+        structs[newStruct.name] = newStruct
+    }
+    
+    // TODO: Potential issue: How are collisions handled?
+    /// Take a `PILFunction` object and add it to the internal dictionary of functions.
+    func newFunction(_ pilFunction: PILFunction) {
+        functions[pilFunction.name] = pilFunction
     }
     
 }

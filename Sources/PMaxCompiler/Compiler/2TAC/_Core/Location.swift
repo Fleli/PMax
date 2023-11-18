@@ -1,8 +1,7 @@
 
-#warning("Referring to values as 'locations' is somewhat unprecise. See TODO below.")
-
-// TODO: Consider instead using a clear distinction between LValues (left-hand side values, i.e. assignable expressions) and RValues (right-hand side values)
-// TODO: Clearly separating between the two would greatly increase clarity and readability, remove many (unreachable) fatalError() calls and generally reduce the probability of errors. Carrying around information about the value's context may also increase the quality of error messages.
+// TODO: Referring to values as 'locations' is somewhat unprecise.
+// Consider instead using a clear distinction between LValues (left-hand side values, i.e. assignable expressions) and RValues (right-hand side values)
+// Clearly separating between the two would greatly increase clarity and readability, remove many (unreachable) fatalError() calls and generally reduce the probability of errors. Carrying around information about the value's context may also increase the quality of error messages.
 
 indirect enum Location: CustomStringConvertible {
     

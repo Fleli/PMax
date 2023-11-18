@@ -3,30 +3,29 @@ import Foundation
 // TODO: Consider enforcing that the argument label matches the parameter label. This increases consistency, but using different labels _may_ increase clarity in some cases
 
 #warning("Update the Docs now that the folder structure is reorganized.")
-#warning("Reorganized the folder structure will create a merge conflict in Git.")
-// Force push this branch to main, then reimplement the small changes made in the two commits this branch hadn't pulled.
 
 public final class Compiler {
     
     
-    public static let version: String = "0.1.1"
-    public static let date: String = "2023-11-10"
+    public static let version: String = "0.2.0"
+    public static let date: String = "2023-11-18"
     
     public static var allowMeta = true
     public static var allowPrinting = false
     
+    
+    var preprocessor: Preprocessor!
     
     var fileOptions: [FileOption] = []
     var profiler: CompilerProfiler!
     
     var encounteredErrors: [PMaxError] = []
     
+    let libraryPaths: [String]
     
-    public init() {
-        
-        let preprocessor = Preprocessor()
-        preprocessor.importLibrary("Test")
-        
+    /// Initialize a `Compiler` instance with certain `libraryPaths`. These are the paths, in order, that the preprocessor searches in when attempting to import libraries. Using as "exact" paths as possible is recommended, since the preprocessor will literally expand the entire tree in its attempt to find the file that is referred to.
+    public init(_ libraryPaths: [String]) {
+        self.libraryPaths = libraryPaths
     }
     
     
@@ -44,6 +43,7 @@ public final class Compiler {
         
         self.encounteredErrors.removeAll()
         self.profiler = CompilerProfiler()
+        self.preprocessor = Preprocessor(self)
         
         do {
             

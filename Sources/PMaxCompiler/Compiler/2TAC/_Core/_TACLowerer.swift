@@ -14,11 +14,14 @@ class TACLowerer: CustomStringConvertible {
     
     private var structs: [String : PILStruct] = [:]
     
-    private(set) var functionLabels: [String : Label] = [:]
+    private var internalFunctionLabels: [String : Label] = [:]
+    private var externalFunctionLabels: [String : String] = [:]
     
     private(set) var functions: [String : PILFunction] = [:]
     
     private(set) var labels: [Label] = []
+    
+    private(set) var libraryAssembly: [String] = []
     
     private(set) var errors: [PMaxError] = []
     
@@ -39,14 +42,30 @@ class TACLowerer: CustomStringConvertible {
             
             let function = function.value
             
-            let newLabel = newLabel("fn_\(function.name)")
-            functionLabels[function.name] = newLabel
+            if case .external(let assembly, let entry) = function.body {
+                
+                libraryAssembly.append(assembly)
+                externalFunctionLabels[function.name] = entry
+                
+            } else {
+                
+                let entry = function.entryLabelName()
+                let newLabel = newLabel(entry, true)
+                internalFunctionLabels[function.name] = newLabel
+                
+            }
             
         }
         
         var containsValidMain = false
         
         for function in functions.values {
+            
+            let body = function.body
+            
+            guard case .pmax(_, let lowered) = body else {
+                continue
+            }
             
             push()
             
@@ -58,9 +77,9 @@ class TACLowerer: CustomStringConvertible {
                 local.declare(parameter.type, parameter.label)
             }
             
-            activeLabel = functionLabels[function.name]!
+            activeLabel = internalFunctionLabels[function.name]!
             
-            for statement in function.body {
+            for statement in lowered {
                 statement.lowerToTAC(self)
             }
             
@@ -73,7 +92,7 @@ class TACLowerer: CustomStringConvertible {
         }
         
         let mainLabel = Label("__main")
-        let fnMainLabel = functionLabels["main"]!
+        let fnMainLabel = internalFunctionLabels["main"]!
         mainLabel.newStatement(.jump(label: fnMainLabel.name))
         labels.insert(mainLabel, at: 0)
         
@@ -97,14 +116,19 @@ class TACLowerer: CustomStringConvertible {
     }
     
     
-    /// Create a new label named within the given `context`. Will return the label, but **won't use it as the new active label.** Doing so is up to the caller.
-    func newLabel(_ context: String) -> Label {
+    /// Create a new label. If `isFunctionEntry` (if this is the label jumped to when calling a function), its name is the `context`. For other labels used in `if`s etc., an internal counter makes sure no names clash, and just uses the context to give the label an informative name.
+    func newLabel(_ context: String, _ isFunctionEntry: Bool) -> Label {
         
-        internalCounter += 1
+        let newLabel: Label
         
-        let newLabel = Label("label\(internalCounter)_\(context)")
+        if isFunctionEntry {
+            newLabel = Label(context)
+        } else {
+            internalCounter += 1
+            newLabel = Label("l\(internalCounter)_\(context)")
+        }
+        
         labels.append(newLabel)
-        
         return newLabel
         
     }
@@ -141,8 +165,16 @@ class TACLowerer: CustomStringConvertible {
     }
     
     var description: String {
+        labels.reduce("", {$0 + $1.description + "\n"})
+    }
+    
+    func getFunctionEntryPoint(_ function: String) -> String {
         
-        return labels.reduce("", {$0 + $1.description + "\n"})
+        if let internalFunction = internalFunctionLabels[function] {
+            return internalFunction.name
+        } else {
+            return externalFunctionLabels[function]!
+        }
         
     }
     

@@ -4,31 +4,64 @@ class PILFunction: CustomStringConvertible {
     let type: PILType
     var parameters: [PILParameter] = []
     
-    var body: [PILStatement] = []
+    let underlyingFunction: Function
+    
+    var body: PILFunctionBody
     
     var description: String {
         "\(name): \(parameters.map {$0.type}) -> \(type)"
     }
     
-    var fullDescription: String {
-        "\(type) \(name) (\(parameters.description.dropFirst().dropLast())) {\n"
-        +   body.reduce("") { $0 + $1.printableDescription(1) }
-        +   "}\n"
+    func entryLabelName() -> String {
+        switch self.body {
+        case .pmax(_, _):
+            return "fn_\(name)"
+        case .external(_, let entry):
+            return entry
+        }
     }
     
-    let underlyingFunction: Function
+    var fullDescription: String {
+        switch self.body {
+        case .pmax(_, let body):
+            return
+                "\(type) \(name) (\(parameters.description.dropFirst().dropLast())) {\n"
+            +   body.reduce("") { $0 + $1.printableDescription(1) }
+            +   "}\n"
+        case .external(_, let entry):
+            return "[extern] \(entry)\n"
+        }
+            
+    }
     
-    /// Initialize a `PILFunction` from an underlying (syntactical) `Function` object. This includes lowering all statements within the function to their `PIL` equivalent.
-    init(_ underlyingFunction: Function, _ lowerer: PILLowerer) {
+    
+    /// Initialize a `PILFunction` from an underlying (syntactical) `Function` object.
+    convenience init(_ underlyingFunction: Function, _ lowerer: PILLowerer) {
+        let body = PILFunctionBody.pmax(underlyingFunction: underlyingFunction, lowered: [])
+        self.init(underlyingFunction, body, lowerer)
+    }
+    
+    
+    /// Initialize a `PILFunction` from an external function object (a function imported from a library). The `underlyingExternalFunction` is used to build the function's signature: its `type`, `name` and `parameters`. The `body` of an external function is its corresponding assembly code. `entry` is the label to jump to when calling the function.
+    convenience init(_ underlyingExternalFunction: Function, _ body: String, _ entry: String, _ lowerer: PILLowerer) {
+        let body = PILFunctionBody.external(assembly: body, entry: entry)
+        self.init(underlyingExternalFunction, body, lowerer)
+    }
+    
+    
+    private init(_ underlyingFunction: Function, _ body: PILFunctionBody, _ lowerer: PILLowerer) {
         
         self.name = underlyingFunction.name
         self.type = PILType(underlyingFunction.returnType, lowerer)
+        
+        self.body = body
         
         self.underlyingFunction = underlyingFunction
         
         appendParameters(underlyingFunction, lowerer)
         
     }
+    
     
     private func appendParameters(_ underlyingFunction: Function, _ lowerer: PILLowerer) {
         
@@ -45,6 +78,10 @@ class PILFunction: CustomStringConvertible {
     
     func lowerToPIL(_ lowerer: PILLowerer) {
         
+        guard case .pmax(let underlyingFunction, var loweredBody) = body else {
+            return
+        }
+        
         lowerer.push()
         
         // We declare each parameter in the function scope.
@@ -54,19 +91,25 @@ class PILFunction: CustomStringConvertible {
         
         // Then we lower the function's body.
         for statement in underlyingFunction.body {
-            let lowered = statement.lowerToPIL(lowerer)
-            self.body += lowered
+            loweredBody += statement.lowerToPIL(lowerer)
         }
         
-        verifyReturns(lowerer)
-        
         lowerer.pop()
+        
+        self.body = .pmax(underlyingFunction: underlyingFunction, lowered: loweredBody)
+        
+        verifyReturns(lowerer)
         
     }
     
     func verifyReturns(_ lowerer: PILLowerer) {
         
-        let returnsOnAllPaths = body.reduce(false, {$0 || $1.returnsOnAllPaths(type, lowerer)})
+        // If the function is external (within a library), it is assumed that its semantics are already verified.
+        guard case .pmax(let underlyingFunction, var lowered) = body else {
+            return
+        }
+        
+        let returnsOnAllPaths = lowered.reduce(false, {$0 || $1.returnsOnAllPaths(type, lowerer)})
         
         if returnsOnAllPaths {
             return
@@ -75,13 +118,15 @@ class PILFunction: CustomStringConvertible {
         if type == .void {
             
             let insertedReturn = PILStatement.return(expression: nil)
-            body.append(insertedReturn)
+            lowered.append(insertedReturn)
             
         } else {
             
             lowerer.submitError(PMaxIssue.doesNotReturnOnAllPaths(function: name))
             
         }
+        
+        self.body = .pmax(underlyingFunction: underlyingFunction, lowered: lowered)
         
     }
     
