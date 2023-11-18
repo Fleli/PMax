@@ -23,6 +23,9 @@ extension Preprocessor {
                     self.newStruct(library, `struct`)
                 case .function(let function):
                     verifyFunction(library, function)
+                case .import(_):
+                    // TODO: Get back to the issue of transitive imports. It requires care to be done right.
+                    break
                 }
                 
             }

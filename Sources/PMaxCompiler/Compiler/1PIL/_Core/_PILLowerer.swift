@@ -19,9 +19,10 @@ class PILLowerer {
     
     private var anonymousVariableCounter = 0
     
-    private(set) var errors: [PMaxError] = []
-    
+    private let preprocessor: Preprocessor
     private let topLevelStatements: TopLevelStatements
+    
+    private(set) var errors: [PMaxError] = []
     
     private(set) var structs: [String : PILStruct] = [:]
     private(set) var functions: [String : PILFunction] = [:]
@@ -29,9 +30,10 @@ class PILLowerer {
     private(set) var structLayouts: [String : MemoryLayout] = [:]
     
     
-    init(_ topLevelStatements: TopLevelStatements) {
+    init(_ topLevelStatements: TopLevelStatements, _ preprocessor: Preprocessor) {
         
         self.topLevelStatements = topLevelStatements
+        self.preprocessor = preprocessor
         self.local = PILScope(self)
         
     }
@@ -64,6 +66,11 @@ class PILLowerer {
                 let name = function.name
                 let pilFunction = PILFunction(function, self)
                 functions[name] = pilFunction
+                
+            case .import(let `import`):
+                
+                let library = `import`.library
+                preprocessor.importLibrary(library, &structs, &functions)
                 
             }
             

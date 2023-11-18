@@ -36,7 +36,7 @@ extension Compiler {
     
     func lowerToPIL(_ converted: TopLevelStatements) {
         
-        let pilLowerer = PILLowerer(converted)
+        let pilLowerer = PILLowerer(converted, preprocessor)
         pilLowerer.lower()
         
         encounteredErrors += pilLowerer.errors

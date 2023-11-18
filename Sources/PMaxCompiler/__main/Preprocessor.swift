@@ -2,15 +2,17 @@ import Foundation
 
 class Preprocessor {
     
+    
     typealias Closure = () -> ()
+    
+    
+    weak var compiler: Compiler!
+    
+    var importedLibraries: Set<String> = []
     
     let libraryPaths: [String]
     
     let fileManager = Foundation.FileManager()
-    
-    private var importedLibraries: Set<String> = []
-    
-    weak var compiler: Compiler!
     
     
     init(_ compiler: Compiler) {
@@ -18,13 +20,10 @@ class Preprocessor {
         self.compiler = compiler
         self.libraryPaths = compiler.libraryPaths
         
-        // For testing purposes:
-        importLibrary("Stdlib")
-        
     }
     
     
-    func importLibrary(_ fileName: String) {
+    func importLibrary(_ fileName: String, _ structs: inout [String : PILStruct], _ externalFunctions: inout [String : PILFunction]) {
         
         let fileName = fileName + ".hmax"
         

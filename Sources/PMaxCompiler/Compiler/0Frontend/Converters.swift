@@ -30,47 +30,22 @@ public extension SLRNode {
 }
 public extension SLRNode {
     
-    func convertToTopLevelStatements() -> TopLevelStatements {
+    func convertToFunctionBodyStatements() -> FunctionBodyStatements {
         
         if children.count == 0 {
             return []
         }
         
         if children.count == 1 {
-            return [children[0].convertToTopLevelStatement()]
+            return [children[0].convertToFunctionBodyStatement()]
         }
         
         if children.count == 2 {
-            return children[0].convertToTopLevelStatements() + [children[1].convertToTopLevelStatement()]
+            return children[0].convertToFunctionBodyStatements() + [children[1].convertToFunctionBodyStatement()]
         }
         
         if children.count == 3 {
-            return children[0].convertToTopLevelStatements() + [children[2].convertToTopLevelStatement()]
-        }
-        
-        fatalError()
-        
-    }
-    
-}
-public extension SLRNode {
-    
-    func convertToParameters() -> Parameters {
-        
-        if children.count == 0 {
-            return []
-        }
-        
-        if children.count == 1 {
-            return [children[0].convertToParameter()]
-        }
-        
-        if children.count == 2 {
-            return children[0].convertToParameters() + [children[1].convertToParameter()]
-        }
-        
-        if children.count == 3 {
-            return children[0].convertToParameters() + [children[2].convertToParameter()]
+            return children[0].convertToFunctionBodyStatements() + [children[2].convertToFunctionBodyStatement()]
         }
         
         fatalError()
@@ -105,22 +80,47 @@ public extension SLRNode {
 }
 public extension SLRNode {
     
-    func convertToFunctionBodyStatements() -> FunctionBodyStatements {
+    func convertToParameters() -> Parameters {
         
         if children.count == 0 {
             return []
         }
         
         if children.count == 1 {
-            return [children[0].convertToFunctionBodyStatement()]
+            return [children[0].convertToParameter()]
         }
         
         if children.count == 2 {
-            return children[0].convertToFunctionBodyStatements() + [children[1].convertToFunctionBodyStatement()]
+            return children[0].convertToParameters() + [children[1].convertToParameter()]
         }
         
         if children.count == 3 {
-            return children[0].convertToFunctionBodyStatements() + [children[2].convertToFunctionBodyStatement()]
+            return children[0].convertToParameters() + [children[2].convertToParameter()]
+        }
+        
+        fatalError()
+        
+    }
+    
+}
+public extension SLRNode {
+    
+    func convertToTopLevelStatements() -> TopLevelStatements {
+        
+        if children.count == 0 {
+            return []
+        }
+        
+        if children.count == 1 {
+            return [children[0].convertToTopLevelStatement()]
+        }
+        
+        if children.count == 2 {
+            return children[0].convertToTopLevelStatements() + [children[1].convertToTopLevelStatement()]
+        }
+        
+        if children.count == 3 {
+            return children[0].convertToTopLevelStatements() + [children[2].convertToTopLevelStatement()]
         }
         
         fatalError()
@@ -334,6 +334,11 @@ public extension SLRNode {
         if type == "TopLevelStatement" && children[0].type == "Function" {
             let nonTerminalNode = children[0].convertToFunction()
             return TopLevelStatement.function(nonTerminalNode)
+        }
+	
+        if type == "TopLevelStatement" && children[0].type == "Import" {
+            let nonTerminalNode = children[0].convertToImport()
+            return TopLevelStatement.`import`(nonTerminalNode)
         }
 	
         fatalError()
@@ -754,6 +759,21 @@ public extension SLRNode {
 		if type == "TypeCast" && children.count == 4 && children[0].type == "(" && children[1].type == "as" && children[2].type == "Type" && children[3].type == ")" {
 			let arg2 = children[2].convertToType()
 			return .init(arg2)
+		}
+		
+		fatalError()
+		
+	}
+
+}
+
+public extension SLRNode {
+
+	func convertToImport() -> Import {
+		
+		if type == "Import" && children.count == 3 && children[0].type == "import" && children[1].type == "identifier" && children[2].type == ";" {
+			let arg1 = children[1].convertToTerminal()
+			return .init(arg1)
 		}
 		
 		fatalError()
