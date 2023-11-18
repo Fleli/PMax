@@ -21,8 +21,7 @@ class Label: Hashable, CustomStringConvertible {
         hasher.combine(name)
     }
     
-    static
-    func == (lhs: Label, rhs: Label) -> Bool {
+    static func == (lhs: Label, rhs: Label) -> Bool {
         return lhs.name == rhs.name
     }
     

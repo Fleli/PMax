@@ -14,7 +14,8 @@ class TACLowerer: CustomStringConvertible {
     
     private var structs: [String : PILStruct] = [:]
     
-    private(set) var functionLabels: [String : Label] = [:]
+    private var internalFunctionLabels: [String : Label] = [:]
+    private var externalFunctionLabels: [String : String] = [:]
     
     private(set) var functions: [String : PILFunction] = [:]
     
@@ -40,12 +41,18 @@ class TACLowerer: CustomStringConvertible {
         for function in functions {
             
             let function = function.value
-            let entry = function.entryLabelName()
-            let newLabel = newLabel(entry, true)
-            functionLabels[function.name] = newLabel
             
-            if case .external(let assembly, _) = function.body {
+            if case .external(let assembly, let entry) = function.body {
+                
                 libraryAssembly.append(assembly)
+                externalFunctionLabels[function.name] = entry
+                
+            } else {
+                
+                let entry = function.entryLabelName()
+                let newLabel = newLabel(entry, true)
+                internalFunctionLabels[function.name] = newLabel
+                
             }
             
         }
@@ -70,7 +77,7 @@ class TACLowerer: CustomStringConvertible {
                 local.declare(parameter.type, parameter.label)
             }
             
-            activeLabel = functionLabels[function.name]!
+            activeLabel = internalFunctionLabels[function.name]!
             
             for statement in lowered {
                 statement.lowerToTAC(self)
@@ -85,7 +92,7 @@ class TACLowerer: CustomStringConvertible {
         }
         
         let mainLabel = Label("__main")
-        let fnMainLabel = functionLabels["main"]!
+        let fnMainLabel = internalFunctionLabels["main"]!
         mainLabel.newStatement(.jump(label: fnMainLabel.name))
         labels.insert(mainLabel, at: 0)
         
@@ -158,8 +165,16 @@ class TACLowerer: CustomStringConvertible {
     }
     
     var description: String {
+        labels.reduce("", {$0 + $1.description + "\n"})
+    }
+    
+    func getFunctionEntryPoint(_ function: String) -> String {
         
-        return labels.reduce("", {$0 + $1.description + "\n"})
+        if let internalFunction = internalFunctionLabels[function] {
+            return internalFunction.name
+        } else {
+            return externalFunctionLabels[function]!
+        }
         
     }
     

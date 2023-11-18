@@ -57,7 +57,7 @@ extension PILExpression {
             
             let returnLabel = lowerer.newLabel("\(pILCall.name)_ret", false)
             
-            let callLabel = lowerer.functionLabels[pILCall.name]!.name
+            let callLabel = lowerer.getFunctionEntryPoint(pILCall.name)
             
             let retType = lowerer.functions[pILCall.name]!.type
             let retSize = lowerer.sizeOf(retType)

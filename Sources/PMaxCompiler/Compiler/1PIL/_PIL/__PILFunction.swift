@@ -104,6 +104,7 @@ class PILFunction: CustomStringConvertible {
     
     func verifyReturns(_ lowerer: PILLowerer) {
         
+        // If the function is external (within a library), it is assumed that its semantics are already verified.
         guard case .pmax(let underlyingFunction, var lowered) = body else {
             return
         }
