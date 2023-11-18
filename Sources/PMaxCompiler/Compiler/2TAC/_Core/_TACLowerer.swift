@@ -38,8 +38,8 @@ class TACLowerer: CustomStringConvertible {
         for function in functions {
             
             let function = function.value
-            
-            let newLabel = newLabel("fn_\(function.name)")
+            let entry = function.entryLabelName()
+            let newLabel = newLabel(entry, true)
             functionLabels[function.name] = newLabel
             
         }
@@ -47,6 +47,12 @@ class TACLowerer: CustomStringConvertible {
         var containsValidMain = false
         
         for function in functions.values {
+            
+            let body = function.body
+            
+            guard case .pmax(_, let lowered) = body else {
+                return
+            }
             
             push()
             
@@ -60,7 +66,7 @@ class TACLowerer: CustomStringConvertible {
             
             activeLabel = functionLabels[function.name]!
             
-            for statement in function.body {
+            for statement in lowered {
                 statement.lowerToTAC(self)
             }
             
@@ -97,14 +103,19 @@ class TACLowerer: CustomStringConvertible {
     }
     
     
-    /// Create a new label named within the given `context`. Will return the label, but **won't use it as the new active label.** Doing so is up to the caller.
-    func newLabel(_ context: String) -> Label {
+    /// Create a new label. If `isFunctionEntry` (if this is the label jumped to when calling a function), its name is the `context`. For other labels used in `if`s etc., an internal counter makes sure no names clash, and just uses the context to give the label an informative name.
+    func newLabel(_ context: String, _ isFunctionEntry: Bool) -> Label {
         
-        internalCounter += 1
+        let newLabel: Label
         
-        let newLabel = Label("label\(internalCounter)_\(context)")
+        if isFunctionEntry {
+            newLabel = Label(context)
+        } else {
+            internalCounter += 1
+            newLabel = Label("l\(internalCounter)_\(context)")
+        }
+        
         labels.append(newLabel)
-        
         return newLabel
         
     }

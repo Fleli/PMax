@@ -88,12 +88,6 @@ class PILLowerer {
                 continue
             }
             
-            print("\(function.name)")
-            
-            function.body.forEach {
-                print($0.printableDescription(1))
-            }
-            
         }
         
     }
