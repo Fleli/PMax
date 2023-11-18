@@ -20,6 +20,8 @@ class TACLowerer: CustomStringConvertible {
     
     private(set) var labels: [Label] = []
     
+    private(set) var libraryAssembly: [String] = []
+    
     private(set) var errors: [PMaxError] = []
     
     init(_ pilLowerer: PILLowerer) {
@@ -42,6 +44,10 @@ class TACLowerer: CustomStringConvertible {
             let newLabel = newLabel(entry, true)
             functionLabels[function.name] = newLabel
             
+            if case .external(let assembly, _) = function.body {
+                libraryAssembly.append(assembly)
+            }
+            
         }
         
         var containsValidMain = false
@@ -51,7 +57,7 @@ class TACLowerer: CustomStringConvertible {
             let body = function.body
             
             guard case .pmax(_, let lowered) = body else {
-                return
+                continue
             }
             
             push()

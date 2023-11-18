@@ -77,7 +77,10 @@ extension Compiler {
         let labels = tacLowerer.labels
         let asmLowerer = AssemblyLowerer(labels)
         
-        let code = asmLowerer.lower()
+        let libCode = tacLowerer.libraryAssembly.reduce("") { $0 + $1 + "\n" }
+        
+        let code = libCode + asmLowerer.lower()
+        
         write(.assemblyCode, code)
         profiler.register(.assemblyCode)
         

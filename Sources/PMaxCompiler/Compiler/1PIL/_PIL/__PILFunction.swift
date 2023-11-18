@@ -28,8 +28,8 @@ class PILFunction: CustomStringConvertible {
                 "\(type) \(name) (\(parameters.description.dropFirst().dropLast())) {\n"
             +   body.reduce("") { $0 + $1.printableDescription(1) }
             +   "}\n"
-        case .external(let assembly, _):
-            return assembly
+        case .external(_, let entry):
+            return "[extern] \(entry)\n"
         }
             
     }
