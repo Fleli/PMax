@@ -1,9 +1,9 @@
 extension PILExpression {
     
     
-    func lowerLHSMember(_ main: PILExpression, _ member: String, _ lowerer: TACLowerer) -> Location {
+    func lowerLHSMember(_ main: PILExpression, _ member: String, _ lowerer: TACLowerer, _ function: String) -> Location {
         
-        let mainLocationAsLHS = main.lowerToTACAsLHS(lowerer)
+        let mainLocationAsLHS = main.lowerToTACAsLHS(lowerer, function)
         
         guard case .struct(let name) = main.type else {
             // Incorrect attempts to access non-struct member should have been caught in PIL.

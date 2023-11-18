@@ -1,7 +1,7 @@
 extension PILStatement {
     
     
-    func lowerToTAC(_ lowerer: TACLowerer) {
+    func lowerToTAC(_ lowerer: TACLowerer, _ function: String) {
         
         switch self {
             
@@ -12,8 +12,8 @@ extension PILStatement {
             
         case .assignment(let lhs, let rhs):
             
-            let lhsLocation = lhs.lowerToTACAsLHS(lowerer)
-            let rhsLocation = rhs.lowerToTAC(lowerer)
+            let lhsLocation = lhs.lowerToTACAsLHS(lowerer, function)
+            let rhsLocation = rhs.lowerToTAC(lowerer, function)
             
             let wordsToAssign = lowerer.sizeOf(lhs.type)
             let statement = TACStatement.assign(lhs: lhsLocation, rhs: rhsLocation, words: wordsToAssign)
@@ -21,7 +21,7 @@ extension PILStatement {
             
         case .return(let expression):
             
-            let value = expression?.lowerToTAC(lowerer)
+            let value = expression?.lowerToTAC(lowerer, function)
             
             var words = 0
             
@@ -34,19 +34,19 @@ extension PILStatement {
              
         case .if(let pILIfStatement):
             
-            let continueLabel = lowerer.newLabel("if_next", false)
-            pILIfStatement.lowerToTAC(lowerer, continueLabel)
+            let continueLabel = lowerer.newLabel("if_next", false, function)
+            pILIfStatement.lowerToTAC(lowerer, continueLabel, function)
             
         case .while(let condition, let body):
             
             // After the while loop is finished, we start to work on nextLabel.
-            let nextLabel = lowerer.newLabel("while_next", false)
+            let nextLabel = lowerer.newLabel("while_next", false, function)
             
             // We also generate the body label, which is where the while loop's body begins.
-            let bodyLabel = lowerer.newLabel("while_body", false)
+            let bodyLabel = lowerer.newLabel("while_body", false, function)
             
             // Create the condition evaluation label and jump to it
-            let conditionEvaluationLabel = lowerer.newLabel("while_condition", false)
+            let conditionEvaluationLabel = lowerer.newLabel("while_condition", false, function)
             let jumpToConditionEvaluation = TACStatement.jump(label: conditionEvaluationLabel.name)
             lowerer.activeLabel.newStatement(jumpToConditionEvaluation)
             
@@ -54,7 +54,7 @@ extension PILStatement {
             lowerer.activeLabel = conditionEvaluationLabel
             
             // If the condition is true, move to the body.
-            let conditionResult = condition.lowerToTAC(lowerer)
+            let conditionResult = condition.lowerToTAC(lowerer, function)
             let jumpToBody = TACStatement.jumpIfNonZero(label: bodyLabel.name, variable: conditionResult)
             lowerer.activeLabel.newStatement(jumpToBody)
             
@@ -66,7 +66,7 @@ extension PILStatement {
             lowerer.push()
             
             for statement in body {
-                statement.lowerToTAC(lowerer)
+                statement.lowerToTAC(lowerer, function)
             }
             
             let jumpBackToCondition = TACStatement.jump(label: conditionEvaluationLabel.name)

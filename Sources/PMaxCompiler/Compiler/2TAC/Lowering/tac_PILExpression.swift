@@ -1,12 +1,12 @@
 extension PILExpression {
     
     /// The `lowerToTAC(_:)` method on `PILExpression` lowers a `PILExpression` to three-address code. It also returns the name of the variable that contains the result of the computation.
-    func lowerToTAC(_ lowerer: TACLowerer) -> Location {
+    func lowerToTAC(_ lowerer: TACLowerer, _ function: String) -> Location {
         
         switch value {
         case .unary(let `operator`, let arg):
             
-            let argument = arg.lowerToTAC(lowerer)
+            let argument = arg.lowerToTAC(lowerer, function)
             let result = lowerer.newInternalVariable("unary:\(`operator`.rawValue)", self.type)
             
             let tac = TACStatement.assignUnaryOperation(lhs: result, operation: `operator`, arg: argument)
@@ -18,8 +18,8 @@ extension PILExpression {
             
             let result = lowerer.newInternalVariable("binary:\(`operator`.rawValue)", self.type)
             
-            let argument1 = arg1.lowerToTAC(lowerer)
-            let argument2 = arg2.lowerToTAC(lowerer)
+            let argument1 = arg1.lowerToTAC(lowerer, function)
+            let argument2 = arg2.lowerToTAC(lowerer, function)
             
             let tac = TACStatement.assignBinaryOperation(lhs: result, operation: `operator`, arg1: argument1, arg2: argument2)
             lowerer.activeLabel.newStatement(tac)
@@ -32,7 +32,7 @@ extension PILExpression {
             
             // We first calculate each argument and remember their names.
             for argument in pILCall.arguments {
-                let name = argument.lowerToTAC(lowerer)
+                let name = argument.lowerToTAC(lowerer, function)
                 let words = lowerer.sizeOf(argument.type)
                 loweredArguments.append((name, words))
             }
@@ -55,7 +55,7 @@ extension PILExpression {
                 lowerer.activeLabel.newStatement(statement)
             }
             
-            let returnLabel = lowerer.newLabel("\(pILCall.name)_ret", false)
+            let returnLabel = lowerer.newLabel("\(pILCall.name)_ret", false, function)
             
             let callLabel = lowerer.getFunctionEntryPoint(pILCall.name)
             
@@ -86,7 +86,7 @@ extension PILExpression {
             
         case .dereference(let pILExpression):
             
-            let argument = pILExpression.lowerToTAC(lowerer)
+            let argument = pILExpression.lowerToTAC(lowerer, function)
             
             let lhs = lowerer.newInternalVariable("dereference", self.type)
             let words = lowerer.sizeOf(self.type)
@@ -98,7 +98,7 @@ extension PILExpression {
             
         case .addressOf(let pILExpression):
             
-            let argument = pILExpression.lowerToTAC(lowerer)
+            let argument = pILExpression.lowerToTAC(lowerer, function)
             
             let lhs = lowerer.newInternalVariable("addressOf", self.type)
             let statement = TACStatement.addressOf(lhs: lhs, arg: argument)
@@ -109,7 +109,7 @@ extension PILExpression {
             
         case .member(let main, let member):
             
-            return lowerMemberToTAC(main, member, lowerer)
+            return lowerMemberToTAC(main, member, lowerer, function)
             
         }
         

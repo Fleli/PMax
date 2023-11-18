@@ -4,7 +4,7 @@ extension PILExpression {
     static var offsetCalculationCount = 0
     
     
-    func lowerToTACAsLHS(_ lowerer: TACLowerer) -> Location {
+    func lowerToTACAsLHS(_ lowerer: TACLowerer, _ function: String) -> Location {
         
         switch value {
             
@@ -14,7 +14,7 @@ extension PILExpression {
             
         case .dereference(let dereferenced):
             
-            guard case .framePointer(let offset) = dereferenced.lowerToTAC(lowerer) else {
+            guard case .framePointer(let offset) = dereferenced.lowerToTAC(lowerer, function) else {
                 // TODO: The assumption that this guard never fails may be incorrect. Double-check this.
                 fatalError()
             }
@@ -23,7 +23,7 @@ extension PILExpression {
             
         case .member(let main, let member):
             
-            return lowerLHSMember(main, member, lowerer)
+            return lowerLHSMember(main, member, lowerer, function)
             
         // Avoid default cases. Explicitly state which cases submit an error.
         case .integerLiteral(_), .addressOf(_), .unary(_, _), .binary(_, _, _), .call(_):

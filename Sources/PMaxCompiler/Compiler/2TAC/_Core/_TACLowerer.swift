@@ -19,8 +19,13 @@ class TACLowerer: CustomStringConvertible {
     
     private(set) var functions: [String : PILFunction] = [:]
     
+    /// The `relatedLabels` dictionary maps a function name (`String`) to the set of labels associated with that function, and also explicitly stores the entry label. This is useful when compiling a library.
+    private(set) var relatedLabels: [String : (entry: Label, all: Set<Label>)] = [:]
+    
+    /// The `labels` array simply stores all labels in the order they were created, which is the default for compiling executables.
     private(set) var labels: [Label] = []
     
+    /// `libraryAssembly` stores a list of assembly code snippets fetched from imported libraries. They are `reduce`d to a single `String` and pasted in with the rest of the assembly when compiling executables.
     private(set) var libraryAssembly: [String] = []
     
     private(set) var errors: [PMaxError] = []
@@ -50,7 +55,7 @@ class TACLowerer: CustomStringConvertible {
             } else {
                 
                 let entry = function.entryLabelName()
-                let newLabel = newLabel(entry, true)
+                let newLabel = newLabel(entry, true, function.name)
                 internalFunctionLabels[function.name] = newLabel
                 
             }
@@ -80,7 +85,7 @@ class TACLowerer: CustomStringConvertible {
             activeLabel = internalFunctionLabels[function.name]!
             
             for statement in lowered {
-                statement.lowerToTAC(self)
+                statement.lowerToTAC(self, function.name)
             }
             
             pop()
@@ -117,18 +122,20 @@ class TACLowerer: CustomStringConvertible {
     
     
     /// Create a new label. If `isFunctionEntry` (if this is the label jumped to when calling a function), its name is the `context`. For other labels used in `if`s etc., an internal counter makes sure no names clash, and just uses the context to give the label an informative name.
-    func newLabel(_ context: String, _ isFunctionEntry: Bool) -> Label {
+    func newLabel(_ context: String, _ isFunctionEntry: Bool, _ function: String) -> Label {
         
         let newLabel: Label
         
         if isFunctionEntry {
             newLabel = Label(context)
+            relatedLabels[function] = (entry: newLabel, all: [newLabel])
         } else {
             internalCounter += 1
             newLabel = Label("l\(internalCounter)_\(context)")
         }
         
         labels.append(newLabel)
+        relatedLabels[function]?.all.insert(newLabel)
         return newLabel
         
     }
