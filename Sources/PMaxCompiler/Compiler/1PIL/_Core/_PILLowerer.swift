@@ -58,19 +58,17 @@ class PILLowerer {
             switch syntacticStatement {
             case .struct(let `struct`):
                 
-                let newStruct = PILStruct(`struct`, self)
-                structs[newStruct.name] = newStruct
+                self.newStruct(`struct`)
                 
             case .function(let function):
                 
-                let name = function.name
                 let pilFunction = PILFunction(function, self)
-                functions[name] = pilFunction
+                self.newFunction(pilFunction)
                 
             case .import(let `import`):
                 
                 let library = `import`.library
-                preprocessor.importLibrary(library, &structs, &functions)
+                preprocessor.importLibrary(library, self)
                 
             }
             
@@ -146,6 +144,19 @@ class PILLowerer {
     
     func submitError(_ newError: PMaxError) {
         errors.append(newError)
+    }
+    
+    // TODO: Potential issue: How are collisions handled?
+    /// Take a syntactical `Struct` object and add it to the internal dictionary of structs.
+    func newStruct(_ `struct`: Struct) {
+        let newStruct = PILStruct(`struct`, self)
+        structs[newStruct.name] = newStruct
+    }
+    
+    // TODO: Potential issue: How are collisions handled?
+    /// Take a `PILFunction` object and add it to the internal dictionary of functions.
+    func newFunction(_ pilFunction: PILFunction) {
+        functions[pilFunction.name] = pilFunction
     }
     
 }

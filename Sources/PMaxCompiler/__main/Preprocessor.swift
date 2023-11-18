@@ -3,6 +3,9 @@ import Foundation
 class Preprocessor {
     
     
+    typealias Structs = [String : PILStruct]
+    typealias Functions = [String : PILFunction]
+    
     typealias Closure = () -> ()
     
     
@@ -14,6 +17,8 @@ class Preprocessor {
     
     let fileManager = Foundation.FileManager()
     
+    var lowerer: PILLowerer! = nil
+    
     
     init(_ compiler: Compiler) {
         
@@ -23,7 +28,9 @@ class Preprocessor {
     }
     
     
-    func importLibrary(_ fileName: String, _ structs: inout [String : PILStruct], _ externalFunctions: inout [String : PILFunction]) {
+    func importLibrary(_ fileName: String, _ lowerer: PILLowerer) {
+        
+        self.lowerer = lowerer
         
         let fileName = fileName + ".hmax"
         
@@ -32,8 +39,6 @@ class Preprocessor {
             // Probably doesn't need to submit error: If a library is already imported, just don't reimport it.
             return
         }
-        
-        print("Search through directories \(libraryPaths)")
         
         var pathIndex = 0
         var content: String? = nil
@@ -54,24 +59,23 @@ class Preprocessor {
             return
         }
         
-        print("Result of search: {\(content)}")
+        parseImport(fileName, content)
         
     }
     
     
     /// Notify the preprocessor that a new `struct` was found in a given library.
     func newStruct(_ library: String, _ `struct`: Struct) {
-        
-        
-        
+        print("[External] Added struct \(`struct`.name) to the type pool.")
+        lowerer.newStruct(`struct`)
     }
     
     
     /// Notify the preprocessor that a new function was encountered.The `function` parameter is used to verify that calls to it match the name, argument count, and types. `entry` and `body` are used in assembly lowering to create the actual link (upon calls) between the library and the caller.
     func newFunction(_ library: String, _ function: Function, _ entry: String, _ body: String) {
-        
-        print("New function: \(function.name) entry @ \(entry) with body {\(body)}")
-        
+        print("[External] Added function \(function.name) to the function pool.")
+        let function = PILFunction(function, body, entry, lowerer)
+        lowerer.newFunction(function)
     }
     
     

@@ -30,22 +30,22 @@ public extension SLRNode {
 }
 public extension SLRNode {
     
-    func convertToFunctionBodyStatements() -> FunctionBodyStatements {
+    func convertToParameters() -> Parameters {
         
         if children.count == 0 {
             return []
         }
         
         if children.count == 1 {
-            return [children[0].convertToFunctionBodyStatement()]
+            return [children[0].convertToParameter()]
         }
         
         if children.count == 2 {
-            return children[0].convertToFunctionBodyStatements() + [children[1].convertToFunctionBodyStatement()]
+            return children[0].convertToParameters() + [children[1].convertToParameter()]
         }
         
         if children.count == 3 {
-            return children[0].convertToFunctionBodyStatements() + [children[2].convertToFunctionBodyStatement()]
+            return children[0].convertToParameters() + [children[2].convertToParameter()]
         }
         
         fatalError()
@@ -80,22 +80,22 @@ public extension SLRNode {
 }
 public extension SLRNode {
     
-    func convertToParameters() -> Parameters {
+    func convertToFunctionBodyStatements() -> FunctionBodyStatements {
         
         if children.count == 0 {
             return []
         }
         
         if children.count == 1 {
-            return [children[0].convertToParameter()]
+            return [children[0].convertToFunctionBodyStatement()]
         }
         
         if children.count == 2 {
-            return children[0].convertToParameters() + [children[1].convertToParameter()]
+            return children[0].convertToFunctionBodyStatements() + [children[1].convertToFunctionBodyStatement()]
         }
         
         if children.count == 3 {
-            return children[0].convertToParameters() + [children[2].convertToParameter()]
+            return children[0].convertToFunctionBodyStatements() + [children[2].convertToFunctionBodyStatement()]
         }
         
         fatalError()

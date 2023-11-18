@@ -2,6 +2,8 @@ extension Preprocessor {
     
     func parseImport(_ library: String, _ hmaxFile: String) {
         
+        print("Parsing library '\(library)'.")
+        
         let lexer = Lexer()
         let parser = SLRParser()
         
@@ -11,6 +13,7 @@ extension Preprocessor {
             
             guard let slrTree = try parser.parse(tokens) else {
                 // TODO: Submit an error.
+                print("Syntactical error.\n")
                 return
             }
             
@@ -24,6 +27,7 @@ extension Preprocessor {
                 case .function(let function):
                     verifyFunction(library, function)
                 case .import(_):
+                    print("(Ignored) Transitive import")
                     // TODO: Get back to the issue of transitive imports. It requires care to be done right.
                     break
                 }
