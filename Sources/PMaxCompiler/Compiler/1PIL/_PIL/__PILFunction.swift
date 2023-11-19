@@ -12,6 +12,11 @@ class PILFunction: CustomStringConvertible {
         "\(name): \(parameters.map {$0.type}) -> \(type)"
     }
     
+    /// Reconstruct the function's signature on the form `T N ( Args )` for return type `T`, function name `N` and argument list `Args`.
+    var signature: String {
+        type.description + " " + name + "(" + parameters.listForm(", ") + ")"
+    }
+    
     func entryLabelName() -> String {
         switch self.body {
         case .pmax(_, _):
@@ -130,15 +135,35 @@ class PILFunction: CustomStringConvertible {
         
     }
     
-    struct PILParameter {
+    struct PILParameter: CustomStringConvertible {
         
         let type: PILType
         let label: String
+        
+        var description: String {
+            type.description + " " + label
+        }
         
         init(_ type: PILType, _ label: String) {
             self.type = type
             self.label = label
         }
+        
+    }
+    
+}
+
+private extension Array where Element: CustomStringConvertible {
+    
+    func listForm(_ separator: String = ", ") -> String {
+        
+        if count == 0 {
+            return ""
+        }
+        
+        let list = reduce("") { $0 + $1.description + separator }.dropLast(separator.count)
+        
+        return String(list)
         
     }
     

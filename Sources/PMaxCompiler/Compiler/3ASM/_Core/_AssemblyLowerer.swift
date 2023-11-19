@@ -13,18 +13,21 @@ class AssemblyLowerer {
         
         var output = ""
         
-        for function in tacLabels {
-            
-            let name = function.key
-            let labelGroup = function.value
+        for labelGroup in tacLabels.values {
             
             let asmString = labelGroup.all.reduce("") { $0 + $1.lowerToBreadboardAssembly() + "\n" }
             
             if compileAsLibrary {
-                // TODO: We need the function's signature to make a valid library file.
-                output += "[lib]\n" + asmString
+                
+                let entry = labelGroup.entry.name
+                let signature = labelGroup.pilFunction.signature
+                
+                output += buildLibraryFunction(signature, entry, asmString)
+                
             } else {
+                
                 output += asmString
+                
             }
             
         }
@@ -33,5 +36,15 @@ class AssemblyLowerer {
         
     }
     
+    private func buildLibraryFunction(_ signature: String, _ entryLabel: String, _ assembly: String) -> String {
+        
+        let entryStatement = "\tLabel \(entryLabel);\n"
+        let asmStatement = "\tassign asm = \"\(assembly)\";\n"
+        
+        let libraryFunction = signature + " {\n" + entryStatement + asmStatement + "}"
+        
+        return libraryFunction
+        
+    }
     
 }
