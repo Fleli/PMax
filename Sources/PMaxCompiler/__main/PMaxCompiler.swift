@@ -39,7 +39,7 @@ public final class Compiler {
     }
     
     
-    public func compile(_ sourceCode: String) throws {
+    public func compile(_ sourceCode: String, _ asLibrary: Bool) throws {
         
         self.encounteredErrors.removeAll()
         self.profiler = CompilerProfiler()
@@ -47,7 +47,7 @@ public final class Compiler {
         
         do {
             
-            try lex(sourceCode)
+            try lex(sourceCode, asLibrary)
             
         } catch let error as ParseError {
             

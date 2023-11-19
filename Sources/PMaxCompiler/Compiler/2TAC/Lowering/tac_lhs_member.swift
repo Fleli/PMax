@@ -1,7 +1,7 @@
 extension PILExpression {
     
     
-    func lowerLHSMember(_ main: PILExpression, _ member: String, _ lowerer: TACLowerer, _ function: String) -> Location {
+    func lowerLHSMember(_ main: PILExpression, _ member: String, _ lowerer: TACLowerer, _ function: PILFunction) -> Location {
         
         let mainLocationAsLHS = main.lowerToTACAsLHS(lowerer, function)
         

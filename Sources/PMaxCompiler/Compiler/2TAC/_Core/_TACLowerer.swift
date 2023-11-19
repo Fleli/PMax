@@ -1,5 +1,7 @@
 class TACLowerer: CustomStringConvertible {
     
+    typealias Labels = [String : (pilFunction: PILFunction, entry: Label, all: Set<Label>)]
+    
     var local: TACScope!
     
     var activeLabel: Label!
@@ -14,16 +16,10 @@ class TACLowerer: CustomStringConvertible {
     
     private var structs: [String : PILStruct] = [:]
     
-    private var internalFunctionLabels: [String : Label] = [:]
-    private var externalFunctionLabels: [String : String] = [:]
-    
     private(set) var functions: [String : PILFunction] = [:]
     
     /// The `relatedLabels` dictionary maps a function name (`String`) to the set of labels associated with that function, and also explicitly stores the entry label. This is useful when compiling a library.
-    private(set) var relatedLabels: [String : (entry: Label, all: Set<Label>)] = [:]
-    
-    /// The `labels` array simply stores all labels in the order they were created, which is the default for compiling executables.
-    private(set) var labels: [Label] = []
+    private(set) var labels: Labels = [:]
     
     /// `libraryAssembly` stores a list of assembly code snippets fetched from imported libraries. They are `reduce`d to a single `String` and pasted in with the rest of the assembly when compiling executables.
     private(set) var libraryAssembly: [String] = []
@@ -41,7 +37,7 @@ class TACLowerer: CustomStringConvertible {
     }
     
     
-    func lower() {
+    func lower(_ compileAsLibrary: Bool) {
         
         for function in functions {
             
@@ -50,13 +46,11 @@ class TACLowerer: CustomStringConvertible {
             if case .external(let assembly, let entry) = function.body {
                 
                 libraryAssembly.append(assembly)
-                externalFunctionLabels[function.name] = entry
                 
             } else {
                 
                 let entry = function.entryLabelName()
-                let newLabel = newLabel(entry, true, function.name)
-                internalFunctionLabels[function.name] = newLabel
+                newLabel(entry, true, function)
                 
             }
             
@@ -82,36 +76,26 @@ class TACLowerer: CustomStringConvertible {
                 local.declare(parameter.type, parameter.label)
             }
             
-            activeLabel = internalFunctionLabels[function.name]!
+            activeLabel = labels[function.name]!.entry
             
             for statement in lowered {
-                statement.lowerToTAC(self, function.name)
+                statement.lowerToTAC(self, function)
             }
             
             pop()
             
         }
         
-        if !containsValidMain {
+        guard containsValidMain || compileAsLibrary else {
             submitError(.hasNoValidMain)
-        }
-        
-        let mainLabel = Label("__main")
-        let fnMainLabel = internalFunctionLabels["main"]!
-        mainLabel.newStatement(.jump(label: fnMainLabel.name))
-        labels.insert(mainLabel, at: 0)
-        
-        guard Compiler.allowPrinting else {
             return
         }
         
-        print("\n\nRESULT FROM LOWERING TO THREE-ADDRESS CODE (TAC):\n")
-        
-        for label in labels {
-            print(label.description)
+        if let fnMainLabelGroup = labels["main"] {
+            let mainLabel = Label("__main")
+            mainLabel.newStatement(.jump(label: fnMainLabelGroup.entry.name))
+            labels["@MAIN"] = (pilFunction: fnMainLabelGroup.pilFunction, entry: mainLabel, all: [mainLabel])
         }
-        
-        print("\n")
         
     }
     
@@ -122,20 +106,20 @@ class TACLowerer: CustomStringConvertible {
     
     
     /// Create a new label. If `isFunctionEntry` (if this is the label jumped to when calling a function), its name is the `context`. For other labels used in `if`s etc., an internal counter makes sure no names clash, and just uses the context to give the label an informative name.
-    func newLabel(_ context: String, _ isFunctionEntry: Bool, _ function: String) -> Label {
+    @discardableResult
+    func newLabel(_ context: String, _ isFunctionEntry: Bool, _ function: PILFunction) -> Label {
         
         let newLabel: Label
         
         if isFunctionEntry {
             newLabel = Label(context)
-            relatedLabels[function] = (entry: newLabel, all: [newLabel])
+            labels[function.name] = (pilFunction: function, entry: newLabel, all: [newLabel])
         } else {
             internalCounter += 1
             newLabel = Label("l\(internalCounter)_\(context)")
         }
         
-        labels.append(newLabel)
-        relatedLabels[function]?.all.insert(newLabel)
+        labels[function.name]?.all.insert(newLabel)
         return newLabel
         
     }
@@ -172,16 +156,17 @@ class TACLowerer: CustomStringConvertible {
     }
     
     var description: String {
-        labels.reduce("", {$0 + $1.description + "\n"})
+        labels.reduce("", {$0 + "(" + $1.key + ")\n" + $1.value.all.reduce("") { $0 + $1.description + "\n" } + "\n"})
     }
     
     func getFunctionEntryPoint(_ function: String) -> String {
         
-        if let internalFunction = internalFunctionLabels[function] {
-            return internalFunction.name
-        } else {
-            return externalFunctionLabels[function]!
+        guard let labelGroup = labels[function] else {
+            // TODO: Verify that this is unreachable.
+            fatalError()
         }
+        
+        return labelGroup.entry.name
         
     }
     

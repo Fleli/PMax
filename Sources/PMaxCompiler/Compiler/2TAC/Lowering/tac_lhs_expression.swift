@@ -4,7 +4,7 @@ extension PILExpression {
     static var offsetCalculationCount = 0
     
     
-    func lowerToTACAsLHS(_ lowerer: TACLowerer, _ function: String) -> Location {
+    func lowerToTACAsLHS(_ lowerer: TACLowerer, _ function: PILFunction) -> Location {
         
         switch value {
             

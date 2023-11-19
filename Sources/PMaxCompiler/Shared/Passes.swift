@@ -1,7 +1,7 @@
 extension Compiler {
     
     
-    func lex(_ sourceCode: String) throws {
+    func lex(_ sourceCode: String, _ asLibrary: Bool) throws {
         
         let rawTokens = try Lexer().lex(sourceCode)
         let tokens = filterTokens(rawTokens)
@@ -10,12 +10,12 @@ extension Compiler {
         write(.tokens, tokensFileContent)
         profiler.register(.tokens)
         
-        try parse(tokens)
+        try parse(tokens, asLibrary)
         
     }
     
     
-    func parse(_ tokens: [Token]) throws {
+    func parse(_ tokens: [Token], _ asLibrary: Bool) throws {
         
         let slrNodeTree = try SLRParser().parse(tokens)
         
@@ -29,12 +29,12 @@ extension Compiler {
         let converted = slrNodeTree.convertToTopLevelStatements()
         profiler.register(.parseTree)
         
-        lowerToPIL(converted)
+        lowerToPIL(converted, asLibrary)
         
     }
     
     
-    func lowerToPIL(_ converted: TopLevelStatements) {
+    func lowerToPIL(_ converted: TopLevelStatements, _ asLibrary: Bool) {
         
         let pilLowerer = PILLowerer(converted, preprocessor)
         pilLowerer.lower()
@@ -48,15 +48,15 @@ extension Compiler {
         write(.pmaxIntermediateLanguage, pilLowerer.readableDescription)
         profiler.register(.pmaxIntermediateLanguage)
         
-        lowerToTAC(pilLowerer)
+        lowerToTAC(pilLowerer, asLibrary)
         
     }
     
     
-    func lowerToTAC(_ pilLowerer: PILLowerer) {
+    func lowerToTAC(_ pilLowerer: PILLowerer, _ asLibrary: Bool) {
         
         let tacLowerer = TACLowerer(pilLowerer)
-        tacLowerer.lower()
+        tacLowerer.lower(asLibrary)
         
         encounteredErrors += tacLowerer.errors
         
@@ -67,19 +67,19 @@ extension Compiler {
         write(.threeAddressCode, tacLowerer.description)
         profiler.register(.threeAddressCode)
         
-        generateAssembly(tacLowerer)
+        generateAssembly(tacLowerer, asLibrary)
         
     }
     
     
-    func generateAssembly(_ tacLowerer: TACLowerer) {
+    func generateAssembly(_ tacLowerer: TACLowerer, _ asLibrary: Bool) {
         
         let labels = tacLowerer.labels
         let asmLowerer = AssemblyLowerer(labels)
         
         let libCode = tacLowerer.libraryAssembly.reduce("") { $0 + $1 + "\n" }
         
-        let code = libCode + asmLowerer.lower()
+        let code = libCode + asmLowerer.lower(asLibrary)
         
         write(.assemblyCode, code)
         profiler.register(.assemblyCode)

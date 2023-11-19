@@ -1,7 +1,7 @@
 extension PILIfStatement {
     
     
-    func lowerToTAC(_ lowerer: TACLowerer, _ continueLabel: Label, _ function: String) {
+    func lowerToTAC(_ lowerer: TACLowerer, _ continueLabel: Label, _ function: PILFunction) {
         
         // Vi begynner med å hoppe til condition-evalueringen
         let conditionEvaluationLabel = lowerer.newLabel("if_condition", false, function)

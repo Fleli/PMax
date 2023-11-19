@@ -1,7 +1,7 @@
 extension PILStatement {
     
     
-    func lowerToTAC(_ lowerer: TACLowerer, _ function: String) {
+    func lowerToTAC(_ lowerer: TACLowerer, _ function: PILFunction) {
         
         switch self {
             
