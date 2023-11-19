@@ -14,7 +14,7 @@ class TACLowerer: CustomStringConvertible {
     
     private var internalCounter = 0
     
-    private var structs: [String : PILStruct] = [:]
+    private(set) var structs: [String : PILStruct] = [:]
     
     private(set) var functions: [String : PILFunction] = [:]
     

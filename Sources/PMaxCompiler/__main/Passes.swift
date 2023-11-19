@@ -74,8 +74,7 @@ extension Compiler {
     
     func generateAssembly(_ tacLowerer: TACLowerer, _ asLibrary: Bool) {
         
-        let labels = tacLowerer.labels
-        let asmLowerer = AssemblyLowerer(labels)
+        let asmLowerer = AssemblyLowerer(tacLowerer)
         
         let libCode = tacLowerer.libraryAssembly.reduce("") { $0 + $1 + "\n" }
         
