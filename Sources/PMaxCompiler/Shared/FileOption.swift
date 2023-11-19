@@ -16,6 +16,8 @@ public enum DebugOption {
     case parseTree
     case pmaxIntermediateLanguage
     case threeAddressCode
+    
+    case libraryCode
     case assemblyCode
     
     case errors

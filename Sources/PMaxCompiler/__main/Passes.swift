@@ -81,8 +81,9 @@ extension Compiler {
         
         let code = libCode + asmLowerer.lower(asLibrary)
         
-        write(.assemblyCode, code)
-        profiler.register(.assemblyCode)
+        let option: DebugOption = asLibrary ? .libraryCode : .assemblyCode
+        write(option, code)
+        profiler.register(option)
         
     }
     
