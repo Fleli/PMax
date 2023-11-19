@@ -31,7 +31,21 @@ class PILStruct: CustomStringConvertible {
     }
     
     var description: String {
-        return "struct \(name) {\n" + fields.map { "\($0.value) \($0.key)" } . reduce("", {$0 + "\t" + $1 + ";\n"}) + "}"
+        
+        var string = "struct \(name) {\n"
+        
+        for field in sortedFields {
+            
+            let type = fields[field]!
+            let declaration = "\t\(type.description) \(field);\n"
+            string += declaration
+            
+        }
+        
+        string += "}"
+        
+        return string
+        
     }
     
 }
