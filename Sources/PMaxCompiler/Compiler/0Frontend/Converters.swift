@@ -30,31 +30,6 @@ public extension SLRNode {
 }
 public extension SLRNode {
     
-    func convertToParameters() -> Parameters {
-        
-        if children.count == 0 {
-            return []
-        }
-        
-        if children.count == 1 {
-            return [children[0].convertToParameter()]
-        }
-        
-        if children.count == 2 {
-            return children[0].convertToParameters() + [children[1].convertToParameter()]
-        }
-        
-        if children.count == 3 {
-            return children[0].convertToParameters() + [children[2].convertToParameter()]
-        }
-        
-        fatalError()
-        
-    }
-    
-}
-public extension SLRNode {
-    
     func convertToStructBodyStatements() -> StructBodyStatements {
         
         if children.count == 0 {
@@ -71,6 +46,31 @@ public extension SLRNode {
         
         if children.count == 3 {
             return children[0].convertToStructBodyStatements() + [children[2].convertToDeclaration()]
+        }
+        
+        fatalError()
+        
+    }
+    
+}
+public extension SLRNode {
+    
+    func convertToArguments() -> Arguments {
+        
+        if children.count == 0 {
+            return []
+        }
+        
+        if children.count == 1 {
+            return [children[0].convertToArgument()]
+        }
+        
+        if children.count == 2 {
+            return children[0].convertToArguments() + [children[1].convertToArgument()]
+        }
+        
+        if children.count == 3 {
+            return children[0].convertToArguments() + [children[2].convertToArgument()]
         }
         
         fatalError()
@@ -105,22 +105,22 @@ public extension SLRNode {
 }
 public extension SLRNode {
     
-    func convertToArguments() -> Arguments {
+    func convertToParameters() -> Parameters {
         
         if children.count == 0 {
             return []
         }
         
         if children.count == 1 {
-            return [children[0].convertToArgument()]
+            return [children[0].convertToParameter()]
         }
         
         if children.count == 2 {
-            return children[0].convertToArguments() + [children[1].convertToArgument()]
+            return children[0].convertToParameters() + [children[1].convertToParameter()]
         }
         
         if children.count == 3 {
-            return children[0].convertToArguments() + [children[2].convertToArgument()]
+            return children[0].convertToParameters() + [children[2].convertToParameter()]
         }
         
         fatalError()

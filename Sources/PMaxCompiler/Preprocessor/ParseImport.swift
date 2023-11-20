@@ -11,10 +11,6 @@ extension Preprocessor {
             
             let tokens = try lexer.lex(hmaxFile).filter { $0.type != "newline" && $0.type != "space" }
             
-            tokens.forEach {
-                print($0)
-            }
-            
             guard let slrTree = try parser.parse(tokens) else {
                 // TODO: Submit an error.
                 print("Syntactical error.\n")
@@ -36,6 +32,14 @@ extension Preprocessor {
                     break
                 }
                 
+            }
+            
+        } catch LexError.invalidCharacter(let char, let tokens) {
+            
+            print("Error. \(char).\n")
+            
+            tokens.forEach {
+                print($0)
             }
             
         } catch {

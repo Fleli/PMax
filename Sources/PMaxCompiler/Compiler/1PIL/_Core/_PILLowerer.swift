@@ -3,6 +3,8 @@ class PILLowerer {
     /// The `local` scope is used to notify the `PILLowerer`'s environment of declarations, and to verify the existence of variables when they are referenced.
     var local: PILScope!
     
+    let id = Int.random(in: 1 ... 10000000)
+    
     var noIssues: Bool {
         return errors.reduce(true, {$0 && $1.allowed})
     }
@@ -53,20 +55,25 @@ class PILLowerer {
     
     private func prepare() {
         
+        print(topLevelStatements)
+        
         for syntacticStatement in topLevelStatements {
             
             switch syntacticStatement {
             case .struct(let `struct`):
                 
+                print("new struct")
                 self.newStruct(`struct`)
                 
             case .function(let function):
                 
+                print("new function")
                 let pilFunction = PILFunction(function, self)
                 self.newFunction(pilFunction)
                 
             case .import(let `import`):
                 
+                print("new import")
                 let library = `import`.library
                 preprocessor.importLibrary(library, self)
                 
@@ -79,13 +86,7 @@ class PILLowerer {
     private func lowerFunctionBodies() {
         
         for function in functions.values {
-            
             function.lowerToPIL(self)
-            
-            guard Compiler.allowPrinting else {
-                continue
-            }
-            
         }
         
     }
@@ -151,6 +152,7 @@ class PILLowerer {
     func newStruct(_ `struct`: Struct) {
         let newStruct = PILStruct(`struct`, self)
         structs[newStruct.name] = newStruct
+        print("Added new struct \(newStruct) to lowerer id = \(id)")
     }
     
     // TODO: Potential issue: How are collisions handled?

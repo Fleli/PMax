@@ -29,6 +29,10 @@ class AssemblyLowerer {
     
     private func lowerAsLibrary(_ output: inout String) {
         
+        for pilStruct in lowerer.structs.values {
+            output += pilStruct.description + "\n\n"
+        }
+        
         for labelGroup in labels.values {
             
             let asmString = labelGroup.all.reduce("") { $0 + $1.lowerToBreadboardAssembly() + "\n" }
@@ -38,10 +42,6 @@ class AssemblyLowerer {
             
             output += buildLibraryFunction(signature, entry, asmString)
             
-        }
-        
-        for pilStruct in lowerer.structs.values {
-            output += pilStruct.description + "\n\n"
         }
         
     }

@@ -2,13 +2,6 @@ import Foundation
 
 class Preprocessor {
     
-    
-    typealias Structs = [String : PILStruct]
-    typealias Functions = [String : PILFunction]
-    
-    typealias Closure = () -> ()
-    
-    
     weak var compiler: Compiler!
     
     var importedLibraries: Set<String> = []
