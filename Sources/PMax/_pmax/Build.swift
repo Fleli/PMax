@@ -29,7 +29,7 @@ struct Build: ParsableCommand {
             
             let sourceCode = try assembleSourceCode()
             
-            // Compiling as a library is not allowed yet, since this function is not finished.
+            // Compiling as a library is not allowed yet, since this functionality is not finished.
             // TODO: Change this when the compiler is ready.
             let compileAsLibrary = false
             
@@ -46,19 +46,13 @@ struct Build: ParsableCommand {
     }
     
     
-    private func assembleSourceCode() throws -> String {
+    private func assembleSourceCode() throws -> [String] {
         
         let sourceFolder = current + "/source"
         
         let allContent = deepSearch(sourceFolder, .collect(predicate: { $0.hasSuffix(".pmax") }))
         
-        for c in allContent {
-            print(c)
-        }
-        
-        let sourceCode = allContent.reduce("") { $0 + $1 }
-        
-        return sourceCode
+        return allContent
         
     }
     

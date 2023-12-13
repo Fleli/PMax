@@ -1,10 +1,19 @@
 extension Compiler {
     
     
-    func lex(_ sourceCode: String, _ asLibrary: Bool) throws {
+    // TODO: The lexer should contain file information, since tokens should be tied to a specific file (important for highlighting etc.)
+    func lex(_ sourceCode: [String], _ asLibrary: Bool) throws {
         
-        let rawTokens = try Lexer().lex(sourceCode)
-        let tokens = filterTokens(rawTokens)
+        var tokens: [[Token]] = []
+        
+        for sourceCodeFile in sourceCode {
+            
+            let rawTokens = try Lexer().lex(sourceCodeFile)
+            let fileTokens = filterTokens(rawTokens)
+            
+            tokens.append(fileTokens)
+            
+        }
         
         let tokensFileContent = tokens.map {$0.description}.reduce("", {$0 + $1 + "\n"})
         write(.tokens, tokensFileContent)
@@ -15,7 +24,9 @@ extension Compiler {
     }
     
     
-    func parse(_ tokens: [Token], _ asLibrary: Bool) throws {
+    func parse(_ tokens: [[Token]], _ asLibrary: Bool) throws {
+        
+        let tokens: [Token] = tokens.reduce([]) { $0 + $1 }
         
         let slrNodeTree = try SLRParser().parse(tokens)
         

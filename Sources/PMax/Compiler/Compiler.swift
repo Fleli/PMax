@@ -35,7 +35,7 @@ final class Compiler {
     }
     
     
-    public func compile(_ sourceCode: String, _ asLibrary: Bool) throws {
+    public func compile(_ sourceCode: [String], _ asLibrary: Bool) throws {
         
         self.encounteredErrors.removeAll()
         self.profiler = CompilerProfiler()
