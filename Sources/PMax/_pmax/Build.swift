@@ -21,7 +21,7 @@ struct Build: ParsableCommand {
     @ArgumentParser.Option(help: "Specify the name of the output file.")
     private var targetName: String?
     
-    @ArgumentParser.Option(help: "Compile the files in 'source' as a library instead of an executable. Compiling as library will produce '.hmax' files in '_target'. NOTE: This functionality is *NOT* finished yet, and correct results are therefore not guaranteed.")
+    @ArgumentParser.Flag(help: "Compile the files in 'source' as a library instead of an executable. Compiling as library will produce '.hmax' files in '_target'. NOTE: This functionality is *NOT* finished yet, and correct results are therefore not guaranteed.")
     private var asLibrary: Bool = false
     
     
@@ -43,7 +43,7 @@ struct Build: ParsableCommand {
     
     private func assembleSourceCode() throws -> [String] {
         
-        let sourceFolder = current + "/source"
+        let sourceFolder = current + "/" + MainDefaults.sourceSubPath
         
         let allContent = deepSearch(sourceFolder, .collect(predicate: { $0.hasSuffix(".pmax") }))
         

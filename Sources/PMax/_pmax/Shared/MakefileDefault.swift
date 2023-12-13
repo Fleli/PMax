@@ -1,17 +1,21 @@
+
 struct MakefileDefault {
+    
     
     static func text(_ targetName: String, _ asLibrary: Bool) -> String {
         
-        let options = asLibrary ? "--as-library" : ""
+        let buildAsLibrary = asLibrary ? "--as-library " : ""
+        let libraryPaths = "_libraries"
         
         return """
         
-        LIBOPTION = \"\(options)\"
+        LIBRARYPATHS = \"\(libraryPaths)\"
         
         all:
-        \tpmax build --target-name \(targetName) $(LIBOPTION)
+        \tpmax build --target-name \(targetName) \(buildAsLibrary)--lib-paths $(LIBRARYPATHS)
         """
         
     }
+    
     
 }

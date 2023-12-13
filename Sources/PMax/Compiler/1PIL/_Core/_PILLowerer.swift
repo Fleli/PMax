@@ -55,6 +55,8 @@ class PILLowerer {
     
     private func prepare() {
         
+        // First go through structs and imports
+        
         for syntacticStatement in topLevelStatements {
             
             switch syntacticStatement {
@@ -62,15 +64,27 @@ class PILLowerer {
                 
                 self.newStruct(`struct`)
                 
-            case .function(let function):
+            case .function(_):
                 
-                let pilFunction = PILFunction(function, self)
-                self.newFunction(pilFunction)
+                continue
                 
             case .import(let `import`):
                 
                 let library = `import`.library
                 preprocessor.importLibrary(library, self)
+                
+            }
+            
+        }
+        
+        // ... then lower functions to PIL
+        
+        for syntacticStatement in topLevelStatements {
+            
+            if case .function(let function) = syntacticStatement {
+                
+                let pilFunction = PILFunction(function, self)
+                self.newFunction(pilFunction)
                 
             }
             
