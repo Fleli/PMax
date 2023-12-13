@@ -3,6 +3,7 @@ import Foundation
 
 struct Build: ParsableCommand {
     
+    
     @ArgumentParser.Argument(help: "The file to compile.")
     private var file: String
     
@@ -12,12 +13,12 @@ struct Build: ParsableCommand {
     @ArgumentParser.Option(help: "Specify where output files go.")
     private var targetLocation: String?
     
+    
     func run() throws {
         
         let currentDirectory = Foundation.FileManager().currentDirectoryPath
         
         let assemblyFilePath = currentDirectory + "/" + (targetLocation ?? ".") + "/main.out"
-        let assemblyFilePathOption = FileOption(assemblyFilePath, .assemblyCode)
         
         let file = currentDirectory + "/" + file
         
@@ -27,7 +28,7 @@ struct Build: ParsableCommand {
         let compiler = Compiler(self.libPaths)
         
         // TODO: This should not necessarily happen (for libraries)
-        compiler.addFileOption(assemblyFilePathOption)
+        compiler.addFileOption(assemblyFilePath, .assemblyCode)
         
         guard FileManager().fileExists(atPath: file) else {
             print("[Meta]  \tCannot compile \(self.file) because it does not exist.")

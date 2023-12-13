@@ -2,6 +2,7 @@ import Foundation
 
 struct Shared {
     
+    static let sourcePath = "source"
     
     static let makefileDefault = """
     
@@ -40,8 +41,7 @@ struct Shared {
             }
             """
         )
+        
     }
-    
-    static let sourcePath = "source"
     
 }

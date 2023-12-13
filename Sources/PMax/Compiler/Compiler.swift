@@ -4,10 +4,10 @@ import Foundation
 
 // TODO: "Update the Docs now that the folder structure has been reorganized.
 
-public final class Compiler {
+final class Compiler {
     
-    public static var allowMeta = true
-    public static var allowPrinting = false
+    static var allowMeta = false
+    static var allowPrinting = false
     
     var preprocessor: Preprocessor!
     
@@ -24,8 +24,9 @@ public final class Compiler {
     }
     
     
-    public func addFileOption(_ option: FileOption) {
-        fileOptions.append(option)
+    public func addFileOption(_ path: String, _ debugOption: DebugOption) {
+        let fileOption = FileOption(path, debugOption)
+        fileOptions.append(fileOption)
     }
     
     

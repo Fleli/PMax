@@ -1,4 +1,4 @@
-# PMax
+# <img src="https://upload.wikimedia.org/wikipedia/commons/4/45/Pepsi_max_brand_logo.png" />
 
 Welcome to the PMax repository. PMax is a programming language that draws inspiration from C. It is built specifically with Hackerspace NTNU's [breadboard computer](https://github.com/hackerspace-ntnu/BreadboardComputer) in mind. While it might not match the sheer elegance of C or the power of Swift, PMax aims to provide an easy-to-use platform to make breadboard computer programming accessible. This repository performs source-to-assembly transformation. An assembler is needed to convert the assembly code to machine instructions. This will be announced once finished.
 
@@ -61,7 +61,7 @@ String email = "frederikedvardsen" + "@gmail" + ".com";
 ## Timeline
 
 Date        |   Commits |   State
-------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------
+------------|-----------|-----------------------------------------------------------------------------------------------------------------------------------
 2023-10-02  |   1       |   The repository is set up.
 2023-10-10  |   27      |   Old work was scrapped because of structural issues.
 2023-10-16  |   51      |   The core functionality of PIL is completed, and TAC planning begins.

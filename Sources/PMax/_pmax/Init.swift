@@ -26,8 +26,7 @@ struct Init: ParsableCommand {
         
         newFile("diagnostics.txt")
         newFile("Makefile", Shared.makefileDefault)
-        
-        newFile(Shared.sourcePath + "/main.pmax", Shared.mainPMaxDefault(name: author))
+        newFile("main.pmax", Shared.mainPMaxDefault(name: author))
         
         print("\nDone\n")
         
