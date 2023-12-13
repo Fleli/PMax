@@ -24,14 +24,8 @@ struct Init: ParsableCommand {
         try newFolder("_targets")
         try newFolder(Shared.sourcePath)
         
-        newFile("diagnostics.txt")
         newFile("Makefile", Shared.makefileDefault)
-        
         newFile("source/main.pmax", Shared.mainPMaxDefault(name: author))
-        newFile("source/a.pmax")
-        newFile("source/b.pmax")
-        newFile("source/c.pmax")
-        newFile("source/d.test")
         
     }
     

@@ -34,25 +34,25 @@ class Preprocessor {
         }
         
         var pathIndex = 0
-        var content: String? = nil
+        var content: [String] = []
         
-        while (pathIndex < libraryPaths.count) && (content == nil) {
+        while (pathIndex < libraryPaths.count) && (content.isEmpty) {
             
             let path = libraryPaths[pathIndex]
             
-            content = searchThroughDirectory(for: fileName, in: path)
+            content = deepSearch(path, .one(match: fileName))
             
             pathIndex += 1
             
         }
         
-        guard let content else {
+        guard content.count > 0 else {
             // TODO: Submit an issue: The library (file) wasn't found.
             print("No file '\(fileName)' in the current directory or any of its children.")
             return
         }
         
-        parseImport(fileName, content)
+        parseImport(fileName, content[0])
         
     }
     

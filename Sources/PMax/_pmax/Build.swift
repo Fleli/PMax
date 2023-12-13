@@ -7,9 +7,6 @@ struct Build: ParsableCommand {
     @ArgumentParser.Option(help: "Specify the paths for the compiler to search for libraries in.")
     private var libPaths: [String] = []
     
-    @ArgumentParser.Option(help: "Specify where output files go.")
-    private var targetLocation: String?
-    
     @ArgumentParser.Option(help: "Specify the name of the output assembly file.")
     private var outAsm: String?
     
@@ -53,22 +50,13 @@ struct Build: ParsableCommand {
         
         let sourceFolder = current + "/source"
         
-        let files = try FileManager().contentsOfDirectory(atPath: sourceFolder)
+        let allContent = deepSearch(sourceFolder, .collect(predicate: { $0.hasSuffix(".pmax") }))
         
-        var sourceCode = ""
-        
-        for file in files {
-            
-            guard file.hasSuffix(".pmax") else {
-                print("Ignoring file '\(file)' (missing '.pmax' suffix).")
-                continue
-            }
-            
-            let contents = try String(contentsOfFile: sourceFolder + "/" + file)
-            
-            sourceCode += contents + "\n"
-            
+        for c in allContent {
+            print(c)
         }
+        
+        let sourceCode = allContent.reduce("") { $0 + $1 }
         
         return sourceCode
         
