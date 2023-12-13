@@ -2,17 +2,12 @@ import Foundation
 
 // TODO: Consider enforcing that the argument label matches the parameter label. This increases consistency, but using different labels _may_ increase clarity in some cases
 
-#warning("Update the Docs now that the folder structure has been reorganized.")
+// TODO: "Update the Docs now that the folder structure has been reorganized.
 
 public final class Compiler {
     
-    
-    public static let version: String = "0.2.0"
-    public static let date: String = "2023-11-18"
-    
     public static var allowMeta = true
     public static var allowPrinting = false
-    
     
     var preprocessor: Preprocessor!
     

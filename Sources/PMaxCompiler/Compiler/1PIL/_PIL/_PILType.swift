@@ -32,9 +32,6 @@ indirect enum PILType: CustomStringConvertible, Hashable {
         case .basic(let id) where lowerer.structs[id] != nil:
             self = .struct(name: id)
         case .basic(let undefined):
-            print(undefined)
-            print(lowerer.structs)
-            print(lowerer.id)
             lowerer.submitError(PMaxIssue.typeDoesNotExist(typeName: undefined))
             self = .error
         case .pointer(let wrapped, _):

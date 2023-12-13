@@ -59,14 +59,12 @@ class Preprocessor {
     
     /// Notify the preprocessor that a new `struct` was found in a given library.
     func newStruct(_ library: String, _ `struct`: Struct) {
-        print("[External] Added struct \(`struct`.name) to the type pool.")
         lowerer.newStruct(`struct`)
     }
     
     
     /// Notify the preprocessor that a new function was encountered.The `function` parameter is used to verify that calls to it match the name, argument count, and types. `entry` and `body` are used in assembly lowering to create the actual link (upon calls) between the library and the caller.
     func newFunction(_ library: String, _ function: Function, _ entry: String, _ body: String) {
-        print("[External] Added function \(function.name) to the function pool.")
         let function = PILFunction(function, body, entry, lowerer)
         lowerer.newFunction(function)
     }

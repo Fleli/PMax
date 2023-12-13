@@ -4,7 +4,33 @@ Welcome to the PMax repository. PMax is a programming language that draws inspir
 
 ## Installation
 
-Please refer to the [repository](https://github.com/Fleli/pmax) wrapping the compiler in an executable command-line application for installation instructions.
+No prebuilt binary is ready as of today. To use the compiler, you will have to download the source code, build it and move it to a location where it can be run from the command-line (e.g. `/usr/local/bin`). The following step-by-step guide demonstrates how to do this.
+
+1. Create and navigate to the folder where you would like the source code to be stored. **Note:** Choose an appropriate location for the source code, for example `Desktop`.
+
+```
+mkdir PMaxSourceCode && cd PMaxSourceCode
+```
+
+2. Clone the project's source code and move into the cloned directory. Then update packages to make sure you get the newest version of the compiler.
+
+```
+git clone https://github.com/Fleli/pmax && cd pmax && swift package update
+```
+
+3. Build an executable. **Note:** This example builds an executable in `debug` mode, since building for `release` mode takes a long time. However, if you want the benefits of using `release` mode, write `release` instead of `debug`.
+
+```
+swift build -c debug
+```
+
+4. Move the build from the debug (or release) folder to `/usr/local/bin`. This step requires `sudo` access. If you used `release` mode instead of `debug` in the previous step, copy `.build/release/pmax` instead of `.build/debug/pmax`.
+
+```
+sudo cp -f .build/debug/pmax /usr/local/bin/pmax
+```
+
+The `pmax` command is now available. Use `pmax -h` for help.
 
 ## Repository Structure
 

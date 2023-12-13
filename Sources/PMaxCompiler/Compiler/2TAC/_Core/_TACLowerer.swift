@@ -43,7 +43,7 @@ class TACLowerer: CustomStringConvertible {
             
             let function = function.value
             
-            if case .external(let assembly, let entry) = function.body {
+            if case .external(let assembly, _) = function.body {
                 
                 libraryAssembly.append(assembly)
                 
@@ -163,7 +163,14 @@ class TACLowerer: CustomStringConvertible {
         
         guard let labelGroup = labels[function] else {
             // TODO: Verify that this is unreachable.
+            labels.forEach {
+                print($0)
+            }
+            
+            print("Function: \(function)")
+            
             fatalError()
+            
         }
         
         return labelGroup.entry.name
