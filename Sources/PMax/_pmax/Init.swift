@@ -1,19 +1,31 @@
+
 import Foundation
 import ArgumentParser
 
-// TODO: Add support for library initialization
-// For now, initialization with the 'init' subcommand is "user-oriented"
-// It assumes someone is building an application, using libraries
-// Support for library initialization for actually writing libraries will come later.
 
 struct Init: ParsableCommand {
+    
+    
+    // MARK: Private variables
+    
+    
+    private var workingDirectory = FileManager().currentDirectoryPath
+    
+    
+    // MARK: Command-line arguments, options and flags
     
     
     @ArgumentParser.Option(help: "Specify the author.")
     var author: String?
     
+    @ArgumentParser.Option(help: "Specify the name of the output file.")
+    private var targetName: String?
     
-    private var workingDirectory = FileManager().currentDirectoryPath
+    @ArgumentParser.Flag(help: "Initialize as a library with a given name.")
+    var asLibrary: Bool = false
+    
+    
+    // MARK: The run() method
     
     
     func run() throws {
@@ -22,27 +34,45 @@ struct Init: ParsableCommand {
         
         try newFolder("_libraries")
         try newFolder("_targets")
-        try newFolder(Shared.sourcePath)
+        try newFolder(MainDefaults.sourceSubPath)
         
-        newFile("Makefile", Shared.makefileDefault)
-        newFile("source/main.pmax", Shared.mainPMaxDefault(name: author))
+        let target = TargetDefaults.name(targetName, asLibrary)
+        newFile("Makefile", MakefileDefault.text(target, asLibrary))
+        
+        createMainFile()
         
     }
+    
+    
+    // MARK: Private helper methods
+    
     
     private func newFolder(_ name: String) throws {
-        
         try FileManager().createDirectory(atPath: workingDirectory + "/" + name, withIntermediateDirectories: false)
-        
     }
     
-    private func newFile(_ name: String, _ contents: String? = nil) {
+    
+    private func newFile(_ path: String, _ contents: String? = nil) {
         
-        let successful = FileManager().createFile(atPath: workingDirectory + "/" + name, contents: contents?.data(using: .utf8))
+        let successful = FileManager().createFile(atPath: path, contents: contents?.data(using: .utf8))
         
         if !successful {
-            print("Creating file \(name) failed.")
+            print("Creating file @ \(path) failed.")
         }
         
     }
+    
+    
+    private func createMainFile() {
+        
+        let path = MainDefaults.sourceSubPath + "/main.pmax"
+        let content = MainDefaults.mainPMaxDefault(author, asLibrary)
+        
+        print(path, content)
+        
+        newFile(path, content)
+        
+    }
+    
     
 }

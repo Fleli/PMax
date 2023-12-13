@@ -1,6 +1,7 @@
 
 import Foundation
 
+
 enum SearchMode {
     
     /// Collect all results matching the given condition
@@ -11,6 +12,7 @@ enum SearchMode {
     
 }
 
+/// Recursively search for files at a given path and in all its children. A search in `.collect` mode will collect content from all files matching a given predicate. Searching in `.one` mode returns immediately when it finds a file with the exact name requested.
 func deepSearch(_ path: String, _ mode: SearchMode) -> [String] {
     
     var collected: [String] = []
@@ -18,16 +20,13 @@ func deepSearch(_ path: String, _ mode: SearchMode) -> [String] {
     
     do {
         allObjects = try FileManager().contentsOfDirectory(atPath: path)
-        print("All objects: \(allObjects)")
     } catch {
-        print("Caught (did not find all content @ \(path))")
         return collected
     }
     
     for object in allObjects {
         
         let subresult = deepSearch(path + "/" + object, mode)
-        print("Subresult: \(subresult)")
         
         switch mode {
         case .collect(_):
@@ -39,8 +38,6 @@ func deepSearch(_ path: String, _ mode: SearchMode) -> [String] {
         do {
             
             let found = try String(contentsOfFile: path + "/" + object)
-            
-            print("Found {\(found)} at path {\(path + "/" + object)}")
             
             switch mode {
             case .collect(let predicate):
@@ -55,7 +52,6 @@ func deepSearch(_ path: String, _ mode: SearchMode) -> [String] {
             
         } catch {
             
-            print("Reading from \(path + "/" + object) failed [continue]")
             continue
             
         }

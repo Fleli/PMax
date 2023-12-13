@@ -1,5 +1,7 @@
+
 import ArgumentParser
 import Foundation
+
 
 struct Build: ParsableCommand {
     
@@ -12,17 +14,18 @@ struct Build: ParsableCommand {
     
     // MARK: Command-line arguments, options and flags
     
+    
     @ArgumentParser.Option(help: "Specify the paths for the compiler to search for libraries in.")
     private var libPaths: [String] = []
     
-    @ArgumentParser.Option(help: "Specify the name of the output file. For executables, this ")
+    @ArgumentParser.Option(help: "Specify the name of the output file.")
     private var targetName: String?
     
     @ArgumentParser.Option(help: "Compile the files in 'source' as a library instead of an executable. Compiling as library will produce '.hmax' files in '_target'. NOTE: This functionality is *NOT* finished yet, and correct results are therefore not guaranteed.")
-    private var library: Bool = false
+    private var asLibrary: Bool = false
     
     
-    // MARK: run() method
+    // MARK: the run() method
     
     
     func run() throws {
@@ -51,10 +54,10 @@ struct Build: ParsableCommand {
     
     private func setOutputInformation(_ compiler: Compiler) {
         
-        let targetName = self.targetName ?? ( library ? "NewLibrary.hmax" : "out.bba" )
+        let targetName = TargetDefaults.name(self.targetName, asLibrary)
         
         let outPath: String = current + "/_targets/" + targetName
-        let outOption: DebugOption = library ? .libraryCode : .assemblyCode
+        let outOption: DebugOption = asLibrary ? .libraryCode : .assemblyCode
         
         compiler.addFileOption(outPath, outOption)
         
@@ -66,7 +69,7 @@ struct Build: ParsableCommand {
         do {
             
             let sourceCode = try assembleSourceCode()
-            try compiler.compile(sourceCode, library)
+            try compiler.compile(sourceCode, asLibrary)
             compiler.printErrors()
             
         } catch {
