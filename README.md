@@ -15,7 +15,7 @@ mkdir PMaxSourceCode && cd PMaxSourceCode
 2. Clone the project's source code and move into the cloned directory. Then update packages to make sure you get the newest version of the compiler.
 
 ```
-git clone https://github.com/Fleli/pmax && cd pmax && swift package update
+git clone https://github.com/Fleli/PMaxCompiler && cd PMaxCompiler && swift package update
 ```
 
 3. Build an executable. **Note:** This example builds an executable in `debug` mode, since building for `release` mode takes a long time. However, if you want the benefits of using `release` mode, write `release` instead of `debug`.

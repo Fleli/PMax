@@ -5,7 +5,6 @@ struct Shared {
     
     static let makefileDefault = """
     
-    
     all: setup
     \t@echo "Running the 'all' command from Makefile."
     
