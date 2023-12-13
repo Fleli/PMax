@@ -4,23 +4,20 @@ import Foundation
 struct Build: ParsableCommand {
     
     
-    @ArgumentParser.Argument(help: "The file to compile.")
-    private var file: String
-    
     @ArgumentParser.Option(help: "Specify the paths for the compiler to search for libraries in.")
     private var libPaths: [String] = []
     
     @ArgumentParser.Option(help: "Specify where output files go.")
     private var targetLocation: String?
     
+    @ArgumentParser.Option(help: "Specify the name of the output assembly file.")
+    private var outAsm: String?
+    
+    
+    private var current = Foundation.FileManager().currentDirectoryPath
+    
     
     func run() throws {
-        
-        let currentDirectory = Foundation.FileManager().currentDirectoryPath
-        
-        let assemblyFilePath = currentDirectory + "/" + (targetLocation ?? ".") + "/main.out"
-        
-        let file = currentDirectory + "/" + file
         
         Compiler.allowMeta = false
         Compiler.allowPrinting = false
@@ -28,17 +25,12 @@ struct Build: ParsableCommand {
         let compiler = Compiler(self.libPaths)
         
         // TODO: This should not necessarily happen (for libraries)
+        let assemblyFilePath = current + "/_targets/" + (outAsm ?? "main.out")
         compiler.addFileOption(assemblyFilePath, .assemblyCode)
-        
-        guard FileManager().fileExists(atPath: file) else {
-            print("[Meta]  \tCannot compile \(self.file) because it does not exist.")
-            print("[Meta]  \tPath: \(file)")
-            return
-        }
         
         do {
             
-            let sourceCode = try String(contentsOfFile: file)
+            let sourceCode = try assembleSourceCode()
             
             // Compiling as a library is not allowed yet, since this function is not finished.
             // TODO: Change this when the compiler is ready.
@@ -55,6 +47,33 @@ struct Build: ParsableCommand {
         }
         
     }
+    
+    
+    private func assembleSourceCode() throws -> String {
+        
+        let sourceFolder = current + "/source"
+        
+        let files = try FileManager().contentsOfDirectory(atPath: sourceFolder)
+        
+        var sourceCode = ""
+        
+        for file in files {
+            
+            guard file.hasSuffix(".pmax") else {
+                print("Ignoring file '\(file)' (missing '.pmax' suffix).")
+                continue
+            }
+            
+            let contents = try String(contentsOfFile: sourceFolder + "/" + file)
+            
+            sourceCode += contents + "\n"
+            
+        }
+        
+        return sourceCode
+        
+    }
+    
     
 }
 

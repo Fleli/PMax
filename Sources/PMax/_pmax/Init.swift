@@ -18,7 +18,7 @@ struct Init: ParsableCommand {
     
     func run() throws {
         
-        print("\nInitializing empty PMax project ...\n")
+        print("Init new PMax repository")
         
         try newFolder("_libraries")
         try newFolder("_targets")
@@ -26,9 +26,12 @@ struct Init: ParsableCommand {
         
         newFile("diagnostics.txt")
         newFile("Makefile", Shared.makefileDefault)
-        newFile("main.pmax", Shared.mainPMaxDefault(name: author))
         
-        print("\nDone\n")
+        newFile("source/main.pmax", Shared.mainPMaxDefault(name: author))
+        newFile("source/a.pmax")
+        newFile("source/b.pmax")
+        newFile("source/c.pmax")
+        newFile("source/d.test")
         
     }
     

@@ -7,7 +7,7 @@ struct Shared {
     static let makefileDefault = """
     
     all: setup
-    \t@echo "Running the 'all' command from Makefile."
+    \tpmax build --out-asm output.out
     
     setup:
     \t@echo "Test 'setup'."
@@ -39,6 +39,7 @@ struct Shared {
             \treturn 0;
             \t
             }
+            
             """
         )
         
