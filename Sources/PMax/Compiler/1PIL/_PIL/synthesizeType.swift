@@ -47,13 +47,21 @@ extension PILOperation {
         case .dereference(let expression):
             
             switch expression.type {
-            case .int, .void, .struct(_):
+                
+            // We generally assume that *p is of type `int` if `p` is an `int`.
+            case .int:
+                return .int
+                
+            case .void, .struct(_):
                 lowerer.submitError(PMaxIssue.dereferenceNonPointerType(type: expression.type))
                 fallthrough
+                
             case .error:
                 return .error
+                
             case .pointer(let pointee):
                 return pointee
+                
             }
             
         case .addressOf(let expression):
