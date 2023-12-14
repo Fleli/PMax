@@ -28,21 +28,19 @@ The `pmax` command is now available. Use `pmax -h` for help.
 
 ## Repository Structure
 
-Code is found inside `Sources/PMaxCompiler`.
+Detailed information about each part is found in the `Documentation` folder.
 
-The folder `__main` contains the `Compiler` class, which is its external interface, and a `Preprocessor` class which is currently under development and will provide features for working with libraries.
+The files in `Sources/PMax/_pmax` implement the compiler's command-line interface. The files `_Build`, `_Init` and `_Version` implement subcommands. `DeepSearch` implements a recursive folder search, used to locate both source code (`.pmax`) and library (`.hmax`) files. The `Defaults` files are used when initializaing new PMax workspaces.
 
-`_Docs` contains documentation on important aspects of the compiler.
+The compiler itself is found in `Sources/PMax/Compiler`. It is quite large, so it is further explained in the `Documents` folder.
 
-The `Compiler` folder contains each step in the compilation process, from source code (`0Frontend`) to assembly (`3ASM`).
+Importing libraries is handled by a preprocessor, found in `Sources/PMax/Preprocessor`. This code implements parser calls, assembly code and entry point extraction, and transitive library resolution (not implemented yet).
 
-The `Shared` folder contains some helper functions for the `Compiler` class, some language-specific constraints, infrastructure for profiling, and extensions to classes.
-
-For a deeper dive into how the compiler is organized, you are encouraged to read the files inside `_Docs`. These will also be expanded later on.
+Lastly, the `Shared` folder contains tools used throughout or related to the compiler. Examples include the `PMaxError` protocol, token filtering, and profiling.
 
 ## Standard Library
 
-The standard library is being implemented in its own [repository](https://github.com/Fleli/PMax-StdLib). It will contain frequently used algorithms and data structures. Before the standard library can be used, however, the compiler needs to support an `import` statement and some infrastructure to "talk" to code outside the current source file.
+The standard library is being implemented in its own repository. Its development happens in parallel with the compiler and language. Therefore, it is rapidly changing and won't be published until it reaches a more stable state.
 
 ## Further Development
 
