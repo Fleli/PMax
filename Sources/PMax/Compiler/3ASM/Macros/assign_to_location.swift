@@ -16,9 +16,21 @@ extension TACStatement {
             // Unreachable: Assignments to literals are caught when trying to lower to TAC.
             fatalError()
             
-        case .rawPointer(let offset):
+        case .rawPointer(.framePointerOffset(let offset)):
             
             let varContainingAddress = Location.framePointer(offset: offset)
+            
+            return
+            
+            // Fetch the address we are going to store `rhs` at. This value is stored at a certain offset from our frame pointer.
+                load_register_with_value(at: varContainingAddress, register: scratch, 0)
+                
+            // Then, store `rhs` at the value that is in `scratch` (which we use as an address).
+                .st(scratch, rhs, "[r\(scratch)] = r\(rhs)")
+            
+        case .rawPointer(.literal(let literal)):
+            
+            let varContainingAddress = Location.rawPointer(.literal(literal))
             
             return
             

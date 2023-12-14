@@ -27,21 +27,22 @@ extension PILExpression {
             
         case .rawPointer(let argumentFramePointerOffset):
             
-            let memberOffsetLiteral = Location.literalValue(value: memberOffset)
-            let location = declareAddressSum(lowerer, memberOffsetLiteral, argumentFramePointerOffset)
-            
-            guard case .framePointer(let offset) = location else {
-                fatalError(location.description)  // Unreachable
+            guard case .framePointerOffset(let int) = argumentFramePointerOffset else {
+                // TODO: Reachable. Should submit error from here.
+                fatalError()
             }
             
-            return .rawPointer(offset: offset)
+            let memberOffsetLiteral = Location.literalValue(value: memberOffset)
+            let offset = declareAddressSum(lowerer, memberOffsetLiteral, int)
+            
+            return .rawPointer(.framePointerOffset(offset))
             
         }
         
     }
     
     
-    private func declareAddressSum(_ lowerer: TACLowerer, _ memberOffsetLiteralLocation: Location, _ offset: Int) -> Location {
+    private func declareAddressSum(_ lowerer: TACLowerer, _ memberOffsetLiteralLocation: Location, _ offset: Int) -> Int {
         
         let newVariable = "$fp\(Self.offsetCalculationCount)"
         let location = lowerer.local.declare(.int, newVariable)
@@ -58,7 +59,11 @@ extension PILExpression {
         
         lowerer.activeLabel.newStatement(assignment)
         
-        return location
+        guard case .framePointer(let offset) = location else {
+            fatalError()
+        }
+        
+        return offset
         
     }
     

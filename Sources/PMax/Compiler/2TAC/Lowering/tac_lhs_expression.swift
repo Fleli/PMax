@@ -14,12 +14,21 @@ extension PILExpression {
             
         case .dereference(let dereferenced):
             
-            guard case .framePointer(let offset) = dereferenced.lowerToTAC(lowerer, function) else {
-                // TODO: The assumption that this guard never fails may be incorrect. Double-check this.
+            let loweredDereference = dereferenced.lowerToTAC(lowerer, function)
+            
+            let rawPointerValue: RawPointerValue
+            
+            switch loweredDereference {
+            case .framePointer(let offset):
+                rawPointerValue = .framePointerOffset(offset)
+            case .literalValue(let value):
+                rawPointerValue = .literal(value)
+            case .rawPointer(_):
+                // TODO: Verify unreachable.
                 fatalError()
             }
             
-            return Location.rawPointer(offset: offset)
+            return Location.rawPointer(rawPointerValue)
             
         case .member(let main, let member):
             

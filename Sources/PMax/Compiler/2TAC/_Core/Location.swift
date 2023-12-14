@@ -12,7 +12,8 @@ indirect enum Location: CustomStringConvertible {
     case literalValue(value: Int)
     
     /// A `.rawPointer(offset:)` represents a pointer. Raw pointers never store the actual address they point to. Instead, they refer to a variable on the stack (at a certain `offset`) that stores the address they point to.
-    case rawPointer(offset: Int)
+    case rawPointer(RawPointerValue)
+    
     
     var description: String {
         switch self {
@@ -21,8 +22,29 @@ indirect enum Location: CustomStringConvertible {
         case .literalValue(let value):
             return "literal \(value)"
         case .rawPointer(let offset):
-            return "[raw @ fp + \(offset)]"
+            return "[raw @ \(offset)]"
         }
     }
     
 }
+
+enum RawPointerValue: CustomStringConvertible {
+    
+    /// The value used as address is a literal.
+    case literal(Int)
+    
+    /// The address is stored as a variable at a given frame pointer offset.
+    case framePointerOffset(Int)
+    
+    
+    var description: String {
+        switch self {
+        case .literal(let int):
+            return "literal \(int)"
+        case .framePointerOffset(let int):
+            return "fp + \(int)"
+        }
+    }
+    
+}
+
