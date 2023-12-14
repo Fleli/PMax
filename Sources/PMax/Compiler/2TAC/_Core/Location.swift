@@ -3,6 +3,11 @@
 // Consider instead using a clear distinction between LValues (left-hand side values, i.e. assignable expressions) and RValues (right-hand side values)
 // Clearly separating between the two would greatly increase clarity and readability, remove many (unreachable) fatalError() calls and generally reduce the probability of errors. Carrying around information about the value's context may also increase the quality of error messages.
 
+// TODO: Do a thorough walkthrough of where (and how) `Location` is used. Split into several (orthogonal) enums tailored for each use case.
+// The use of `Location` throughout the compiler's late stages is flat out terrible.
+// It is used for several different purposes, leading to weird switch statements where some cases are marked as unreachable etc.
+// It is also highly error prone, and difficult to maintain (simply because it is illogical).
+
 indirect enum Location: CustomStringConvertible {
     
     /// A `.framePointer` case represents a certain offset from the current frame pointer. This is used for referring to local variables.

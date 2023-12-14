@@ -22,9 +22,9 @@ extension TACStatement {
             
             return "".li(index, value, "r\(index) = \(value)")
             
-        case .rawPointer(_):
+        default:
             
-            // TODO: Not implemented
+            // TODO: Verify unreachable.
             fatalError()
             
         }

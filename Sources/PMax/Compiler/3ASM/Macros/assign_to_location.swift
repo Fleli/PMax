@@ -16,29 +16,21 @@ extension TACStatement {
             // Unreachable: Assignments to literals are caught when trying to lower to TAC.
             fatalError()
             
-        case .rawPointer(.framePointerOffset(let offset)):
+        case .rawPointer(let rawPointerValue):
             
-            let varContainingAddress = Location.framePointer(offset: offset)
+            let rhsAddress: Location
             
-            return
-            
-            // Fetch the address we are going to store `rhs` at. This value is stored at a certain offset from our frame pointer.
-                load_register_with_value(at: varContainingAddress, register: scratch, 0)
+            switch rawPointerValue {
                 
-            // Then, store `rhs` at the value that is in `scratch` (which we use as an address).
-                .st(scratch, rhs, "[r\(scratch)] = r\(rhs)")
+            case .literal(let literal):
+                rhsAddress = .literalValue(value: literal)
+            case .framePointerOffset(let offset):
+                rhsAddress = .framePointer(offset: offset)
+            }
             
-        case .rawPointer(.literal(let literal)):
+            let assembly = load_register_with_value(at: rhsAddress, register: scratch, 0).st(scratch, rhs, "[r\(scratch)] = r\(rhs)")
             
-            let varContainingAddress = Location.rawPointer(.literal(literal))
-            
-            return
-            
-            // Fetch the address we are going to store `rhs` at. This value is stored at a certain offset from our frame pointer.
-                load_register_with_value(at: varContainingAddress, register: scratch, 0)
-                
-            // Then, store `rhs` at the value that is in `scratch` (which we use as an address).
-                .st(scratch, rhs, "[r\(scratch)] = r\(rhs)")
+            return assembly
             
         }
         
