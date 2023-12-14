@@ -34,9 +34,9 @@ The files in `Sources/PMax/_pmax` implement the compiler's command-line interfac
 
 The compiler itself is found in `Sources/PMax/Compiler`. It is quite large, so it is further explained in the `Documents` folder.
 
-Importing libraries is handled by a preprocessor, found in `Sources/PMax/Preprocessor`. This code implements parser calls, assembly code and entry point extraction, and transitive library resolution (not implemented yet).
+Importing libraries is handled by a preprocessor, found in `Sources/PMax/Preprocessor`. This code implements parser calls, assembly code and entry point extraction, and transitive library resolution (coming later).
 
-Lastly, the `Shared` folder contains tools used throughout or related to the compiler. Examples include the `PMaxError` protocol, token filtering, and profiling.
+Finally, the `Shared` folder contains tools used throughout or related to the compiler. Examples include the `PMaxError` protocol, token filtering, and profiling.
 
 ## Standard Library
 
