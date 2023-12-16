@@ -30,9 +30,9 @@ extension String {
         
     }
     
-    /// Load with register as address
-    func ldfr(_ dst: Int, _ addressRegister: Int, _ comment: String? = nil) -> String {
-        build("ldfr r\(dst), r\(addressRegister)", comment)
+    /// Load indirect.
+    func ldind(_ dst: Int, _ addressRegister: Int, _ comment: String? = nil) -> String {
+        build("ldind r\(dst), r\(addressRegister)", comment)
     }
     
     /// The following pattern often occurs:
@@ -43,7 +43,7 @@ extension String {
     func ldio(_ dst: Int, _ src: Int, _ imm: Int, _ comment: String? = nil) -> String {
         
         if imm == 0 {
-            return ldfr(dst, src, comment == nil ? nil : comment! + " [Optimization: r\(src) + 0 == r\(src)]")
+            return ldind(dst, src, comment == nil ? nil : comment! + " [Optimization: r\(src) + 0 == r\(src)]")
         } else {
             return build("ldio r\(dst), r\(src), \(imm)", comment)
         }
@@ -62,12 +62,12 @@ extension String {
     
     /// Perform an addition on the operands `srcA` and `srcB`. Store the result in `dst`.
     func add(_ dst: Int, _ srcA: Int, _ srcB: Int, _ comment: String? = nil) -> String {
-        build("add r\(dst), r\(srcA) r\(srcB)", comment)
+        build("add r\(dst), r\(srcA), r\(srcB)", comment)
     }
     
     /// Perform a subtraction on the operands `srcA` and `srcB`. Store the result in `dst`.
     func sub(_ dst: Int, _ srcA: Int, _ srcB: Int, _ comment: String? = nil) -> String {
-        build("sub r\(dst), r\(srcA) r\(srcB)", comment)
+        build("sub r\(dst), r\(srcA), r\(srcB)", comment)
     }
     
     /// Perform a bitwise `NOT` on the operand `src`. Store the result in `dst`.
@@ -92,7 +92,7 @@ extension String {
     
     /// Jump if a certain register is _not_ equal to zero.
     func jnz(_ register: Int, _ label: String, _ comment: String? = nil) -> String {
-        build("jnz r\(register) \(label)", comment)
+        build("jnz r\(register), \(label)", comment)
     }
     
     /// Shift right

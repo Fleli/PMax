@@ -27,7 +27,7 @@ extension TACStatement {
         
         // We start by calculating fp - 1 and then fetch the data there.
         assembly += self.calculate_stack_pointer_offset(0, -1)
-        assembly = assembly.ldfr(0, 0, "Fetch [fp - 1]")
+        assembly = assembly.ldind(0, 0, "Fetch [fp - 1]")
         
         // Now, we have [fp - 1] in r0. Now, we want to jump (unconditionally) to it.
         assembly = assembly.j(0, "Jump to the address stored in r0.")

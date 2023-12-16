@@ -34,19 +34,19 @@ extension PILStatement {
              
         case .if(let pILIfStatement):
             
-            let continueLabel = lowerer.newLabel("if_next", false, function)
+            let continueLabel = lowerer.newLabel("@if_next", false, function)
             pILIfStatement.lowerToTAC(lowerer, continueLabel, function)
             
         case .while(let condition, let body):
             
             // After the while loop is finished, we start to work on nextLabel.
-            let nextLabel = lowerer.newLabel("while_next", false, function)
+            let nextLabel = lowerer.newLabel("@while_next", false, function)
             
             // We also generate the body label, which is where the while loop's body begins.
-            let bodyLabel = lowerer.newLabel("while_body", false, function)
+            let bodyLabel = lowerer.newLabel("@while_body", false, function)
             
             // Create the condition evaluation label and jump to it
-            let conditionEvaluationLabel = lowerer.newLabel("while_condition", false, function)
+            let conditionEvaluationLabel = lowerer.newLabel("@while_condition", false, function)
             let jumpToConditionEvaluation = TACStatement.jump(label: conditionEvaluationLabel.name)
             lowerer.activeLabel.newStatement(jumpToConditionEvaluation)
             

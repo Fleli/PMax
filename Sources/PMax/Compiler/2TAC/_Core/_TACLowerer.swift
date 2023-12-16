@@ -92,7 +92,7 @@ class TACLowerer: CustomStringConvertible {
         }
         
         if let fnMainLabelGroup = labels["main"] {
-            let mainLabel = Label("__main")
+            let mainLabel = Label("@__main")
             mainLabel.newStatement(.jump(label: fnMainLabelGroup.entry.name))
             labels["@MAIN"] = (pilFunction: fnMainLabelGroup.pilFunction, entry: mainLabel, all: [mainLabel])
         }
@@ -116,7 +116,7 @@ class TACLowerer: CustomStringConvertible {
             labels[function.name] = (pilFunction: function, entry: newLabel, all: [newLabel])
         } else {
             internalCounter += 1
-            newLabel = Label("l\(internalCounter)_\(context)")
+            newLabel = Label("@l\(internalCounter)_\(context)")
         }
         
         labels[function.name]?.all.insert(newLabel)

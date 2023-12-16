@@ -8,7 +8,7 @@ extension TACStatement {
         switch self {
         case .jump(let label):
             
-            assembly = assembly.build("j \(label)", "Unconditional jump to \(label)")
+            assembly = assembly.build("jimm \(label)", "Unconditional jump to \(label)")
             
         case .assign(let lhs, let rhs, let words):
             

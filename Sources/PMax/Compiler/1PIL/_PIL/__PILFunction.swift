@@ -20,7 +20,7 @@ class PILFunction: CustomStringConvertible {
     func entryLabelName() -> String {
         switch self.body {
         case .pmax(_, _):
-            return "fn_\(name)"
+            return "@fn_\(name)"
         case .external(_, let entry):
             return entry
         }
