@@ -31,7 +31,9 @@ final class Compiler {
     
     
     public func printErrors() {
-        Swift.print(encounteredErrors.readableFormat)
+        if !encounteredErrors.readableFormat.isEmpty {
+            Swift.print(encounteredErrors.readableFormat)
+        }
     }
     
     
