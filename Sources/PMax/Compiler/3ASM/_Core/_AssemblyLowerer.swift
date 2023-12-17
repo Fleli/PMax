@@ -49,6 +49,8 @@ class AssemblyLowerer {
     
     private func lowerAsExecutable(_ output: inout String) {
         
+        output = "@__main:\n\t; Jump to main entry point\n\tjimm @fn_main\n"
+        
         for labelGroup in labels.values {
             
             for label in labelGroup.all {

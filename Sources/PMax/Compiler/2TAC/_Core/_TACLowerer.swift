@@ -91,12 +91,6 @@ class TACLowerer: CustomStringConvertible {
             return
         }
         
-        if let fnMainLabelGroup = labels["main"] {
-            let mainLabel = Label("@__main")
-            mainLabel.newStatement(.jump(label: fnMainLabelGroup.entry.name))
-            labels["@MAIN"] = (pilFunction: fnMainLabelGroup.pilFunction, entry: mainLabel, all: [mainLabel])
-        }
-        
     }
     
     

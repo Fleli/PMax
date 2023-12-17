@@ -67,3 +67,4 @@ Date        |   Commits |   State
 2023-10-23  |   98      |   Completed the core functionality of ASM. The compiler performed its first source-to-assembly transformation.
 2023-11-01  |   115     |   Implemented a compiler interface and better error messages and assembly output. Laid out roadmap for future updates.
 2023-11-16  |   138     |   Improved code quality, implemented a few missing features and improved assembly code performance for literals.
+2023-12-17  |   182     |   For the first time used in conjunction with assembler and virtual machine to run a program
