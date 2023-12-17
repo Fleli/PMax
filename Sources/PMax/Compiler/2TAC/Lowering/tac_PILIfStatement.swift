@@ -11,7 +11,7 @@ extension PILIfStatement {
         // Så gjør vi klar body-labelen (for true condition)
         let bodyInitLabel = lowerer.newLabel("if_body", false, function)
         
-        // Så svitsjer vi over til condition-bergeningslabelen.
+        // Så svitsjer vi over til condition-beregnings-labelen.
         lowerer.activeLabel = conditionEvaluationLabel
         
         // Der evaluerer vi faktisk condition
@@ -45,6 +45,8 @@ extension PILIfStatement {
             // Så hopper vi til denne, og lar else-`if`-en utføre sitt. Den skal fortsette på `continueLabel`.
             let jumpToElse = TACStatement.jump(label: elseLabel.name)
             lowerer.activeLabel.newStatement(jumpToElse)
+            
+            lowerer.activeLabel = elseLabel
             
             `else`.lowerToTAC(lowerer, continueLabel, function)
             
