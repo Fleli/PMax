@@ -10,7 +10,7 @@ extension TACStatement {
         // If there is a value to return, we move that value to the return value data space
         if let value {
             
-            let returnValueOffset = -(2 + words)      // 2 locations for the FP and ret. address, and `words` addresses since the return values itself takes up some space
+            let returnValueOffset = -(1 + words)      // 2 locations for the FP and ret. address, and `words` addresses since the return values itself takes up some space
             
             for i in 0 ..< words {
                 

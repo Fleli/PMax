@@ -16,7 +16,7 @@ extension TACStatement {
             // .addi(destination, .stackPointer, offset, "Find the address of the variable located \(offset) from the stack pointer")
             // .ldfr(index, index, "Load the variable located at the value in r\(index)")
             
-            return "".ldio(index, .stackPointer, offset, "r\(index) = [fp + \(offset)]")
+            return "".ldio(index, .stackPointer, offset + extraOffset, "r\(index) = [fp + \(offset + extraOffset)]")
             
         case .literalValue(let value):
             

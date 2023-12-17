@@ -23,9 +23,9 @@ extension TACStatement {
             switch rawPointerValue {
                 
             case .literal(let literal):
-                rhsAddress = .literalValue(value: literal)
+                rhsAddress = .literalValue(value: literal + extraOffset)
             case .framePointerOffset(let offset):
-                rhsAddress = .framePointer(offset: offset)
+                rhsAddress = .framePointer(offset: offset + extraOffset)
             }
             
             let assembly = load_register_with_value(at: rhsAddress, register: scratch, 0).st(scratch, rhs, "[r\(scratch)] = r\(rhs)")
