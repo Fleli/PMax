@@ -29,6 +29,9 @@ extension TACStatement {
         assembly += self.calculate_stack_pointer_offset(0, -1)
         assembly = assembly.ldind(0, 0, "Fetch [fp - 1]")
         
+        // Revert back to the old frame pointer, using r1
+        assembly = assembly.ldio(7, 7, 0, "fp = [fp] (unwind frame pointer)")
+        
         // Now, we have [fp - 1] in r0. Now, we want to jump (unconditionally) to it.
         assembly = assembly.j(0, "Jump to the address stored in r0.")
         
