@@ -9,10 +9,20 @@ struct MakefileDefault {
         
         return """
         
-        LIBRARYPATHS = \"\(libraryPaths)\"
-        
+        ASLIBRARY = \(buildAsLibrary)
+        LIBRARYPATHS = "\(libraryPaths)"
+        ASMFILE = "out.bba"
+        MACHINEFILE = "out.bbx"
+
         all:
-        \tpmax build --target-name \(targetName) \(buildAsLibrary)--lib-paths $(LIBRARYPATHS)
+            @clear
+            @echo "Compiling (pmax -> assembly)"
+            pmax build --target-name $(ASMFILE) $(ASLIBRARY)--lib-paths $(LIBRARYPATHS)
+            @echo "Assembling (assembly -> binary)"
+            bbasm assemble _targets/$(ASMFILE) _targets/$(MACHINEFILE)
+            @echo "Running (binary)"
+            bbvm _targets/$(MACHINEFILE)
+
         """
         
     }
