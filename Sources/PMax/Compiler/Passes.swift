@@ -66,7 +66,7 @@ extension Compiler {
     
     func lowerToTAC(_ pilLowerer: PILLowerer, _ asLibrary: Bool) {
         
-        let tacLowerer = TACLowerer(pilLowerer)
+        let tacLowerer = TACLowerer(pilLowerer, self.emitOffsets)
         tacLowerer.lower(asLibrary)
         
         encounteredErrors += tacLowerer.errors

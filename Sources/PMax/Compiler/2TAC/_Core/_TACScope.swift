@@ -2,6 +2,8 @@ class TACScope {
     
     let parent: TACScope?
     
+    private var emitOffsets: Bool
+    
     private var dataSectionCounter: Int
     private var framePointerOffset: Int
     
@@ -9,12 +11,13 @@ class TACScope {
     
     private weak var lowerer: TACLowerer!
     
-    init(_ lowerer: TACLowerer) {
+    init(_ lowerer: TACLowerer, _ emitOffsets: Bool) {
         
         self.parent = nil
         self.lowerer = lowerer
         self.dataSectionCounter = 0
         self.framePointerOffset = 1
+        self.emitOffsets = emitOffsets
         
     }
     
@@ -24,6 +27,7 @@ class TACScope {
         self.lowerer = parent.lowerer
         self.dataSectionCounter = parent.dataSectionCounter
         self.framePointerOffset = parent.framePointerOffset
+        self.emitOffsets = parent.emitOffsets
         
     }
     
@@ -32,9 +36,19 @@ class TACScope {
         
         let location = Location.framePointer(offset: framePointerOffset)
         variables[name] = (type, location)
-        framePointerOffset += lowerer.sizeOf(type)
         
-        printIfAllowed("\(type) \(name)", 40, "@ \(location)")
+        let typeSize = lowerer.sizeOf(type)
+        
+        if emitOffsets {
+            var decl = type.description + " " + name + ";"
+            decl += String(repeating: " ", count: max(0, 25 - decl.count))
+            decl += "fp + \(framePointerOffset)"
+            decl += String(repeating: " ", count: max(0, 50 - decl.count))
+            decl += "\(typeSize) words"
+            print("\t" + decl)
+        }
+        
+        framePointerOffset += typeSize
         
         return location
         

@@ -26,13 +26,13 @@ class TACLowerer: CustomStringConvertible {
     
     private(set) var errors: [PMaxError] = []
     
-    init(_ pilLowerer: PILLowerer) {
+    init(_ pilLowerer: PILLowerer, _ emitOffsets: Bool) {
         
         self.pilLowerer = pilLowerer
         self.structs = pilLowerer.structs
         self.functions = pilLowerer.functions
         
-        self.local = TACScope(self)
+        self.local = TACScope(self, emitOffsets)
         
     }
     
@@ -65,6 +65,8 @@ class TACLowerer: CustomStringConvertible {
             guard case .pmax(_, let lowered) = body else {
                 continue
             }
+            
+            print(function.signature)
             
             push()
             

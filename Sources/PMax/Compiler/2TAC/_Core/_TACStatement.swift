@@ -45,7 +45,7 @@ enum TACStatement: CustomStringConvertible {
         case .jumpIfNonZero(let label, let variable):
             return "jump \(label) if \(variable) != 0"
         case .call(let lhs, let function, let returnLabel, let words):
-            return "[\(words)]  \(lhs) = call \(function) - resume @ \(returnLabel)"
+            return "[\(words)]  \(lhs) = call \(function), resume \(returnLabel)"
         case .pushParameter(let name, let words, let framePointerOffset):
             return "[\(words)]  param \(name) @ fp + \(framePointerOffset)"
         case .dereference(let lhs, let arg, let words):

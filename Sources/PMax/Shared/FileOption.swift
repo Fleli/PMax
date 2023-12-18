@@ -23,4 +23,6 @@ enum DebugOption {
     case errors
     case profile
     
+    case offsets
+    
 }

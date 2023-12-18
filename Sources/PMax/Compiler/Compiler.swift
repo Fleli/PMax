@@ -18,8 +18,11 @@ final class Compiler {
     
     let libraryPaths: [String]
     
+    let emitOffsets: Bool
+    
     /// Initialize a `Compiler` instance with certain `libraryPaths`. These are the paths, in order, that the preprocessor searches in when attempting to import libraries. Using as "exact" paths as possible is recommended, since the preprocessor will literally expand the entire tree in its attempt to find the file that is referred to.
-    public init(_ libraryPaths: [String]) {
+    public init(_ emitOffsets: Bool, _ libraryPaths: [String]) {
+        self.emitOffsets = emitOffsets
         self.libraryPaths = libraryPaths
     }
     
