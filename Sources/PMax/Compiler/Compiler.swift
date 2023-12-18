@@ -24,7 +24,8 @@ final class Compiler {
     }
     
     
-    public func addFileOption(_ path: String, _ debugOption: DebugOption) {
+    /// Add a file option to the compiler. For non-`nil` `path`s, content specified by the `debugOption` will be written to a file. If `path` is `nil`, the same content will instead be printed to the terminal.
+    public func addFileOption(_ path: String?, _ debugOption: DebugOption) {
         let fileOption = FileOption(path, debugOption)
         fileOptions.append(fileOption)
     }

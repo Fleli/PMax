@@ -6,7 +6,13 @@ extension Compiler {
     func write(_ result: DebugOption, _ content: String) {
         
         for option in self.fileOptions where option.result == result {
-            writeToFile(option.path, content)
+            
+            if let path = option.path {
+                writeToFile(path, content)
+            } else {
+                Swift.print(content)
+            }
+            
         }
         
     }

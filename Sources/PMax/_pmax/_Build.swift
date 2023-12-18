@@ -24,6 +24,9 @@ struct Build: ParsableCommand {
     @ArgumentParser.Flag(help: "Compile the files in 'source' as a library instead of an executable. Compiling as library will produce '.hmax' files in '_target'. NOTE: This functionality is *NOT* finished yet, and correct results are therefore not guaranteed.")
     private var asLibrary: Bool = false
     
+    @ArgumentParser.Flag(help: "Print profiling information. Get timing information about each part of the compilation process.")
+    private var profile: Bool = false
+    
     
     // MARK: the run() method
     
@@ -31,6 +34,10 @@ struct Build: ParsableCommand {
     func run() throws {
         
         let compiler = Compiler(self.libPaths)
+        
+        if profile {
+            compiler.addFileOption(nil, .profile)
+        }
         
         setOutputInformation(compiler)
         compile(compiler)

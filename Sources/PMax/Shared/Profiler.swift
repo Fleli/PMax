@@ -8,7 +8,7 @@ class CompilerProfiler: CustomStringConvertible {
     
     
     var description: String {
-        results.reduce("") {$0 + $1.description + "\n"}
+        results.reduce("\nCOMPILER TIMING MEASUREMENTS (PROFILING RESULTS)\n------------------------------------------------\n") {$0 + $1.description + "\n"} + "\n"
     }
     
     
