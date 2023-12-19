@@ -50,10 +50,17 @@ extension TACStatement {
             // a >= b is equivalent to b <= a.
             return perform_arithmetic(dst, srcB, srcA, scratch, Binary(rawValue: "<=")!)
             
+        case "!=":
+            
+            // If a == b, then a - b == 0.
+            // Thus, a - b is nonzero if a != b.
+            return ""
+                .sub(dst, srcA, srcB, "If a - b is nonzero, then a != b")
+            
         default:
             
-            // TODO: Handle this better
-            return ""
+            // TODO: Don't fatalError here. Instead, submit an error.
+            fatalError("Binary operator '\(operation.rawValue)' not supported.")
             
         }
         

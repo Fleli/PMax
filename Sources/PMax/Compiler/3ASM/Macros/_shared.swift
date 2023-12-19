@@ -1,8 +1,3 @@
-extension TACStatement {
-    
-    static let dataSectionAddress = 0x2000
-    
-}
 
 extension Int {
     
