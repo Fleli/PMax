@@ -3,23 +3,25 @@ extension PILIfStatement {
     
     func lowerToTAC(_ lowerer: TACLowerer, _ continueLabel: Label, _ function: PILFunction) {
         
-        // Vi begynner med å hoppe til condition-evalueringen
+        // We start by jumping to the condition evaluation label
         let conditionEvaluationLabel = lowerer.newLabel("if_condition", false, function)
         let jump = TACStatement.jump(label: conditionEvaluationLabel.name)
         lowerer.activeLabel.newStatement(jump)
         
-        // Så gjør vi klar body-labelen (for true condition)
+        // Then we prepare the body label
         let bodyInitLabel = lowerer.newLabel("if_body", false, function)
         
-        // Så svitsjer vi over til condition-beregnings-labelen.
+        // We then switch to the condition evaluation label and lower the condition evaluation
         lowerer.activeLabel = conditionEvaluationLabel
-        
-        // Der evaluerer vi faktisk condition
         let conditionEvaluationResult = condition.lowerToTAC(lowerer, function)
         
-        // Dersom true, så hopper vi til bodyInitLabel. Der utfører vi instruksjoner og hopper til `continueLabel` når ferdig.
+        // If the condition evaluates to true, we jump to the body label.
         let jumpIfTrue = TACStatement.jumpIfNonZero(label: bodyInitLabel.name, variable: conditionEvaluationResult)
         lowerer.activeLabel.newStatement(jumpIfTrue)
+        
+        // We might have moved to a new label during condition evaluation (e.g. if it contains a function call).
+        let newConditionEvaluationLabel = lowerer.activeLabel
+        
         lowerer.activeLabel = bodyInitLabel
         
         // Før vi begynner å lowere body, pusher vi et nytt scope slik at name resolution blir riktig. Vi popper dette etterpå.
@@ -35,7 +37,7 @@ extension PILIfStatement {
         lowerer.pop()
         
         // Vi svitsjer nå tilbake til conditionEvaluationLabel, for vi må også gjøre noe dersom condition failet.
-        lowerer.activeLabel = conditionEvaluationLabel
+        lowerer.activeLabel = newConditionEvaluationLabel
         
         if let `else` {
             
