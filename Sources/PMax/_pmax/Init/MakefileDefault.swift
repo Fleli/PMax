@@ -34,13 +34,13 @@ struct MakefileDefault {
         MAXINSTRUCTIONS = 10000000
         
         all:
-            @clear
-            @echo "Compiling (pmax -> assembly)"
-            @pmax build --target-name $(ASMFILE) --lib-paths $(LIBRARYPATHS) $(PROFILECOMPILER) $(EMITINTERMEDIATE)
-            @echo "Assembling (assembly -> binary)"
-            @bbasm assemble _targets/$(ASMFILE) _targets/$(MACHINEFILE) $(EMITINDICES) --print-stats
-            @echo "Running (binary)"
-            @bbvm run _targets/$(MACHINEFILE) $(VIEWEXECUTION) --max-instructions $(MAXINSTRUCTIONS)
+        \t@clear
+        \t@echo "Compiling (pmax -> assembly)"
+        \t@pmax build --target-name $(ASMFILE) --lib-paths $(LIBRARYPATHS) $(PROFILECOMPILER) $(EMITINTERMEDIATE)
+        \t@echo "Assembling (assembly -> binary)"
+        \t@bbasm assemble _targets/$(ASMFILE) _targets/$(MACHINEFILE) $(EMITINDICES) --print-stats
+        \t@echo "Running (binary)"
+        \t@bbvm run _targets/$(MACHINEFILE) $(VIEWEXECUTION) --max-instructions $(MAXINSTRUCTIONS)
         
         """
         
