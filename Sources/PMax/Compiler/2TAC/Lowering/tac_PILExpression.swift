@@ -7,7 +7,7 @@ extension PILExpression {
         case .unary(let `operator`, let arg):
             
             let argument = arg.lowerToTAC(lowerer, function)
-            let result = lowerer.newInternalVariable("unary:\(`operator`.rawValue)", self.type)
+            let result = lowerer.newInternalVariable("un\(`operator`.rawValue)", self.type)
             
             let tac = TACStatement.assignUnaryOperation(lhs: result, operation: `operator`, arg: argument)
             lowerer.activeLabel.newStatement(tac)
@@ -16,10 +16,9 @@ extension PILExpression {
             
         case .binary(let `operator`, let arg1, let arg2):
             
-            let result = lowerer.newInternalVariable("binary:\(`operator`.rawValue)", self.type)
-            
             let argument1 = arg1.lowerToTAC(lowerer, function)
             let argument2 = arg2.lowerToTAC(lowerer, function)
+            let result = lowerer.newInternalVariable("bin\(`operator`.rawValue)", self.type)
             
             let tac = TACStatement.assignBinaryOperation(lhs: result, operation: `operator`, arg1: argument1, arg2: argument2)
             lowerer.activeLabel.newStatement(tac)
@@ -38,7 +37,7 @@ extension PILExpression {
             }
             
             // Then, we declare the name of the variable representing the returned value.
-            let lhs = lowerer.newInternalVariable("call to \(pILCall.name)", self.type)
+            let lhs = lowerer.newInternalVariable("call_\(pILCall.name)", self.type)
             
             guard case .framePointer(let returnValueOffset) = lhs else {
                 fatalError("\(lhs)")

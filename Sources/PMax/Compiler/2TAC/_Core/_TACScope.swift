@@ -41,9 +41,9 @@ class TACScope {
         
         if emitOffsets {
             var decl = type.description + " " + name + ";"
-            decl += String(repeating: " ", count: max(0, 25 - decl.count))
+            decl += String(repeating: " ", count: max(0, 35 - decl.count))
             decl += "fp + \(framePointerOffset)"
-            decl += String(repeating: " ", count: max(0, 50 - decl.count))
+            decl += String(repeating: " ", count: max(0, 55 - decl.count))
             decl += "\(typeSize) words"
             print("\t" + decl)
         }

@@ -90,7 +90,7 @@ struct Build: ParsableCommand {
         
         let targetName = TargetDefaults.name(self.targetName, asLibrary)
         
-        let outPath: String = current + "/_targets/" + targetName
+        let outPath: String = current + "/_targets/" + targetName + (asLibrary ? ".hmax" : ".bba")
         let outOption: DebugOption = asLibrary ? .libraryCode : .assemblyCode
         
         compiler.addFileOption(outPath, outOption)

@@ -58,6 +58,10 @@ extension PILStatement {
             let jumpToBody = TACStatement.jumpIfNonZero(label: bodyLabel.name, variable: conditionResult)
             lowerer.activeLabel.newStatement(jumpToBody)
             
+            // We remember which label the condition evaluation ended at (in case it changed)
+            // This is needed for the case where the condition is evaluated to false.
+            let conditionEvaluationFinalLabel = lowerer.activeLabel
+            
             // We now move to the body and lower all of its statements. At the end of the body, insert a jump to the condition evaluator.
             lowerer.activeLabel = bodyLabel
             
@@ -74,8 +78,9 @@ extension PILStatement {
             
             lowerer.pop()
             
-            // Now, we consider the case where the condition failed. So we move back to the condition evaluation and insert a jump to nextLabel.
-            lowerer.activeLabel = conditionEvaluationLabel
+            // Now, we consider the case where the condition failed
+            // So we move back to the final condition evaluation label and insert a jump to nextLabel.
+            lowerer.activeLabel = conditionEvaluationFinalLabel
             let jumpToNext = TACStatement.jump(label: nextLabel.name)
             lowerer.activeLabel.newStatement(jumpToNext)
             
