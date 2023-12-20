@@ -25,18 +25,19 @@ struct MakefileDefault {
         return """
         
         LIBRARYPATHS = "\(libraryPaths)"
-        ASMFILE = "\(targetName).bba"
-        MACHINEFILE = "\(targetName).bbx"
+        ASMFILE = "\(targetName)"
+        MACHINEFILE = "\(targetName)"
         PROFILECOMPILER = #--profile
         VIEWEXECUTION = #--view-short
         PRINTASSEMBLERSTATS = #--print-stats
         EMITINTERMEDIATE = #--emit-offsets --emit-tac --emit-pil
         EMITINDICES = #--emit-indices
-        MAXINSTRUCTIONS = 10000000
+        MAXINSTRUCTIONS = 1000000
+        INCLUDECOMMENTS = #--include-comments
         
         all:
         \t@clear
-        \tpmax build --target-name $(ASMFILE) --lib-paths $(LIBRARYPATHS) $(PROFILECOMPILER) $(EMITINTERMEDIATE)
+        \tpmax build --target-name $(ASMFILE) --lib-paths $(LIBRARYPATHS) $(PROFILECOMPILER) $(EMITINTERMEDIATE) $(INCLUDECOMMENTS)
         \tbbasm assemble _targets/$(ASMFILE) _targets/$(MACHINEFILE) $(EMITINDICES)
         \tbbvm run _targets/$(MACHINEFILE) $(VIEWEXECUTION) --max-instructions $(MAXINSTRUCTIONS)
         
