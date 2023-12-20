@@ -25,22 +25,20 @@ struct MakefileDefault {
         return """
         
         LIBRARYPATHS = "\(libraryPaths)"
-        ASMFILE = "out.bba"
-        MACHINEFILE = "out.bbx"
-        PROFILECOMPILER = --profile
-        VIEWEXECUTION =
+        ASMFILE = "\(targetName).bba"
+        MACHINEFILE = "\(targetName).bbx"
+        PROFILECOMPILER = #--profile
+        VIEWEXECUTION = #--view-short
+        PRINTASSEMBLERSTATS = #--print-stats
         EMITINTERMEDIATE = #--emit-offsets --emit-tac --emit-pil
         EMITINDICES = #--emit-indices
         MAXINSTRUCTIONS = 10000000
         
         all:
         \t@clear
-        \t@echo "Compiling (pmax -> assembly)"
-        \t@pmax build --target-name $(ASMFILE) --lib-paths $(LIBRARYPATHS) $(PROFILECOMPILER) $(EMITINTERMEDIATE)
-        \t@echo "Assembling (assembly -> binary)"
-        \t@bbasm assemble _targets/$(ASMFILE) _targets/$(MACHINEFILE) $(EMITINDICES) --print-stats
-        \t@echo "Running (binary)"
-        \t@bbvm run _targets/$(MACHINEFILE) $(VIEWEXECUTION) --max-instructions $(MAXINSTRUCTIONS)
+        \tpmax build --target-name $(ASMFILE) --lib-paths $(LIBRARYPATHS) $(PROFILECOMPILER) $(EMITINTERMEDIATE)
+        \tbbasm assemble _targets/$(ASMFILE) _targets/$(MACHINEFILE) $(EMITINDICES)
+        \tbbvm run _targets/$(MACHINEFILE) $(VIEWEXECUTION) --max-instructions $(MAXINSTRUCTIONS)
         
         """
         

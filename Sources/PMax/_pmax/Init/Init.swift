@@ -30,8 +30,6 @@ struct Init: ParsableCommand {
     
     func run() throws {
         
-        print("Init new PMax repository")
-        
         try newFolder("_libraries")
         try newFolder("_targets")
         try newFolder(MainDefaults.sourceSubPath)
@@ -67,8 +65,6 @@ struct Init: ParsableCommand {
         
         let path = MainDefaults.sourceSubPath + "/main.pmax"
         let content = MainDefaults.mainPMaxDefault(author, asLibrary)
-        
-        print(path, content)
         
         newFile(path, content)
         

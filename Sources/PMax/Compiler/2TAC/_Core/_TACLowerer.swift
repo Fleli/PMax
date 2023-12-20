@@ -66,8 +66,6 @@ class TACLowerer: CustomStringConvertible {
                 continue
             }
             
-            print(function.signature)
-            
             push()
             
             if function.name == "main" && function.type == .int && function.parameters.count == 0 {
@@ -159,14 +157,7 @@ class TACLowerer: CustomStringConvertible {
         
         guard let labelGroup = labels[function] else {
             // TODO: Verify that this is unreachable.
-            labels.forEach {
-                print($0)
-            }
-            
-            print("Function: \(function)")
-            
-            fatalError()
-            
+            fatalError("Function: \(function). Labels: \(labels)")
         }
         
         return labelGroup.entry.name

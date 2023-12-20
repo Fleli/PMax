@@ -18,7 +18,7 @@ struct Build: ParsableCommand {
     @ArgumentParser.Option(help: "Specify the paths for the compiler to search for libraries in.")
     private var libPaths: [String] = []
     
-    @ArgumentParser.Option(help: "Specify the name of the output file.")
+    @ArgumentParser.Option(help: "Specify the name of the output file. Do not include file extensions - only provide the actual name.")
     private var targetName: String?
     
     @ArgumentParser.Flag(help: "Compile the files in 'source' as a library instead of an executable. Compiling as library will produce '.hmax' files in '_target'. NOTE: This functionality is *NOT* finished yet, and correct results are therefore not guaranteed.")
