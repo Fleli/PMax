@@ -3,7 +3,7 @@ extension Label {
     
     func lowerToBreadboardAssembly() -> String {
         
-        var assembly = "\n\(self.name):\n"
+        var assembly = "\(self.name):\n"
         
         for statement in self.statements {
             assembly += statement.lowerToBreadboardAssembly()

@@ -12,7 +12,7 @@ struct Build: ParsableCommand {
     private var current = Foundation.FileManager().currentDirectoryPath
     
     
-    // MARK: Command-line arguments, options and flags
+    // MARK: Command-line
     
     
     @ArgumentParser.Option(help: "Specify the paths for the compiler to search for libraries in.")
@@ -36,11 +36,15 @@ struct Build: ParsableCommand {
     @ArgumentParser.Flag(help: "Emit full TAC (Three-Address Code) information.")
     private var emitTac: Bool = false
     
+    @ArgumentParser.Flag(help: "Include TAC comments and assembly explanations in the resulting assembly file.")
+    private var includeComments: Bool = false
     
-    // MARK: the run() method
+    // MARK: The run() method
     
     
     func run() throws {
+        
+        String.includeCommentsInAssembly = self.includeComments
         
         let compiler = Compiler(emitOffsets, libPaths)
         

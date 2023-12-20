@@ -61,7 +61,7 @@ extension TACStatement {
             
         }
         
-        return "\n ; \(self.description)\n" + assembly
+        return (String.includeCommentsInAssembly ? "\n; \(self.description)\n" : "") + assembly
         
     }
     
