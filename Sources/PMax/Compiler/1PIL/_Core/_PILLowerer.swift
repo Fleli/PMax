@@ -163,10 +163,19 @@ class PILLowerer {
         structs[newStruct.name] = newStruct
     }
     
-    // TODO: Potential issue: How are collisions handled?
+    
     /// Take a `PILFunction` object and add it to the internal dictionary of functions.
     func newFunction(_ pilFunction: PILFunction) {
-        functions[pilFunction.name] = pilFunction
+        
+        let name = pilFunction.name
+        
+        guard functions[name] == nil else {
+            submitError(PMaxIssue.invalidRedeclaration(function: name))
+            return
+        }
+        
+        functions[name] = pilFunction
+        
     }
     
 }

@@ -25,6 +25,7 @@ enum PMaxIssue: PMaxError {
     case grammaticalIssue(description: String)
     case illegalIntegerLiteral(literal: String)
     case stringsAreNotSupported
+    case invalidRedeclaration(function: String)
     
     var allowed: Bool {
         false
@@ -83,6 +84,8 @@ enum PMaxIssue: PMaxError {
                 return "Illegal integer literal \(literal)."
             case .stringsAreNotSupported:
                 return "String literals are not supported by PMax yet."
+            case .invalidRedeclaration(let function):
+                return "Invalid redeclaration of function '\(function)'."
             }
         }()
         
