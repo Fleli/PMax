@@ -104,6 +104,10 @@ extension PILExpression {
             
             lowerer.activeLabel.newStatement(statement)
             
+            if case .literalValue(_) = argument {
+                lowerer.submitError(PMaxIssue.cannotFindAddressOfNonReference)
+            }
+            
             return lhs
             
         case .member(let main, let member):

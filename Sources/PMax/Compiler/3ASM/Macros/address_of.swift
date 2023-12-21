@@ -10,15 +10,9 @@ extension TACStatement {
             // Adressen til variabelen er sp + offset
             assembly = calculate_stack_pointer_offset(0, offset)
             
-        case .literalValue(_):
+        default:
             
-            // TODO: This is definitely reachable: &6. Catch this (and submit an error) earlier so that assembly code generation is safe.
-            fatalError()
-            
-        case .rawPointer(_):
-            
-            // Not reachable
-            fatalError()
+            fatalError("Should be unreachable.\narg: \(arg).\nlhs: \(lhs).")
             
         }
         

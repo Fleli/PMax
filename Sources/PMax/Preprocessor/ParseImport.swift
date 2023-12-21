@@ -2,8 +2,6 @@ extension Preprocessor {
     
     func parseImport(_ library: String, _ hmaxFile: String) {
         
-        print("Parsing library '\(library)'.")
-        
         let lexer = Lexer()
         let parser = SLRParser()
         

@@ -23,8 +23,6 @@ class PILCall: CustomStringConvertible {
     private func performSemanticChecksOnArguments(_ lowerer: PILLowerer) {
         
         guard let function = lowerer.functions[name] else {
-            // TODO: Verify that we should actually submit an error here. We probably shouldn't.
-            lowerer.submitError(PMaxIssue.functionDoesNotExist(name: name))
             return
         }
         
@@ -45,8 +43,6 @@ class PILCall: CustomStringConvertible {
                 lowerer.submitError(PMaxIssue.incorrectTypeInFunctionCall(functionName: name, expected: parameterType, given: argumentType, position: i + 1))
                 continue
             }
-            
-            // TODO: Verify that there is nothing more to check.
             
         }
         

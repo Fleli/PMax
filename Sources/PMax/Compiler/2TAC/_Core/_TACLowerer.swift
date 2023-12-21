@@ -156,7 +156,6 @@ class TACLowerer: CustomStringConvertible {
     func getFunctionEntryPoint(_ function: String) -> String {
         
         guard let labelGroup = labels[function] else {
-            // TODO: Verify that this is unreachable.
             fatalError("Function: \(function). Labels: \(labels)")
         }
         
