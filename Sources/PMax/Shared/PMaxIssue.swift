@@ -26,6 +26,7 @@ enum PMaxIssue: PMaxError {
     case illegalIntegerLiteral(literal: String)
     case stringsAreNotSupported
     case invalidRedeclaration(function: String)
+    case invalidRedeclaratino(struct: String)
     
     var allowed: Bool {
         false
@@ -86,6 +87,8 @@ enum PMaxIssue: PMaxError {
                 return "String literals are not supported by PMax yet."
             case .invalidRedeclaration(let function):
                 return "Invalid redeclaration of function '\(function)'."
+            case .invalidRedeclaratino(let `struct`):
+                return "Invalid redeclaration of struct '\(`struct`)'."
             }
         }()
         

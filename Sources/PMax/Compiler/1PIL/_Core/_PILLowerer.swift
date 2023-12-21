@@ -156,11 +156,20 @@ class PILLowerer {
         errors.append(newError)
     }
     
-    // TODO: Potential issue: How are collisions handled?
+    
     /// Take a syntactical `Struct` object and add it to the internal dictionary of structs.
     func newStruct(_ `struct`: Struct) {
+        
+        let type = `struct`.name
+        
+        guard structs[type] == nil else {
+            submitError(PMaxIssue.invalidRedeclaratino(struct: type))
+            return
+        }
+        
         let newStruct = PILStruct(`struct`, self)
-        structs[newStruct.name] = newStruct
+        structs[type] = newStruct
+        
     }
     
     
