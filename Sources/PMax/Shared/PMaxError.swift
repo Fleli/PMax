@@ -1,4 +1,4 @@
-protocol PMaxError: CustomStringConvertible {
+protocol PMaxError: CustomStringConvertible, Error {
     
     var allowed: Bool { get }
     

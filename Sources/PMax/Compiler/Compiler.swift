@@ -34,10 +34,20 @@ final class Compiler {
     }
     
     
-    public func printErrors() {
+    public func printErrors() throws {
+        
         if !encounteredErrors.readableFormat.isEmpty {
+            
             Swift.print(encounteredErrors.readableFormat)
+            
+            for error in encounteredErrors {
+                if !error.allowed {
+                    throw error
+                }
+            }
+            
         }
+        
     }
     
     

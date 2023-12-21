@@ -50,7 +50,7 @@ struct Build: ParsableCommand {
         
         handleFlags(compiler)
         setOutputInformation(compiler)
-        compile(with: compiler)
+        try compile(with: compiler)
         
     }
     
@@ -98,20 +98,11 @@ struct Build: ParsableCommand {
     }
     
     
-    private func compile(with compiler: Compiler) {
+    private func compile(with compiler: Compiler) throws {
         
-        do {
-            
-            let sourceCode = try assembleSourceCode()
-            try compiler.compile(sourceCode, asLibrary)
-            compiler.printErrors()
-            
-        } catch {
-            
-            print(error)
-            return
-            
-        }
+        let sourceCode = try assembleSourceCode()
+        try compiler.compile(sourceCode, asLibrary)
+        try compiler.printErrors()
         
     }
     
