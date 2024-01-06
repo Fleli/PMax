@@ -13,7 +13,7 @@ int main() {
 }
 ```
 
-Lexical analysis touches on every single character in the input and results in an array of _tokens_, represented internally by the `Token` class. Each `Token` has a _type_ (first column) and some _content_ (second column). The class also stores information about where in the input it was found. This will become useful later for syntax highlighting and precise error messages.
+Lexical analysis touches on every single character in the input and results in an array of _tokens_, represented internally by the `Token` class. Each `Token` has a _type_ (first column) and _content_ (second column). The class also stores information about where in the input it was found. This will become useful later for syntax highlighting and precise error messages.
 
 <details>
     <summary>Generated tokens</summary>

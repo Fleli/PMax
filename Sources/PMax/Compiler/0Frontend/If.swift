@@ -7,22 +7,22 @@ public class If: CustomStringConvertible {
 	
 	let condition: Expression
 	let body: FunctionBodyStatements
-	let elseIf: If?
+	let `else`: Else?
 	
-	init(_ condition: Expression, _ body: FunctionBodyStatements, _ elseIf: If) {
+	init(_ condition: Expression, _ body: FunctionBodyStatements, _ `else`: Else) {
 		self.condition = condition
 		self.body = body
-		self.elseIf = elseIf
+		self.`else` = `else`
 	}
 	
 	init(_ condition: Expression, _ body: FunctionBodyStatements) {
 		self.condition = condition
 		self.body = body
-		self.elseIf = nil
+		self.`else` = nil
 	}
 
 	public var description: String {
-		"if " + condition.description + " " + "{ " + body.description + " " + "} " + (elseIf == nil ? "" : "else " + elseIf!.description + " ")
+		"if " + condition.description + " " + "{ " + body.description + " " + "} " + (`else` == nil ? "" : "else " + `else`!.description + " ")
 	}
 	
 }

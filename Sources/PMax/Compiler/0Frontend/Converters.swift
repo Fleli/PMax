@@ -5,22 +5,22 @@
 
 public extension SLRNode {
     
-    func convertToTopLevelStatements() -> TopLevelStatements {
+    func convertToParameters() -> Parameters {
         
         if children.count == 0 {
             return []
         }
         
         if children.count == 1 {
-            return [children[0].convertToTopLevelStatement()]
+            return [children[0].convertToParameter()]
         }
         
         if children.count == 2 {
-            return children[0].convertToTopLevelStatements() + [children[1].convertToTopLevelStatement()]
+            return children[0].convertToParameters() + [children[1].convertToParameter()]
         }
         
         if children.count == 3 {
-            return children[0].convertToTopLevelStatements() + [children[2].convertToTopLevelStatement()]
+            return children[0].convertToParameters() + [children[2].convertToParameter()]
         }
         
         fatalError()
@@ -55,22 +55,22 @@ public extension SLRNode {
 }
 public extension SLRNode {
     
-    func convertToParameters() -> Parameters {
+    func convertToStructBodyStatements() -> StructBodyStatements {
         
         if children.count == 0 {
             return []
         }
         
         if children.count == 1 {
-            return [children[0].convertToParameter()]
+            return [children[0].convertToDeclaration()]
         }
         
         if children.count == 2 {
-            return children[0].convertToParameters() + [children[1].convertToParameter()]
+            return children[0].convertToStructBodyStatements() + [children[1].convertToDeclaration()]
         }
         
         if children.count == 3 {
-            return children[0].convertToParameters() + [children[2].convertToParameter()]
+            return children[0].convertToStructBodyStatements() + [children[2].convertToDeclaration()]
         }
         
         fatalError()
@@ -105,22 +105,22 @@ public extension SLRNode {
 }
 public extension SLRNode {
     
-    func convertToStructBodyStatements() -> StructBodyStatements {
+    func convertToTopLevelStatements() -> TopLevelStatements {
         
         if children.count == 0 {
             return []
         }
         
         if children.count == 1 {
-            return [children[0].convertToDeclaration()]
+            return [children[0].convertToTopLevelStatement()]
         }
         
         if children.count == 2 {
-            return children[0].convertToStructBodyStatements() + [children[1].convertToDeclaration()]
+            return children[0].convertToTopLevelStatements() + [children[1].convertToTopLevelStatement()]
         }
         
         if children.count == 3 {
-            return children[0].convertToStructBodyStatements() + [children[2].convertToDeclaration()]
+            return children[0].convertToTopLevelStatements() + [children[2].convertToTopLevelStatement()]
         }
         
         fatalError()
@@ -128,29 +128,6 @@ public extension SLRNode {
     }
     
 }
-public extension SLRNode {
-
-	func convertToIf() -> If {
-		
-		if type == "If" && children.count == 5 && children[0].type == "if" && children[1].type == "Expression" && children[2].type == "{" && children[3].type == "FunctionBodyStatements" && children[4].type == "}" {
-			let arg1 = children[1].convertToExpression()
-			let arg3 = children[3].convertToFunctionBodyStatements()
-			return .init(arg1, arg3)
-		}
-		
-		if type == "If" && children.count == 7 && children[0].type == "if" && children[1].type == "Expression" && children[2].type == "{" && children[3].type == "FunctionBodyStatements" && children[4].type == "}" && children[5].type == "else" && children[6].type == "If" {
-			let arg1 = children[1].convertToExpression()
-			let arg3 = children[3].convertToFunctionBodyStatements()
-			let arg6 = children[6].convertToIf()
-			return .init(arg1, arg3, arg6)
-		}
-		
-		fatalError()
-		
-	}
-
-}
-
 public extension SLRNode {
 
 	func convertToAssignment() -> Assignment {
@@ -261,6 +238,64 @@ public extension SLRNode {
 			let arg0 = children[0].convertToType()
 			let arg1 = children[1].convertToTerminal()
 			return .init(arg0, arg1)
+		}
+		
+		fatalError()
+		
+	}
+
+}
+
+public extension SLRNode {
+
+	func convertToIf() -> If {
+		
+		if type == "If" && children.count == 5 && children[0].type == "if" && children[1].type == "Expression" && children[2].type == "{" && children[3].type == "FunctionBodyStatements" && children[4].type == "}" {
+			let arg1 = children[1].convertToExpression()
+			let arg3 = children[3].convertToFunctionBodyStatements()
+			return .init(arg1, arg3)
+		}
+		
+		if type == "If" && children.count == 7 && children[0].type == "if" && children[1].type == "Expression" && children[2].type == "{" && children[3].type == "FunctionBodyStatements" && children[4].type == "}" && children[5].type == "else" && children[6].type == "Else" {
+			let arg1 = children[1].convertToExpression()
+			let arg3 = children[3].convertToFunctionBodyStatements()
+			let arg6 = children[6].convertToElse()
+			return .init(arg1, arg3, arg6)
+		}
+		
+		fatalError()
+		
+	}
+
+}
+
+public extension SLRNode {
+
+	func convertToElse() -> Else {
+		
+		if type == "Else" && children.count == 1 && children[0].type == "UnconditionalElse" {
+			let arg0 = children[0].convertToUnconditionalElse()
+			return Else.uncdoncitional(arg0)
+		}
+	
+		if type == "Else" && children.count == 1 && children[0].type == "If" {
+			let arg0 = children[0].convertToIf()
+			return Else.conditional(arg0)
+		}
+	
+		fatalError()
+	
+	}
+	
+}
+
+public extension SLRNode {
+
+	func convertToUnconditionalElse() -> UnconditionalElse {
+		
+		if type == "UnconditionalElse" && children.count == 3 && children[0].type == "{" && children[1].type == "FunctionBodyStatements" && children[2].type == "}" {
+			let arg1 = children[1].convertToFunctionBodyStatements()
+			return .init(arg1)
 		}
 		
 		fatalError()

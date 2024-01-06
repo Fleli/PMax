@@ -6,17 +6,9 @@ Welcome to the PMax repository. PMax is a programming language that draws inspir
 
 Please refer to the [PMax Development Kit](https://github.com/Fleli/PDK-Installer) to install the compiler (this repository), an assembler and a virtual machine to run the code on.
 
-## Repository Structure
+## Documentation
 
-Detailed information about each part is found in the `Documentation` folder.
-
-The files in `Sources/PMax/_pmax` implement the compiler's command-line interface. The files `_Build`, `_Init` and `_Version` implement subcommands. `DeepSearch` implements a recursive folder search, used to locate both source code (`.pmax`) and library (`.hmax`) files. The `Defaults` files are used when initializaing new PMax workspaces.
-
-The compiler itself is found in `Sources/PMax/Compiler`. It is quite large, so it is further explained in the `Documents` folder.
-
-Importing libraries is handled by a preprocessor, found in `Sources/PMax/Preprocessor`. This code implements parser calls, assembly code and entry point extraction, and transitive library resolution (coming later).
-
-Finally, the `Shared` folder contains tools used throughout or related to the compiler. Examples include the `PMaxError` protocol, token filtering, and profiling.
+The `Documentation` folder contains detailed information about each part of the compiler. A quick overview is found in `Documentation/Compiler.md`.
 
 ## Standard Library
 
