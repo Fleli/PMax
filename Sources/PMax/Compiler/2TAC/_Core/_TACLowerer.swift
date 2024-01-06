@@ -1,30 +1,60 @@
 class TACLowerer: CustomStringConvertible {
     
-    typealias Labels = [String : (pilFunction: PILFunction, entry: Label, all: Set<Label>)]
     
+    /// The typealias `(PILFunction, Label, Set<Label>)` groups together information about a function, including all its labels, its entry label (used for calling), and its corresponding complete `PILFunction` instance.
+    typealias AssociatedFunctionData = (pilFunction: PILFunction, entry: Label, all: Set<Label>)
+    
+    
+    // MARK: Internal Properties
+    
+    /// The current local scope.
     var local: TACScope!
     
+    /// The currently active label. The next statement is appended to the current label.
     var activeLabel: Label!
     
-    let pilLowerer: PILLowerer
-    
+    /// Returns `true` if no issues were found, i.e. if it is safe to generate code. Warnings are allowed, so this returns `true` even if warnings were generated.
     var noIssues: Bool {
         return errors.reduce(true, {$0 && $1.allowed})
     }
     
-    private var internalCounter = 0
+    /// Build a description of the `TACLowerer` instance.
+    /// This description contains includes all functions and their related labels and entry points.
+    var description: String {
+        labels.reduce("", {$0 + "(" + $1.key + ")\n" + $1.value.all.reduce("") { $0 + $1.description + "\n" } + "\n"})
+    }
     
+    // MARK: Private(set) Properties
+    
+    /// All structs declared in the program and imported libraries.
     private(set) var structs: [String : PILStruct] = [:]
     
+    /// All functions declared in the program and imported libraries.
     private(set) var functions: [String : PILFunction] = [:]
     
-    /// The `relatedLabels` dictionary maps a function name (`String`) to the set of labels associated with that function, and also explicitly stores the entry label. This is useful when compiling a library.
-    private(set) var labels: Labels = [:]
+    /// Maps a function name (`String`) to data associated with that function. This data includes the corresponding `PILFunction` instance, function entry label, and a set of _all_ labels that are part of the function.. This is useful when compiling a library.
+    private(set) var labels: [String : AssociatedFunctionData] = [:]
     
     /// `libraryAssembly` stores a list of assembly code snippets fetched from imported libraries. They are `reduce`d to a single `String` and pasted in with the rest of the assembly when compiling executables.
     private(set) var libraryAssembly: [String] = []
     
+    /// The ordered list of errors (issues and warnings) found by the `TACLowerer` instance.
     private(set) var errors: [PMaxError] = []
+    
+    // MARK: Private Properties
+    
+    // TODO: Replace the PILLowerer, which as a whole isn't really interesting, with just the struct layouts dictionary. However, first verify that we really don't need more than that.
+    /// The `PILLowerer` instance that supplied this `TACLowerer` with data.
+    /// The `PILLowerer` is used to find struct layouts.
+    private let pilLowerer: PILLowerer
+    
+    /// Counts the number of labels generated. Used to make sure all label names are unique.
+    private var labelCounter = 0
+    
+    /// Counts the number of internal variables generated. Used to make sure all internal variable names are unique.
+    private var variableCounter = 0
+    
+    // MARK: Initializer
     
     init(_ pilLowerer: PILLowerer, _ emitOffsets: Bool) {
         
@@ -36,6 +66,7 @@ class TACLowerer: CustomStringConvertible {
         
     }
     
+    // MARK: Main Lowering Function
     
     func lower(_ compileAsLibrary: Bool) {
         
@@ -93,11 +124,13 @@ class TACLowerer: CustomStringConvertible {
         
     }
     
+    // MARK: Error Submission
     
     func submitError(_ newError: PMaxIssue) {
         errors.append(newError)
     }
     
+    // MARK: Label Generator
     
     /// Create a new label. If `isFunctionEntry` (if this is the label jumped to when calling a function), its name is the `context`. For other labels used in `if`s etc., an internal counter makes sure no names clash, and just uses the context to give the label an informative name.
     @discardableResult
@@ -109,8 +142,8 @@ class TACLowerer: CustomStringConvertible {
             newLabel = Label(context)
             labels[function.name] = (pilFunction: function, entry: newLabel, all: [newLabel])
         } else {
-            internalCounter += 1
-            newLabel = Label("@l\(internalCounter)_\(context)")
+            labelCounter += 1
+            newLabel = Label("@l\(labelCounter)_\(context)")
         }
         
         labels[function.name]?.all.insert(newLabel)
@@ -118,14 +151,19 @@ class TACLowerer: CustomStringConvertible {
         
     }
     
+    // MARK: Internal Variable Generator
     
-    /// Generate (and declare) a new internal variable. It does not collide with any other variable names. It uses a `context` parameter to give a _somewhat_ informative name.
-    func newInternalVariable(_ context: String, _ type: PILType) -> Location {
-        internalCounter += 1
-        let name = "$\(internalCounter)_\(context)"
+    /// Generate (and declare) a new internal variable.
+    /// This variable is guaranteed not to collide with any other variable names.
+    /// It uses a `context` parameter to give a _somewhat_ informative name.
+    /// Returns the frame pointer offset of the newly declared variable.
+    func newInternalVariable(_ context: String, _ type: PILType) -> Int {
+        variableCounter += 1
+        let name = "$\(variableCounter)_\(context)"
         return local.declare(type, name)
     }
     
+    // MARK: SizeOf
     
     func sizeOf(_ type: PILType) -> Int {
         
@@ -140,6 +178,7 @@ class TACLowerer: CustomStringConvertible {
         
     }
     
+    // MARK: Scope Push & Pop
     
     func push() {
         local = TACScope(local)
@@ -149,9 +188,7 @@ class TACLowerer: CustomStringConvertible {
         local = local.parent!
     }
     
-    var description: String {
-        labels.reduce("", {$0 + "(" + $1.key + ")\n" + $1.value.all.reduce("") { $0 + $1.description + "\n" } + "\n"})
-    }
+    // MARK: Function Entry Points
     
     func getFunctionEntryPoint(_ function: String) -> String {
         

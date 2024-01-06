@@ -3,35 +3,36 @@ enum TACStatement: CustomStringConvertible {
     typealias Binary = Expression.InfixOperator
     typealias Unary = Expression.SingleArgumentOperator
     
-    /// Assign the result of the operation `arg1 (op) arg2` to `lhs` for values in arbitrary locations `lhs`, `arg1`, `arg2`.
-    case assignBinaryOperation(lhs: Location, operation: Binary, arg1: Location, arg2: Location)
+    /// Assign the result of the operation `arg1 (op) arg2` to `lhs`.
+    case assignBinaryOperation(lhs: LValue, operation: Binary, arg1: RValue, arg2: RValue)
     
-    /// Assign the result of the operation `(op) arg` to `lhs` for values in arbitrary locations `lhs`, `arg`.
-    case assignUnaryOperation(lhs: Location, operation: Unary, arg: Location)
+    /// Assign the result of the operation `(op) arg` to `lhs`.
+    case assignUnaryOperation(lhs: LValue, operation: Unary, arg: RValue)
     
     /// Jump to a label in named `label`.
     case jump(label: String)
     
-    /// Jump to a label named `label` if the value at location `variable` is non-zero.
-    case jumpIfNonZero(label: String, variable: Location)
+    /// Jump to a label named `label` if the `RValue` condition is non-zero
+    case jumpIfNonZero(label: String, condition: RValue)
     
-    /// Call a function whose start label is `functionLabel` and return to `returnLabel`. The returned result is `words` words long and is assigned to `lhs`, which is assumed to be a frame pointer offset.
-    case call(lhs: Location, functionLabel: String, returnLabel: String, words: Int)
+    /// Call a function whose start label is `functionLabel` and return to `returnLabel`. The returned result is `words` words long and is assigned to the given frame pointer offset.
+    case call(returnValueFramePointerOffset: Int, functionLabel: String, returnLabel: String, words: Int)
     
-    /// Push a parameter of size `words` at an offset of `framePointerOffset` from the current function's frame pointer. The value to push is found at `at`.
-    case pushParameter(at: Location, words: Int, framePointerOffset: Int)
+    /// Push a parameter `value` of size `words` at an offset of `framePointerOffset` from the current function's frame pointer.
+    case pushParameter(value: RValue, words: Int, framePointerOffset: Int)
     
-    /// Assign the value of dereferencing `arg` to the location `lhs`. The `words` integer is used to find the number of words to copy (the size of the type being assigned to `lhs`).
-    case dereference(lhs: Location, arg: Location, words: Int)
+    /// Assign the value of dereferencing `expression` to the location `lhs`. The `words` integer is used to find the number of words to copy (the size of the type being assigned to `lhs`).
+    case dereference(lhs: LValue, expression: RValue, words: Int)
     
-    /// Find the address of the variable referred to by `arg`. Assign this address to `lhs`.
-    case addressOf(lhs: Location, arg: Location)
+    /// Find the address of `expression`. Addresses only exist for `LValue`s. The address is assigned to `lhs`.
+    case addressOf(lhs: LValue, expression: LValue)
     
     /// Assign the value at `rhs` to the location `lhs`. The `words` attribute tells how large the value to copy is (e.g. whether to copy 1, 2, 3, etc. words). The `lhs` and `rhs` locations represent the _start_ addresses to use.
-    case assign(lhs: Location, rhs: Location, words: Int)
+    case assign(lhs: LValue, rhs: RValue, words: Int)
     
-    /// Return from a function. The return value is an optional `Location` (which is `nil` for `void` returns and non-`nil` otherwise). `words` tells the size of the value to return.
-    case `return`(value: Location?, words: Int)
+    /// Return a value from a function. If the function is `void`, the `returnValueFramePointerOffset` is `nil` and `words` is `0` (indicating the length of the return value is 0).
+    /// For non-`void` functions, the `returnValueFramePointerOffset` specifies the beginning frame pointer offset of the return value, and `words` indicates the return value's size.
+    case `return`(returnValueFramePointerOffset: Int?, words: Int)
     
     var description: String {
         

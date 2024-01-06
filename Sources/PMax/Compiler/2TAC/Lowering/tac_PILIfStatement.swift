@@ -13,10 +13,10 @@ extension PILIfStatement {
         
         // We then switch to the condition evaluation label and lower the condition evaluation
         lowerer.activeLabel = conditionEvaluationLabel
-        let conditionEvaluationResult = condition.lowerToTAC(lowerer, function)
+        let conditionEvaluationResult = condition.lowerToTACAsRValue(lowerer, function)
         
         // If the condition evaluates to true, we jump to the body label.
-        let jumpIfTrue = TACStatement.jumpIfNonZero(label: bodyInitLabel.name, variable: conditionEvaluationResult)
+        let jumpIfTrue = TACStatement.jumpIfNonZero(label: bodyInitLabel.name, condition: conditionEvaluationResult)
         lowerer.activeLabel.newStatement(jumpIfTrue)
         
         // We might have moved to a new label during condition evaluation (e.g. if it contains a function call).

@@ -7,7 +7,7 @@ class TACScope {
     private var dataSectionCounter: Int
     private var framePointerOffset: Int
     
-    private var variables: [String : (PILType, Location)] = [:]
+    private var variables: [String : (type: PILType, framePointerOffset: Int)] = [:]
     
     private weak var lowerer: TACLowerer!
     
@@ -31,26 +31,34 @@ class TACScope {
         
     }
     
+    /// Declare a new variable in this scope. Return the new variable's frame pointer offset.
     @discardableResult
-    func declare(_ type: PILType, _ name: String) -> Location {
+    func declare(_ type: PILType, _ name: String) -> Int {
         
-        let location = Location.framePointer(offset: framePointerOffset)
-        variables[name] = (type, location)
+        /// Represents the frame pointer offset of the newly declared variable.
+        let offset = framePointerOffset
         
+        /// Represents the size of the newly declared variable, in words (number of addresses).
         let typeSize = lowerer.sizeOf(type)
         
+        // Increment the frame pointer so that the next variable is declared just after this one.
+        framePointerOffset += typeSize
+            
+        // Store the newly declared variable.
+        variables[name] = (type, offset)
+        
+        // Obey command-line requests.
         if emitOffsets {
             var decl = type.description + " " + name + ";"
             decl += String(repeating: " ", count: max(0, 35 - decl.count))
-            decl += "fp + \(framePointerOffset)"
+            decl += "fp + \(offset)"
             decl += String(repeating: " ", count: max(0, 55 - decl.count))
             decl += "\(typeSize) words"
             print("\t" + decl)
         }
         
-        framePointerOffset += typeSize
-        
-        return location
+        // Retun the frame pointer offset of the new variable.
+        return offset
         
     }
     
@@ -69,14 +77,13 @@ class TACScope {
         
     }
     
-    func getVariable(_ name: String) -> (type: PILType, location: Location) {
+    func getVariableAsLValue(_ name: String) -> LValue {
         
-        // SKAL eksistere, ellers har noe gått galt.
-        guard let v = variables[name] else {
-            return parent!.getVariable(name)
+        guard let local = variables[name] else {
+            return parent!.getVariableAsLValue(name)
         }
         
-        return v
+        return .stackAllocated(framePointerOffset: local.1)
         
     }
     

@@ -23,7 +23,10 @@ extension If {
             
             // If the `else` is unconditional, we tranform it to the condition `if 1`, which always evaluates to `true`.
             // This introduces a small performance penalty in the generated executable.
+            
             // TODO: Introduce an optimization that removes this penalty.
+            // Note: This will be done automatically by LLMM if used together with this compiler (once it's finished).
+            
             let ordinaryElseIf = If(Expression.integer("1"), unconditionalElse.body)
             `else` = ordinaryElseIf.lowerToPIL(lowerer)
             

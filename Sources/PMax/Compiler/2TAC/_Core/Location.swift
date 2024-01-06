@@ -8,6 +8,8 @@
 // It is used for several different purposes, leading to weird switch statements where some cases are marked as unreachable etc.
 // It is also highly error prone, and difficult to maintain (simply because it is illogical).
 
+/*
+
 indirect enum Location: CustomStringConvertible {
     
     /// A `.framePointer` case represents a certain offset from the current frame pointer. This is used for referring to local variables.
@@ -53,3 +55,4 @@ enum RawPointerValue: CustomStringConvertible {
     
 }
 
+*/

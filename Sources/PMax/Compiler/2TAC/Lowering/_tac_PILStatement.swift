@@ -12,8 +12,8 @@ extension PILStatement {
             
         case .assignment(let lhs, let rhs):
             
-            let lhsLocation = lhs.lowerToTACAsLHS(lowerer, function)
-            let rhsLocation = rhs.lowerToTAC(lowerer, function)
+            let lhsLocation = lhs.lowerToTACAsLValue(lowerer, function)
+            let rhsLocation = rhs.lowerToTACAsRValue(lowerer, function)
             
             let wordsToAssign = lowerer.sizeOf(lhs.type)
             let statement = TACStatement.assign(lhs: lhsLocation, rhs: rhsLocation, words: wordsToAssign)
@@ -21,7 +21,7 @@ extension PILStatement {
             
         case .return(let expression):
             
-            let value = expression?.lowerToTAC(lowerer, function)
+            let value = expression?.lowerToTACAsStackAllocatedRValue(lowerer, function)
             
             var words = 0
             
@@ -29,7 +29,7 @@ extension PILStatement {
                 words = lowerer.sizeOf(t)
             }
             
-            let statement = TACStatement.return(value: value, words: words)
+            let statement = TACStatement.return(returnValueFramePointerOffset: value, words: words)
             lowerer.activeLabel.newStatement(statement)
              
         case .if(let pILIfStatement):
@@ -54,8 +54,8 @@ extension PILStatement {
             lowerer.activeLabel = conditionEvaluationLabel
             
             // If the condition is true, move to the body.
-            let conditionResult = condition.lowerToTAC(lowerer, function)
-            let jumpToBody = TACStatement.jumpIfNonZero(label: bodyLabel.name, variable: conditionResult)
+            let conditionResult = condition.lowerToTACAsRValue(lowerer, function)
+            let jumpToBody = TACStatement.jumpIfNonZero(label: bodyLabel.name, condition: conditionResult)
             lowerer.activeLabel.newStatement(jumpToBody)
             
             // We remember which label the condition evaluation ended at (in case it changed)

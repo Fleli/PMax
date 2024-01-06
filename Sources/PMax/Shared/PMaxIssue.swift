@@ -76,7 +76,7 @@ enum PMaxIssue: PMaxError {
             case .unassignableLHS(let lhs):
                 return "The expression \(lhs.readableDescription) is unassignable because it is not a local variable, pointer dereference or member access."
             case .hasNoValidMain:
-                return "The exectuable must contain a valid int main() function."
+                return "The exectuable must contain a function whose signature is 'int main()'."
             case .invalidMember(let invalid):
                 return "Members must be referred to by name. The expression '\(invalid.readableDescription)' is not a valid member."
             case .grammaticalIssue(let description):

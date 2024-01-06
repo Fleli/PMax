@@ -1,9 +1,9 @@
 extension PILExpression {
     
     
-    func lowerMemberToTAC(_ main: PILExpression, _ member: String, _ lowerer: TACLowerer, _ function: PILFunction) -> Location {
+    func lowerToTACAsMemberRValue(_ main: PILExpression, _ member: String, _ lowerer: TACLowerer, _ function: PILFunction) -> RValue {
         
-        var mainResult = main.lowerToTAC(lowerer, function)
+        var mainResult = main.lowerToTACAsRValue(lowerer, function)
         
         let lhs = lowerer.newInternalVariable("member", self.type)
         
