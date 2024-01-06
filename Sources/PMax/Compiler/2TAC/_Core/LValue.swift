@@ -12,6 +12,21 @@ enum LValue: CustomStringConvertible {
     /// Dereferencing literal values (e.g. `*30`) is allowed, but the compiler will generate some internal variable and set it equal to `30`, and then use its offset as the `framePointerOffset`.
     case dereference(framePointerOffset: Int)
     
+    
+    /// Since `LValue`s are a subset of `RValue`s, it might make sense to convert an `LValue` to an `RValue`.
+    /// This is, for example, used when fetching local variables but using them as RHS of an expression (scopes return them as `LValue`s).
+    func treatAsRValue() -> RValue {
+        
+        switch self {
+        case .stackAllocated(let framePointerOffset):
+            return .stackAllocated(framePointerOffset: framePointerOffset)
+        case .dereference(let framePointerOffset):
+            return .dereference(framePointerOffset: framePointerOffset)
+        }
+        
+    }
+    
+    
     /// A description of the `LValue`.
     var description: String {
         switch self {

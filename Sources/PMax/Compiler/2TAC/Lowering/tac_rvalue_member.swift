@@ -1,6 +1,6 @@
 extension PILExpression {
     
-    /*
+    
     func lowerToTACAsMemberRValue(_ main: PILExpression, _ member: String, _ lowerer: TACLowerer, _ function: PILFunction) -> RValue {
         
         var mainResult = main.lowerToTACAsRValue(lowerer, function)
@@ -18,7 +18,7 @@ extension PILExpression {
         case .integerLiteral(let value):
             <#code#>
         case .dereference(let framePointerOffset):
-            <#code#>
+            <#code#> 
         }
         
         
@@ -35,6 +35,6 @@ extension PILExpression {
         return lhs
         
     }
-    */
+    
     
 }

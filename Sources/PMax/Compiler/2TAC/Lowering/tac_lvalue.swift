@@ -4,6 +4,9 @@ extension PILExpression {
     static var offsetCalculationCount = 0
     
     
+    // TODO: Consider adding a specialized error message for when attempting to take address-of an LValue.
+    // Implementation Method: Add a parameter to the function below: `addressOf: Bool`, that is used to generate a proper error message.
+    
     func lowerToTACAsLValue(_ lowerer: TACLowerer, _ function: PILFunction) -> LValue {
         
         switch value {

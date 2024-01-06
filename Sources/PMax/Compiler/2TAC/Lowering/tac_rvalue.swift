@@ -38,6 +38,7 @@ extension PILExpression {
             /// The result is treated first as an `LValue` (when we apply the operator), and then as an `RValue` (when we return it).
             let resultOffset = lowerer.newInternalVariable("bin\(`operator`.rawValue)", self.type)
             
+            /// The `TAC` statement corresponding to the binary operation in question. Here, the result is treated as an `LValue` since we're writing into it.
             let tac = TACStatement.assignBinaryOperation(
                 lhs: .stackAllocated(framePointerOffset: resultOffset),
                 operation: `operator`,
@@ -45,7 +46,6 @@ extension PILExpression {
                 arg2: argument2
             )
             
-            /// The `TAC` statement corresponding to the binary operation in question. Here, the result is treated as an `LValue` since we're writing into it.
             lowerer.activeLabel.newStatement(tac)
             
             // When we're done, we treat the result as an `RValue`.
@@ -53,7 +53,11 @@ extension PILExpression {
             
         case .call(let pilCall):
             
-            var loweredArguments: [(name: Location, size: Int)] = []
+            // TODO: Calls should be further cleaned up.
+            // - We don't need generic `RValues`s for the arguments. They are always declared on the stack, so we should just store their offsets.
+            // - There should be more comments here explaining the process.
+            
+            var loweredArguments: [(name: RValue, size: Int)] = []
             
             // We first calculate each argument and remember their names.
             for argument in pilCall.arguments {
@@ -62,31 +66,28 @@ extension PILExpression {
                 loweredArguments.append((name, words))
             }
             
-            // Then, we declare the name of the variable representing the returned value.
-            let lhs = lowerer.newInternalVariable("call_\(pilCall.name)", self.type)
-            
-            guard case .framePointer(let returnValueOffset) = lhs else {
-                fatalError("\(lhs)")
-            }
+            // Then, we declare the variable holding the returned value.
+            let returnValueOffset = lowerer.newInternalVariable("call_\(pilCall.name)_retvalue", self.type)
             
             // We keep track of the next argument's position relative to the frame pointer.
-            let returnSize = lowerer.sizeOf(lowerer.functions[pILCall.name]!.type)
+            let returnSize = lowerer.sizeOf(lowerer.functions[pilCall.name]!.type)
             var argumentOffsetToOldFramePointer = returnValueOffset + returnSize + 2
             
             // Then, since the return value's offset is known, we can push each argument with the correct offset.
             for (name, words) in loweredArguments {
-                let statement = TACStatement.pushParameter(at: name, words: words, framePointerOffset: argumentOffsetToOldFramePointer)
+                let statement = TACStatement.pushParameter(value: name, words: words, framePointerOffset: argumentOffsetToOldFramePointer)
                 argumentOffsetToOldFramePointer += words
                 lowerer.activeLabel.newStatement(statement)
             }
             
-            let returnLabel = lowerer.newLabel("\(pILCall.name)_ret", false, function)
+            let returnLabel = lowerer.newLabel("\(pilCall.name)_ret", false, function)
             
-            let callLabel = lowerer.getFunctionEntryPoint(pILCall.name)
+            let callLabel = lowerer.getFunctionEntryPoint(pilCall.name)
             
-            let retType = lowerer.functions[pILCall.name]!.type
+            let retType = lowerer.functions[pilCall.name]!.type
             let retSize = lowerer.sizeOf(retType)
-            let callStatement = TACStatement.call(lhs: lhs, functionLabel: callLabel, returnLabel: returnLabel.name, words: retSize)
+            
+            let callStatement = TACStatement.call(returnValueFramePointerOffset: returnValueOffset, functionLabel: callLabel, returnLabel: returnLabel.name, words: retSize)
             
             lowerer.activeLabel.newStatement(callStatement)
             
@@ -94,51 +95,74 @@ extension PILExpression {
             lowerer.activeLabel = returnLabel
             
             // The result is stored in `lhs`, so we return it so that it is accessible to other statements as well.
-            return lhs
+            return .stackAllocated(framePointerOffset: returnValueOffset)
             
         case .variable(let name):
             
-            return lowerer.local.getVariable(name).1
+            // Fetch the variable from the local scope and explicitly cast it as an RValue.
+            return lowerer.local.getVariableAsLValue(name).treatAsRValue()
             
         case .integerLiteral(let literal):
             
+            // Verify that the integer literal is valid (within bounds). submit an error if it isn't.
             guard let value = Int(literal), 0 <= value, value <= Builtin.intLiteralInclusiveBound else {
                 lowerer.submitError(PMaxIssue.illegalIntegerLiteral(literal: literal))
-                return .literalValue(value: 0)
+                return .integerLiteral(value: 0)
             }
             
-            return Location.literalValue(value: value)
+            return .integerLiteral(value: value)
             
         case .dereference(let pILExpression):
             
+            /// The expression to dereference, lowered to TAC as an `RValue`.
             let argument = pILExpression.lowerToTACAsRValue(lowerer, function)
             
-            let lhs = lowerer.newInternalVariable("dereference", self.type)
+            /// The frame pointer offset of the variable where we store `*argument`.
+            let lhsOffset = lowerer.newInternalVariable("dereference", self.type)
+            
+            /// The `LValue` that holds the dereferenced value.
+            let lhs = LValue.stackAllocated(framePointerOffset: lhsOffset)
+            
+            /// The size (number of words in memory) that the LHS takes up.
             let words = lowerer.sizeOf(self.type)
-            let statement = TACStatement.dereference(lhs: lhs, arg: argument, words: words)
+            
+            /// The TAC statement that dereferences the argument and stores it at the new internal variable `lhs`.
+            let statement = TACStatement.dereference(
+                lhs: lhs,
+                expression: argument,
+                words: words
+            )
             
             lowerer.activeLabel.newStatement(statement)
             
-            return lhs
+            // Return the dereferenced value, but casted as an RValue.
+            return lhs.treatAsRValue()
             
         case .addressOf(let pILExpression):
             
-            let argument = pILExpression.lowerToTACAsRValue(lowerer, function)
+            /// The expression to find the address of, lowered to TAC as an `LValue` (since only `LValue`s have an address).
+            let argument = pILExpression.lowerToTACAsLValue(lowerer, function)
             
-            let lhs = lowerer.newInternalVariable("addressOf", self.type)
-            let statement = TACStatement.addressOf(lhs: lhs, arg: argument)
+            /// The offset for a new internal variable which will hold the result of the address-of operation.
+            let lhsOffset = lowerer.newInternalVariable("addressOf", self.type)
             
-            lowerer.activeLabel.newStatement(statement)
+            /// The `LValue` representing the left-hand side of the address-of operation.
+            let lhs = LValue.stackAllocated(framePointerOffset: lhsOffset)
             
-            if case .literalValue(_) = argument {
-                lowerer.submitError(PMaxIssue.cannotFindAddressOfNonReference)
-            }
+            /// The TAC statement performing the address-of operation.
+            let addressOfStatement = TACStatement.addressOf(
+                lhs: lhs,
+                expression: argument
+            )
             
-            return lhs
+            lowerer.activeLabel.newStatement(addressOfStatement)
+            
+            // Treat the result (holding the address of the argument) as an RValue and return it.
+            return lhs.treatAsRValue()
             
         case .member(let main, let member):
             
-            return lowerMemberToTAC(main, member, lowerer, function)
+            return lowerToTACAsMemberRValue(main, member, lowerer, function)
             
         }
         
