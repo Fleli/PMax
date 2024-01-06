@@ -1,6 +1,6 @@
 extension PILExpression {
     
-    
+    /*
     func lowerToTACAsMemberRValue(_ main: PILExpression, _ member: String, _ lowerer: TACLowerer, _ function: PILFunction) -> RValue {
         
         var mainResult = main.lowerToTACAsRValue(lowerer, function)
@@ -11,10 +11,19 @@ extension PILExpression {
             fatalError()
         }
         
-        let layout = lowerer.pilLowerer.structLayouts[structName]
-        let memberLayout = layout!.fields[member]!
         
-        let localOffset = memberLayout.start
+        switch mainResult {
+        case .stackAllocated(let framePointerOffset):
+            <#code#>
+        case .integerLiteral(let value):
+            <#code#>
+        case .dereference(let framePointerOffset):
+            <#code#>
+        }
+        
+        
+        let layout = lowerer.structLayout(structName)
+        let localOffset = layout.fields[member]!.start
         
         mainResult = .framePointer(offset: offset + localOffset)
         
@@ -26,6 +35,6 @@ extension PILExpression {
         return lhs
         
     }
-    
+    */
     
 }

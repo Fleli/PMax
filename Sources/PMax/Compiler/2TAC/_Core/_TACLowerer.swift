@@ -157,6 +157,10 @@ class TACLowerer: CustomStringConvertible {
     
     // MARK: Internal Variable Generator
     
+    // TODO: Consider implementing a function for generating stack-allocated internal variables
+    // Essentially calling this and wrapping it in a stack-rvalue/lvalue since this is a common pattern
+    // This might clear up the code on the calling side.
+    
     /// Generate (and declare) a new internal variable.
     /// This variable is guaranteed not to collide with any other variable names.
     /// It uses a `context` parameter to give a _somewhat_ informative name.

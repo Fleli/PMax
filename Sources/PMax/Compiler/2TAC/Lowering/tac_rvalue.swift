@@ -7,38 +7,63 @@ extension PILExpression {
         switch value {
         case .unary(let `operator`, let arg):
             
+            /// `argument` represents `arg` (the unary operator's argument) lowered to TAC as an `RValue`.
             let argument = arg.lowerToTACAsRValue(lowerer, function)
-            let result = lowerer.newInternalVariable("un\(`operator`.rawValue)", self.type)
             
-            let tac = TACStatement.assignUnaryOperation(lhs: result, operation: `operator`, arg: argument)
+            /// `resultOffset` is the frame pointer offset of the variable holding the result of the operation.
+            /// The result is treated first as an `LValue` (when we apply the operator), and then as an `RValue` (when we return it).
+            let resultOffset = lowerer.newInternalVariable("un\(`operator`.rawValue)", self.type)
+            
+            /// The `TAC` statement corresponding to the unary operation in question. Here, the result is treated as an `LValue` since we're writing into it.
+            let tac = TACStatement.assignUnaryOperation(
+                lhs: .stackAllocated(framePointerOffset: resultOffset),
+                operation: `operator`,
+                arg: argument
+            )
+            
             lowerer.activeLabel.newStatement(tac)
             
-            return result
+            // When we're done, we treat the result as an `RValue`.
+            return .stackAllocated(framePointerOffset: resultOffset)
             
         case .binary(let `operator`, let arg1, let arg2):
             
+            /// `argument1` represents `arg1` (the binary operator's 1st argument) lowered to TAC as an `RValue`.
             let argument1 = arg1.lowerToTACAsRValue(lowerer, function)
-            let argument2 = arg2.lowerToTACAsRValue(lowerer, function)
-            let result = lowerer.newInternalVariable("bin\(`operator`.rawValue)", self.type)
             
-            let tac = TACStatement.assignBinaryOperation(lhs: result, operation: `operator`, arg1: argument1, arg2: argument2)
+            /// `argument2` represents `ar2` (the binary operator's 2nd argument) lowered to TAC as an `RValue`.
+            let argument2 = arg2.lowerToTACAsRValue(lowerer, function)
+            
+            /// `resultOffset` is the frame pointer offset of the variable holding the result of the operation.
+            /// The result is treated first as an `LValue` (when we apply the operator), and then as an `RValue` (when we return it).
+            let resultOffset = lowerer.newInternalVariable("bin\(`operator`.rawValue)", self.type)
+            
+            let tac = TACStatement.assignBinaryOperation(
+                lhs: .stackAllocated(framePointerOffset: resultOffset),
+                operation: `operator`,
+                arg1: argument1,
+                arg2: argument2
+            )
+            
+            /// The `TAC` statement corresponding to the binary operation in question. Here, the result is treated as an `LValue` since we're writing into it.
             lowerer.activeLabel.newStatement(tac)
             
-            return result
+            // When we're done, we treat the result as an `RValue`.
+            return .stackAllocated(framePointerOffset: resultOffset)
             
-        case .call(let pILCall):
+        case .call(let pilCall):
             
             var loweredArguments: [(name: Location, size: Int)] = []
             
             // We first calculate each argument and remember their names.
-            for argument in pILCall.arguments {
+            for argument in pilCall.arguments {
                 let name = argument.lowerToTACAsRValue(lowerer, function)
                 let words = lowerer.sizeOf(argument.type)
                 loweredArguments.append((name, words))
             }
             
             // Then, we declare the name of the variable representing the returned value.
-            let lhs = lowerer.newInternalVariable("call_\(pILCall.name)", self.type)
+            let lhs = lowerer.newInternalVariable("call_\(pilCall.name)", self.type)
             
             guard case .framePointer(let returnValueOffset) = lhs else {
                 fatalError("\(lhs)")
