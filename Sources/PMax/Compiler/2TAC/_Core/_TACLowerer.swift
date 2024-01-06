@@ -48,6 +48,9 @@ class TACLowerer: CustomStringConvertible {
     /// The `PILLowerer` is used to find struct layouts.
     private let pilLowerer: PILLowerer
     
+    /// Map a struct name to that struct's corresponding `MemoryLayout`.
+    private let structLayouts: [String : MemoryLayout]
+    
     /// Counts the number of labels generated. Used to make sure all label names are unique.
     private var labelCounter = 0
     
@@ -61,6 +64,7 @@ class TACLowerer: CustomStringConvertible {
         self.pilLowerer = pilLowerer
         self.structs = pilLowerer.structs
         self.functions = pilLowerer.functions
+        self.structLayouts = pilLowerer.structLayouts
         
         self.local = TACScope(self, emitOffsets)
         
@@ -198,6 +202,13 @@ class TACLowerer: CustomStringConvertible {
         
         return labelGroup.entry.name
         
+    }
+    
+    // MARK: Struct Layouts
+    
+    /// Return the `MemoryLayout` describing a struct. Assumes that the struct exists (otherwise, `fatalError`).
+    func structLayout(_ structName: String) -> MemoryLayout {
+        return structLayouts[structName]!
     }
     
 }

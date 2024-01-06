@@ -1,3 +1,6 @@
+
+/// A `MemoryLayout` describes the memory layout of instances of a struct type.
+/// A memory layout includes offsets and sizes for each member of the struct instance.
 struct MemoryLayout: CustomStringConvertible {
     
     
