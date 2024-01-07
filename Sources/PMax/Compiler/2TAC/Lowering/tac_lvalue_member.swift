@@ -5,7 +5,17 @@ extension PILExpression {
         
         let mainLValue = main.lowerToTACAsLValue(lowerer, function)
         
-        guard case .struct(let name) = main.type else {
+        return lowerToTACAsMemberLValue(main.type, mainLValue, member, lowerer, function)
+        
+    }
+    
+    
+    // Split into two functions since RValue lowering uses the function below as a helper.
+    
+    
+    func lowerToTACAsMemberLValue(_ mainType: PILType, _ mainLValue: LValue, _ member: String, _ lowerer: TACLowerer, _ function: PILFunction) -> LValue {
+        
+        guard case .struct(let name) = mainType else {
             // Incorrect attempts to access non-struct member should have been caught in PIL.
             // TODO: Check if this guard statement could somehow be removed.
             fatalError()

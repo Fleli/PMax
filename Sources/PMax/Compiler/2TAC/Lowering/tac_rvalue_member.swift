@@ -3,36 +3,11 @@ extension PILExpression {
     
     func lowerToTACAsMemberRValue(_ main: PILExpression, _ member: String, _ lowerer: TACLowerer, _ function: PILFunction) -> RValue {
         
-        var mainResult = main.lowerToTACAsRValue(lowerer, function)
+        /// Lower the struct instance to TAC as an RValue. Treat the result as an `LValue`.
+        let loweredMain = main.lowerToTACAsRValue(lowerer, function).treatAsLValue()
         
-        let lhs = lowerer.newInternalVariable("member", self.type)
-        
-        guard case .`struct`(let structName) = main.type, case .framePointer(let offset) = mainResult else {
-            fatalError()
-        }
-        
-        
-        switch mainResult {
-        case .stackAllocated(let framePointerOffset):
-            <#code#>
-        case .integerLiteral(let value):
-            <#code#>
-        case .dereference(let framePointerOffset):
-            <#code#> 
-        }
-        
-        
-        let layout = lowerer.structLayout(structName)
-        let localOffset = layout.fields[member]!.start
-        
-        mainResult = .framePointer(offset: offset + localOffset)
-        
-        let wordsToAssign = lowerer.sizeOf(self.type)
-        let statement = TACStatement.assign(lhs: lhs, rhs: mainResult, words: wordsToAssign)
-        
-        lowerer.activeLabel.newStatement(statement)
-        
-        return lhs
+        // Calculate offsets etc. using the LValue algorithm, since they are identical at this point. Treat the result from there as an RValue.
+        return lowerToTACAsMemberLValue(main.type, loweredMain, member, lowerer, function).treatAsRValue()
         
     }
     

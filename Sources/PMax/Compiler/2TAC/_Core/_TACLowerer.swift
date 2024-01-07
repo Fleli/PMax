@@ -208,11 +208,16 @@ class TACLowerer: CustomStringConvertible {
         
     }
     
-    // MARK: Struct Layouts
+    // MARK: Struct Layouts And Member Offsets
     
     /// Return the `MemoryLayout` describing a struct. Assumes that the struct exists (otherwise, `fatalError`).
     func structLayout(_ structName: String) -> MemoryLayout {
         return structLayouts[structName]!
+    }
+    
+    /// Return the internal member offset of `member` in a given struct. Assumes that the struct and member both exist (otherwise, `fatalError`).
+    func structMemberOffset(_ structName: String, _ member: String) -> Int {
+        return structLayout(structName).fields[member]!.start
     }
     
 }
