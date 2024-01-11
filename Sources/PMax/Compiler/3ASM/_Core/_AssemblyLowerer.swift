@@ -3,7 +3,7 @@ class AssemblyLowerer {
     
     private let lowerer: TACLowerer
     
-    private var labels: TACLowerer.Labels
+    private var labels: [String : TACLowerer.AssociatedFunctionData]
     
     
     init(_ lowerer: TACLowerer) {

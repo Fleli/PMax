@@ -1,14 +1,7 @@
 extension TACStatement {
     
     
-    func perform_call(_ lhs: Location, _ functionLabel: String, _ returnLabel: String, _ words: Int) -> String {
-        
-        /// The `returnValueOffset` is the frame pointer offset (relative to the calling function) of the return value.
-        /// Relative to the new function (where this will be negative), this is seen as a place to put the return value.
-        /// Relative to the calling function, this number is positive (and the value of `returnValueOffset` is), and represents the variable being assigned the result of the call.
-        guard case .framePointer(let returnValueOffset) = lhs else {
-            fatalError("SHOULD BE UNREACHABLE. Expected frame pointer as LHS, but found \(lhs.description).")
-        }
+    func perform_call(_ returnValueFramePointerOffset: Int, _ functionLabel: String, _ returnLabel: String, _ words: Int) -> String {
         
         // ----- CALLING CONVENTION -----
         //  1.  The variable in the old function is stored at a certain offset, `returnValueOffset`, from the old frame pointer.
@@ -25,8 +18,8 @@ extension TACStatement {
         var code = String()
         
         // ----- CALCULATE AND STORE THE NEW FRAME POINTER -----
-        let newFPRelativeToPreviousFP = returnValueOffset + words + 1
-        code = code.addi(0, .stackPointer, newFPRelativeToPreviousFP, "Compute address of new relative zero (fp + \(returnValueOffset) + \(words) + 1)")
+        let newFPRelativeToPreviousFP = returnValueFramePointerOffset + words + 1
+        code = code.addi(0, .stackPointer, newFPRelativeToPreviousFP, "Compute address of new relative zero (fp + \(returnValueFramePointerOffset) + \(words) + 1)")
         code = code.st(0, .stackPointer, "Store the current frame pointer at the new relative zero")
         code = code.mv(.stackPointer, 0, "Upate the frame pointer register to use the new relative zero")
         

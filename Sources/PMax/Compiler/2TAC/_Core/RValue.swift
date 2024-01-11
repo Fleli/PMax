@@ -24,7 +24,7 @@ enum RValue: CustomStringConvertible {
         case .stackAllocated(let framePointerOffset):
             return .stackAllocated(framePointerOffset: framePointerOffset)
         case .integerLiteral(let value):
-            fatalError("Cannot convert RValue '\(self.description)' to LValue.")
+            fatalError("Cannot convert RValue '\(self.description)' to LValue (integer literal \(value)).")
         case .dereference(let framePointerOffset):
             return .dereference(framePointerOffset: framePointerOffset)
         }

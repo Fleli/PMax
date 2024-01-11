@@ -3,29 +3,26 @@ extension TACStatement {
     
     
     /// Load a register with a value at a given location. Since types larger than 1 word may need extra offsets, an `extraOffset` integer is included. It is added on top of the address calculated by offsetting the stack pointer.
-    func load_register_with_value(at location: Location, register index: Int, _ extraOffset: Int) -> String {
+    func load_register_with_value(_ value: RValue, register index: Int, _ extraOffset: Int) -> String {
         
         guard 0 <= index  &&  index <= 7 else {
             fatalError("Register index cannot be \(index).")
         }
         
-        switch location {
+        switch value {
             
-        case .framePointer(let offset):
-            
-            // .addi(destination, .stackPointer, offset, "Find the address of the variable located \(offset) from the stack pointer")
-            // .ldfr(index, index, "Load the variable located at the value in r\(index)")
+        case .stackAllocated(let offset):
             
             return "".ldio(index, .stackPointer, offset + extraOffset, "r\(index) = [fp + \(offset + extraOffset)]")
             
-        case .literalValue(let value):
+        case .integerLiteral(let value):
             
             return "".li(index, value, "r\(index) = \(value)")
             
-        default:
+        case .dereference(let framePointerOffset):
             
-            // TODO: Verify unreachable.
-            fatalError()
+            // TODO: Apparently unreachable. Double-check this.
+            fatalError("deref @ load_register_with_value: fpOffset = \(framePointerOffset)")
             
         }
         

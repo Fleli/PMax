@@ -1,7 +1,7 @@
 extension TACStatement {
     
     
-    func return_from_function(_ value: Location?, _ words: Int) -> String {
+    func return_from_function(_ value: RValue?, _ words: Int) -> String {
         
         var assembly = ""
         
@@ -14,9 +14,9 @@ extension TACStatement {
             
             for i in 0 ..< words {
                 
-                let returnValueLocation = Location.framePointer(offset: returnValueOffset)
+                let returnValueLocation = LValue.stackAllocated(framePointerOffset: returnValueOffset)
                 
-                assembly += self.load_register_with_value(at: value, register: 0, i)    // Load to r0
+                assembly += self.load_register_with_value(value, register: 0, i)    // Load to r0
                 assembly += self.assign_to_location(returnValueLocation, 0, 1, i)       // Store r0, using r1 as scratch
                 
             }

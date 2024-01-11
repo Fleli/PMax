@@ -1,7 +1,7 @@
 extension TACStatement {
     
     
-    func dereference(_ lhs: Location, _ arg: Location, _ words: Int) -> String {
+    func dereference(_ lhs: LValue, _ arg: RValue, _ words: Int) -> String {
         
         // Say our statement is:  assign b = *a;
         
@@ -11,7 +11,7 @@ extension TACStatement {
         // r2:  Scratch register for assignments
         
         // First, we find the value of a
-        var assembly = load_register_with_value(at: arg, register: 0, 0)
+        var assembly = load_register_with_value(arg, register: 0, 0)
         
         // For each word in *a:
         for i in 0 ..< words {

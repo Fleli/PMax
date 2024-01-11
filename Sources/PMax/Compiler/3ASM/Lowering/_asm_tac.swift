@@ -17,20 +17,20 @@ extension TACStatement {
             
             // For data types larger than 1 word, we need to move multiple consecutive words in memory.
             for i in 0 ..< words {
-                assembly += load_register_with_value(at: rhs, register: dataRegister, i)
+                assembly += load_register_with_value(rhs, register: dataRegister, i)
                 assembly += assign_to_location(lhs, dataRegister, scratch, i)
             }
             
         case .assignBinaryOperation(let lhs, let operation, let arg1, let arg2):
             
-            assembly = load_register_with_value(at: arg1, register: 0, 0)
-            assembly += load_register_with_value(at: arg2, register: 1, 0)
+            assembly = load_register_with_value(arg1, register: 0, 0)
+            assembly += load_register_with_value(arg2, register: 1, 0)
             assembly += perform_arithmetic(0, 0, 1, 2, operation)
             assembly += assign_to_location(lhs, 0, 1, 0)
             
         case .assignUnaryOperation(let lhs, let operation, let arg):
             
-            assembly = load_register_with_value(at: arg, register: 0, 0)
+            assembly = load_register_with_value(arg, register: 0, 0)
             assembly += perform_arithmetic(0, 0, operation)
             assembly += assign_to_location(lhs, 0, 1, 0)
             
@@ -44,7 +44,9 @@ extension TACStatement {
             
         case .return(let value, let words):
             
-            assembly += return_from_function(value, words)
+            let rvalue = (value == nil) ? nil : RValue.stackAllocated(framePointerOffset: value!)
+            
+            assembly += return_from_function(rvalue, words)
             
         case .addressOf(let lhs, let arg):
             
@@ -52,7 +54,7 @@ extension TACStatement {
             
         case .jumpIfNonZero(let label, let variable):
             
-            assembly += load_register_with_value(at: variable, register: 0, 0)
+            assembly += load_register_with_value(variable, register: 0, 0)
                 .jnz(0, label, "Jump to \(label) if r0 != 0")
             
         case .dereference(let lhs, let arg, let words):
