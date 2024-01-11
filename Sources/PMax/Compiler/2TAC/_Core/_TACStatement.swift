@@ -55,8 +55,10 @@ enum TACStatement: CustomStringConvertible {
             return "\t \(lhs) = &\(arg)"
         case .assign(let lhs, let rhs, let words):
             return "[\(words)]  \(lhs) = \(rhs)"
+        case .return(nil, let words):
+            return "[\(words)]  ret void)"
         case .return(let value, let words):
-            return "[\(words)]  ret \(value?.description ?? "[void]")"
+            return "[\(words)]  ret [fp + \(value!)]"
         }
         
     }

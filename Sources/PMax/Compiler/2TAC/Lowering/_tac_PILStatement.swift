@@ -21,15 +21,41 @@ extension PILStatement {
             
         case .return(let expression):
             
-            let value = expression?.lowerToTACAsStackAllocatedRValue(lowerer, function)
+            let value = expression?.lowerToTACAsRValue(lowerer, function)
             
             var words = 0
             
             if let t = expression?.type {
+                
                 words = lowerer.sizeOf(t)
+                
             }
             
-            let statement = TACStatement.return(returnValueFramePointerOffset: value, words: words)
+            var fOffset: Int? = nil
+            
+            if let value {
+                
+                switch value {
+                case .stackAllocated(let framePointerOffset):
+                    
+                    fOffset = framePointerOffset
+                    
+                case .integerLiteral(let literal):
+                    
+                    let literalVariable = lowerer.newInternalVariable("literal\(literal)", .int)
+                    lowerer.activeLabel.newStatement(TACStatement.assign(lhs: .stackAllocated(framePointerOffset: literalVariable), rhs: value, words: 1))
+                    fOffset = literalVariable
+                    
+                case .dereference(let framePointerOffset):
+                    
+                    // TODO: Should avoid cases like these.
+                    fatalError("Unreachable: \(framePointerOffset).")
+                    
+                }
+                
+            }
+            
+            let statement = TACStatement.return(returnValueFramePointerOffset: fOffset, words: words)
             lowerer.activeLabel.newStatement(statement)
              
         case .if(let pILIfStatement):
