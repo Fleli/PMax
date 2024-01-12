@@ -31,9 +31,9 @@ enum LValue: CustomStringConvertible {
     var description: String {
         switch self {
         case .stackAllocated(let framePointerOffset):
-            return "lvalue: fp + \(framePointerOffset)"
+            return "lvalue(fp + \(framePointerOffset))"
         case .dereference(let framePointerOffset):
-            return "lvalue: [fp + \(framePointerOffset)]"
+            return "lvalue[fp + \(framePointerOffset)]"
         }
     }
     

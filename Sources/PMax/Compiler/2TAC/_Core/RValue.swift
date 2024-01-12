@@ -36,11 +36,11 @@ enum RValue: CustomStringConvertible {
     var description: String {
         switch self {
         case .stackAllocated(let framePointerOffset):
-            return "rvalue: [fp + \(framePointerOffset)]"
+            return "rvalue[fp + \(framePointerOffset)]"
         case .integerLiteral(let value):
-            return "rvalue: \(value)"
+            return "rvalue(\(value))"
         case .dereference(let framePointerOffset):
-            return "rvalue: *[fp + \(framePointerOffset)]"
+            return "rvalue(*[fp + \(framePointerOffset)])"
         }
     }
     
