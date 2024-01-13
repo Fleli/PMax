@@ -3,6 +3,7 @@ extension PILOperation {
     func synthesizeType(_ lowerer: PILLowerer) -> PILType {
         
         switch self {
+            
         case .unary(let `operator`, let arg):
             
             guard let inferred = PILType.inferUnaryOperatorType(arg.type) else {
@@ -75,6 +76,10 @@ extension PILOperation {
         case .member(let main, let member):
             
             return lowerer.fieldType(member, of: main.type)
+            
+        case .sizeof(_):
+            
+            return .int
             
         }
         

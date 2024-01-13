@@ -44,6 +44,7 @@ public indirect enum Expression: CustomStringConvertible {
 	case identifierleftParenthesis_ArgumentsrightParenthesis_(String, String, Arguments, String)
 	case ampersand_Expression(String, Expression)
 	case asterisk_Expression(String, Expression)
+	case Sizeof(Sizeof)
 
 	public var description: String {
 		switch self {
@@ -57,6 +58,7 @@ public indirect enum Expression: CustomStringConvertible {
 		case .identifierleftParenthesis_ArgumentsrightParenthesis_(_, _, let arguments, _): return "identifier" + "(" + arguments.description + ")"
 		case .ampersand_Expression(_, let expression): return "&" + expression.description
 		case .asterisk_Expression(_, let expression): return "*" + expression.description
+		case .Sizeof(let sizeof): return sizeof.description
 		}
 	}
 	

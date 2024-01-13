@@ -75,25 +75,27 @@ CASEKExpression -> #identifier
 CASEKExpression -> #identifier #( Arguments #) 
 CASEKExpression -> #& Expression 
 CASEKExpression -> #* Expression 
+CASEKExpression -> Sizeof 
 TypeCast -> #( #as Type #) 
+Sizeof -> #sizeof #( Type #) 
 Import -> #import #identifier #; 
 While -> #while Expression #{ FunctionBodyStatements #} 
 Argument -> Expression 
 Argument -> #identifier #: Expression 
 Declaration -> Type #identifier #; 
 Declaration -> Type #identifier #= Expression #; 
-Parameters -> Parameters #, Parameter
-Parameters -> Parameter
-Parameters ->
-Arguments -> Arguments #, Argument
-Arguments -> Argument
-Arguments ->
 StructBodyStatements -> StructBodyStatements Declaration
 StructBodyStatements -> Declaration
 StructBodyStatements ->
-FunctionBodyStatements -> FunctionBodyStatements FunctionBodyStatement
-FunctionBodyStatements -> FunctionBodyStatement
-FunctionBodyStatements ->
 TopLevelStatements -> TopLevelStatements TopLevelStatement
 TopLevelStatements -> TopLevelStatement
 TopLevelStatements ->
+FunctionBodyStatements -> FunctionBodyStatements FunctionBodyStatement
+FunctionBodyStatements -> FunctionBodyStatement
+FunctionBodyStatements ->
+Arguments -> Arguments #, Argument
+Arguments -> Argument
+Arguments ->
+Parameters -> Parameters #, Parameter
+Parameters -> Parameter
+Parameters ->

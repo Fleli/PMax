@@ -5,6 +5,7 @@ extension PILExpression {
     func lowerToTACAsRValue(_ lowerer: TACLowerer, _ function: PILFunction) -> RValue {
         
         switch value {
+            
         case .unary(let `operator`, let arg):
             
             /// `argument` represents `arg` (the unary operator's argument) lowered to TAC as an `RValue`.
@@ -163,6 +164,12 @@ extension PILExpression {
         case .member(let main, let member):
             
             return lowerToTACAsMemberRValue(main, member, lowerer, function)
+            
+        case .sizeof(let type):
+            
+            let size = lowerer.sizeOf(type)
+            
+            return .integerLiteral(value: size)
             
         }
         

@@ -3,6 +3,7 @@ extension Expression {
     func lowerToPIL(_ lowerer: PILLowerer) -> PILExpression {
         
         switch self {
+            
         case .infixOperator(let binary, let a, let b):
             
             if binary.rawValue == "->" {
@@ -73,6 +74,14 @@ extension Expression {
             
             lowerer.submitError(PMaxIssue.stringsAreNotSupported)
             return PILExpression.init(.integerLiteral("0"), cast: .error)
+            
+        case .Sizeof(let sizeof):
+            
+            let pilType = PILType(sizeof.type, lowerer)
+            let pilSizeof = PILOperation.sizeof(type: pilType)
+            let pilExpr = PILExpression(pilSizeof, lowerer)
+            
+            return pilExpr
             
         }
         

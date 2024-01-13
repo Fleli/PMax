@@ -5,56 +5,6 @@
 
 public extension SLRNode {
     
-    func convertToParameters() -> Parameters {
-        
-        if children.count == 0 {
-            return []
-        }
-        
-        if children.count == 1 {
-            return [children[0].convertToParameter()]
-        }
-        
-        if children.count == 2 {
-            return children[0].convertToParameters() + [children[1].convertToParameter()]
-        }
-        
-        if children.count == 3 {
-            return children[0].convertToParameters() + [children[2].convertToParameter()]
-        }
-        
-        fatalError()
-        
-    }
-    
-}
-public extension SLRNode {
-    
-    func convertToArguments() -> Arguments {
-        
-        if children.count == 0 {
-            return []
-        }
-        
-        if children.count == 1 {
-            return [children[0].convertToArgument()]
-        }
-        
-        if children.count == 2 {
-            return children[0].convertToArguments() + [children[1].convertToArgument()]
-        }
-        
-        if children.count == 3 {
-            return children[0].convertToArguments() + [children[2].convertToArgument()]
-        }
-        
-        fatalError()
-        
-    }
-    
-}
-public extension SLRNode {
-    
     func convertToStructBodyStatements() -> StructBodyStatements {
         
         if children.count == 0 {
@@ -71,6 +21,31 @@ public extension SLRNode {
         
         if children.count == 3 {
             return children[0].convertToStructBodyStatements() + [children[2].convertToDeclaration()]
+        }
+        
+        fatalError()
+        
+    }
+    
+}
+public extension SLRNode {
+    
+    func convertToTopLevelStatements() -> TopLevelStatements {
+        
+        if children.count == 0 {
+            return []
+        }
+        
+        if children.count == 1 {
+            return [children[0].convertToTopLevelStatement()]
+        }
+        
+        if children.count == 2 {
+            return children[0].convertToTopLevelStatements() + [children[1].convertToTopLevelStatement()]
+        }
+        
+        if children.count == 3 {
+            return children[0].convertToTopLevelStatements() + [children[2].convertToTopLevelStatement()]
         }
         
         fatalError()
@@ -105,22 +80,47 @@ public extension SLRNode {
 }
 public extension SLRNode {
     
-    func convertToTopLevelStatements() -> TopLevelStatements {
+    func convertToArguments() -> Arguments {
         
         if children.count == 0 {
             return []
         }
         
         if children.count == 1 {
-            return [children[0].convertToTopLevelStatement()]
+            return [children[0].convertToArgument()]
         }
         
         if children.count == 2 {
-            return children[0].convertToTopLevelStatements() + [children[1].convertToTopLevelStatement()]
+            return children[0].convertToArguments() + [children[1].convertToArgument()]
         }
         
         if children.count == 3 {
-            return children[0].convertToTopLevelStatements() + [children[2].convertToTopLevelStatement()]
+            return children[0].convertToArguments() + [children[2].convertToArgument()]
+        }
+        
+        fatalError()
+        
+    }
+    
+}
+public extension SLRNode {
+    
+    func convertToParameters() -> Parameters {
+        
+        if children.count == 0 {
+            return []
+        }
+        
+        if children.count == 1 {
+            return [children[0].convertToParameter()]
+        }
+        
+        if children.count == 2 {
+            return children[0].convertToParameters() + [children[1].convertToParameter()]
+        }
+        
+        if children.count == 3 {
+            return children[0].convertToParameters() + [children[2].convertToParameter()]
         }
         
         fatalError()
@@ -781,6 +781,13 @@ public extension SLRNode {
 			
 		}
 		
+		if type == "CASEKExpression" && children.count == 1 && children[0].type == "Sizeof" {
+			
+			let arg0 = children[0].convertToSizeof()
+			return .Sizeof(arg0)
+			
+		}
+		
 		fatalError()
 		
 	}
@@ -792,6 +799,21 @@ public extension SLRNode {
 	func convertToTypeCast() -> TypeCast {
 		
 		if type == "TypeCast" && children.count == 4 && children[0].type == "(" && children[1].type == "as" && children[2].type == "Type" && children[3].type == ")" {
+			let arg2 = children[2].convertToType()
+			return .init(arg2)
+		}
+		
+		fatalError()
+		
+	}
+
+}
+
+public extension SLRNode {
+
+	func convertToSizeof() -> Sizeof {
+		
+		if type == "Sizeof" && children.count == 4 && children[0].type == "sizeof" && children[1].type == "(" && children[2].type == "Type" && children[3].type == ")" {
 			let arg2 = children[2].convertToType()
 			return .init(arg2)
 		}

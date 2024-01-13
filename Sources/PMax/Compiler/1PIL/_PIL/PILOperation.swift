@@ -21,8 +21,12 @@ enum PILOperation: CustomStringConvertible {
     /// The `member` operation involves finding a member of another (struct-type) variable.
     case member(main: PILExpression, member: String)
     
+    case sizeof(type: PILType)
+    
     var description: String {
+        
         switch self {
+            
         case .unary(let `operator`, let arg):
             return "(\(`operator`.rawValue)\(arg.description))"
         case .binary(let `operator`, let arg1, let arg2):
@@ -39,11 +43,16 @@ enum PILOperation: CustomStringConvertible {
             return "(&\(arg))"
         case .member(let main, let member):
             return "((\(main)).\(member))"
+        case .sizeof(let type):
+            return "sizeof(\(type.description))"
         }
+        
     }
     
     var readableDescription: String {
+        
         switch self {
+            
         case .unary(let `operator`, let arg):
             return "(\(`operator`.rawValue)\(arg.readableDescription))"
         case .binary(let `operator`, let arg1, let arg2):
@@ -68,7 +77,10 @@ enum PILOperation: CustomStringConvertible {
             return "&\(pILExpression.readableDescription)"
         case .member(let main, let member):
             return "(\(main.readableDescription)).\(member)"
+        case .sizeof(let type):
+            return "sizeof(\(type.description))"
         }
+        
     }
     
 }
