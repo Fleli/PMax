@@ -176,12 +176,24 @@ class TACLowerer: CustomStringConvertible {
     func sizeOf(_ type: PILType) -> Int {
         
         switch type {
+            
         case .int, .pointer(_):
+            
             return 1
+            
         case .void, .error:
+            
             return 0
+            
         case .struct(let name):
-            return pilLowerer.structLayouts[name]!.size
+            
+            guard let structLayout = pilLowerer.structLayouts[name] else {
+                submitError(PMaxIssue.typeDoesNotExist(typeName: type.description))
+                return 0
+            }
+            
+            return structLayout.size
+            
         }
         
     }
