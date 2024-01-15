@@ -84,7 +84,7 @@ class TACLowerer: CustomStringConvertible {
                 
             } else {
                 
-                let entry = function.entryLabelName()
+                let entry = function.entryLabelName
                 newLabel(entry, true, function)
                 
             }
