@@ -40,6 +40,8 @@ class Preprocessor {
             
             let path = libraryPaths[pathIndex]
             
+            print("Searching path '\(path)'.")
+            
             content = deepSearch(path, .one(match: fileName))
             
             pathIndex += 1
@@ -51,6 +53,8 @@ class Preprocessor {
             print("No file '\(fileName)' in the current directory or any of its children.")
             return
         }
+        
+        print("Successfully found file '\(fileName)'.")
         
         parseImport(fileName, content[0])
         

@@ -77,25 +77,29 @@ extension Preprocessor {
     
     private func findEntryPoint(_ statement: FunctionBodyStatement) -> String? {
         
-        guard case .declaration(let declaration) = statement, declaration.type == .basic("Label"), declaration.value == nil else {
+        guard case .declaration(let declaration) = statement,
+              declaration.type == .basic("Label"),
+              declaration.name == "entry",
+              case .string(let str) = declaration.value
+        else {
             return nil
         }
         
-        return declaration.name
+        return String(str.dropFirst().dropLast(1))
         
     }
     
     private func findAssemblyCode(_ statement: FunctionBodyStatement) -> String? {
         
-        guard case .assignment(let assignment) = statement, assignment.operator == nil, case .identifier("asm") = assignment.lhs else {
+        guard case .declaration(let declaration) = statement,
+              declaration.name == "asm",
+              declaration.type == .basic("Code"),
+              case .string(let str) = declaration.value
+        else {
             return nil
         }
         
-        guard case .string(let str) = assignment.rhs else {
-            return nil
-        }
-        
-        return str
+        return String(str.dropFirst().dropLast(1))
         
     }
     

@@ -31,8 +31,10 @@ func deepSearch(_ path: String, _ mode: SearchMode) -> [String] {
         switch mode {
         case .collect(_):
             collected += subresult
-        case .one(_):
+        case .one(_) where subresult.count > 0:
             return subresult
+        default:
+            break
         }
         
         do {

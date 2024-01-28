@@ -2,7 +2,7 @@ class TACLowerer: CustomStringConvertible {
     
     
     /// The typealias `(PILFunction, Label, Set<Label>)` groups together information about a function, including all its labels, its entry label (used for calling), and its corresponding complete `PILFunction` instance.
-    typealias AssociatedFunctionData = (pilFunction: PILFunction, entry: Label, all: Set<Label>)
+    typealias AssociatedFunctionData = (pilFunction: PILFunction, entry: Label, all: Set<Label>, imported: Bool)
     
     
     // MARK: Internal Properties
@@ -78,9 +78,10 @@ class TACLowerer: CustomStringConvertible {
             
             let function = function.value
             
-            if case .external(let assembly, _) = function.body {
+            if case .external(let assembly, let entry) = function.body {
                 
                 libraryAssembly.append(assembly)
+                newLabel(entry, true, function, true)
                 
             } else {
                 
@@ -138,13 +139,13 @@ class TACLowerer: CustomStringConvertible {
     
     /// Create a new label. If `isFunctionEntry` (if this is the label jumped to when calling a function), its name is the `context`. For other labels used in `if`s etc., an internal counter makes sure no names clash, and just uses the context to give the label an informative name.
     @discardableResult
-    func newLabel(_ context: String, _ isFunctionEntry: Bool, _ function: PILFunction) -> Label {
+    func newLabel(_ context: String, _ isFunctionEntry: Bool, _ function: PILFunction, _ imported: Bool = false) -> Label {
         
         let newLabel: Label
         
         if isFunctionEntry {
             newLabel = Label(context)
-            labels[function.name] = (pilFunction: function, entry: newLabel, all: [newLabel])
+            labels[function.name] = (pilFunction: function, entry: newLabel, all: [newLabel], imported)
         } else {
             labelCounter += 1
             newLabel = Label("@l\(labelCounter)_\(context)")
