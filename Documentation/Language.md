@@ -6,7 +6,7 @@ The PMax programming language shares a lot of syntax and semantics with C. Some 
 - The widespread use of pointers for dynamic memory management
 - The language is statically typed, but its typing system is weak and obeys the programmer's type casts
 
-Below follows a top-down description of the language. When a word (like `Args` or `Name`) starts with an uppercase letter, it is to be considered a placeholder for an actual value, for example `abc` in the place of `Name`. Words that begin with lowercase letters, like `if` or `assign`, are PMax keywords and must be found in their exact form. Special tokens like `(` and `;` are also treated like this, and are therefore _not_ placeholders.
+Below follows a top-down description of the language. When a word (like `Args` or `Name`) starts with an uppercase letter, it is to be considered a placeholder for an actual value, for example `abc` in the place of `Name`. Words that begin with lowercase letters, like `if` or `assign`, are PMax keywords and must be found in their exact form. Special tokens like `(` and `;` are also treated this way, and are _not_ placeholders.
 
 ## Top Down
 

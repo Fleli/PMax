@@ -62,7 +62,7 @@ int b() {
 }
 ```
 
-Before `b()` is called, a variable `$1_call_b_retvalue` is generated at the top of the frame, so `a`'s stack frame looks like this\*:
+Before `b()` is called, a variable `$1_call_b_retvalue` is generated at the top of the frame, so `a`'s stack frame looks like this:
 
 contents            |   size                |   Explanation                                                                 |
 --------------------|-----------------------|-------------------------------------------------------------------------------|
@@ -73,7 +73,7 @@ return address      |   1                   |   The address where the caller wil
 return value        |   `sizeof(int) = 1`   |   The return value will be stored here when the function returns              |
 
 **Note:**
-The address (or addresses in the case of return types larger than `int`) at the top of the frame are shared between `$1_call_b_retvalue` (in function `a`) and the _return value_ space in function `b` when it is called. Thus, when `b` returns and puts its return value in these addresses, they will become available to `a` through the variable `$1_call_b_retvalue`. Then, the compiler inserts a statement like `assign k = $1_call_b_retvalue` to actually assign the value to `k` as specified by the programmer.
+The address (or addresses in the case of return types larger than `int`) at the top of the frame are shared between `$1_call_b_retvalue` (in function `a`) and the _return value_ space in function `b` when it is called. Thus, when `b` returns and puts its return value in these addresses, they will become available to `a` through the variable `$1_call_b_retvalue`. Then, the compiler inserts the statement `assign k = $1_call_b_retvalue;` to actually assign the value to `k` as specified by the programmer.
 
 Since the addresses holding `b`'s return value will be written to later, nothing needs to be done yet. There are 4 steps that _do_ need to be performed for the function call to be correct:
 1. In the memory address just after that of _return value_ (from `b`'s perspective) (or `$1_call_b_retvalue` from `a`'s perspective), `b` expects a return address. When `a` calls `b`, `a` puts the address of the continuing label here. `a` knows the address of this label at assemble-time (see [the assembler](https://github.com/Fleli/bbasm) for more information), so at runtime this just involves putting an immediate value there.
