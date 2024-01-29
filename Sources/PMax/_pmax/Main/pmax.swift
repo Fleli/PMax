@@ -7,7 +7,7 @@ struct pmax: ParsableCommand {
     
     static let configuration = CommandConfiguration(
         abstract: "PMax Compiler",
-        subcommands: [Version.self, Build.self, Init.self]
+        subcommands: [Version.self, Build.self, Init.self, Logo.self]
     )
     
 }
