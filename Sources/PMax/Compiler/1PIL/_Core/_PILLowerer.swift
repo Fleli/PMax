@@ -94,6 +94,11 @@ class PILLowerer {
                 let library = `import`.library
                 preprocessor.importLibrary(library, self)
                 
+            case .macro(_):
+                
+                // Macros are handled by the preprocessor.
+                continue
+                
             }
             
         }

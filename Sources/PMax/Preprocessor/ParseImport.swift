@@ -28,6 +28,9 @@ extension Preprocessor {
                     print("(Ignored) Transitive import")
                     // TODO: Get back to the issue of transitive imports. It requires care to be done right.
                     break
+                case .macro(_):
+                    #warning("The preprocessor handles macros.")
+                    break
                 }
                 
             }
