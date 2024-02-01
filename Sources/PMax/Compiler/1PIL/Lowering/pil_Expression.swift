@@ -66,9 +66,17 @@ extension Expression {
             
         case .identifier(let identifier):
             
-            let operation = PILOperation.variable(identifier)
-            
-            return PILExpression(operation, lowerer)
+            if let replacing = lowerer.macros[identifier] {
+                
+                return replacing.lowerToPIL(lowerer)
+                
+            } else {
+                
+                let operation = PILOperation.variable(identifier)
+                
+                return PILExpression(operation, lowerer)
+                
+            }
             
         case .string(_):
             

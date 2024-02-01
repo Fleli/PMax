@@ -42,6 +42,9 @@ class PILLowerer {
     /// The memory layout describes the internal offsets for each member of the struct.
     private(set) var structLayouts: [String : MemoryLayout] = [:]
     
+    /// All declared macros and their corresponding expressions.
+    private(set) var macros: [String : Expression] = [:]
+    
     /// Initialize a `PILLowerer` object from a number of top-level statements (the whole program) and a preprocessor that handles imports.
     init(_ topLevelStatements: TopLevelStatements, _ preprocessor: Preprocessor) {
         
@@ -94,10 +97,16 @@ class PILLowerer {
                 let library = `import`.library
                 preprocessor.importLibrary(library, self)
                 
-            case .macro(_):
+            case .macro(let macro):
                 
-                // Macros are handled by the preprocessor.
-                continue
+                if macros.keys.contains(macro.name) {
+                    submitError(PMaxIssue.invalidMacroRedeclaration(name: macro.name))
+                    continue
+                }
+                
+                // TODO: When handled this way, macros may not use each other.
+                // Add support for referencing other macros later.
+                macros[macro.name] = macro.expression
                 
             }
             

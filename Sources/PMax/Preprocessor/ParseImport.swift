@@ -25,11 +25,11 @@ extension Preprocessor {
                 case .function(let function):
                     verifyFunction(library, function)
                 case .import(_):
-                    print("(Ignored) Transitive import")
                     // TODO: Get back to the issue of transitive imports. It requires care to be done right.
+                    print("(Ignored) Transitive import")
                     break
                 case .macro(_):
-                    #warning("The preprocessor handles macros.")
+                    // TODO: Get back to imported macros. Should these be included in the file importing them?
                     break
                 }
                 

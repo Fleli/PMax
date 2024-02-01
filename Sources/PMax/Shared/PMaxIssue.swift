@@ -27,6 +27,7 @@ enum PMaxIssue: PMaxError {
     case stringsAreNotSupported
     case invalidRedeclaration(function: String)
     case invalidRedeclaratino(struct: String)
+    case invalidMacroRedeclaration(name: String)
     
     var allowed: Bool {
         false
@@ -89,6 +90,8 @@ enum PMaxIssue: PMaxError {
                 return "Invalid redeclaration of function '\(function)'."
             case .invalidRedeclaratino(let `struct`):
                 return "Invalid redeclaration of struct '\(`struct`)'."
+            case .invalidMacroRedeclaration(let name):
+                return "Macro \(name) was declared more than once."
             }
         }()
         
