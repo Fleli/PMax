@@ -5,31 +5,6 @@
 
 public extension SLRNode {
     
-    func convertToTopLevelStatements() -> TopLevelStatements {
-        
-        if children.count == 0 {
-            return []
-        }
-        
-        if children.count == 1 {
-            return [children[0].convertToTopLevelStatement()]
-        }
-        
-        if children.count == 2 {
-            return children[0].convertToTopLevelStatements() + [children[1].convertToTopLevelStatement()]
-        }
-        
-        if children.count == 3 {
-            return children[0].convertToTopLevelStatements() + [children[2].convertToTopLevelStatement()]
-        }
-        
-        fatalError()
-        
-    }
-    
-}
-public extension SLRNode {
-    
     func convertToParameters() -> Parameters {
         
         if children.count == 0 {
@@ -55,22 +30,22 @@ public extension SLRNode {
 }
 public extension SLRNode {
     
-    func convertToArguments() -> Arguments {
+    func convertToTopLevelStatements() -> TopLevelStatements {
         
         if children.count == 0 {
             return []
         }
         
         if children.count == 1 {
-            return [children[0].convertToArgument()]
+            return [children[0].convertToTopLevelStatement()]
         }
         
         if children.count == 2 {
-            return children[0].convertToArguments() + [children[1].convertToArgument()]
+            return children[0].convertToTopLevelStatements() + [children[1].convertToTopLevelStatement()]
         }
         
         if children.count == 3 {
-            return children[0].convertToArguments() + [children[2].convertToArgument()]
+            return children[0].convertToTopLevelStatements() + [children[2].convertToTopLevelStatement()]
         }
         
         fatalError()
@@ -121,6 +96,31 @@ public extension SLRNode {
         
         if children.count == 3 {
             return children[0].convertToFunctionBodyStatements() + [children[2].convertToFunctionBodyStatement()]
+        }
+        
+        fatalError()
+        
+    }
+    
+}
+public extension SLRNode {
+    
+    func convertToArguments() -> Arguments {
+        
+        if children.count == 0 {
+            return []
+        }
+        
+        if children.count == 1 {
+            return [children[0].convertToArgument()]
+        }
+        
+        if children.count == 2 {
+            return children[0].convertToArguments() + [children[1].convertToArgument()]
+        }
+        
+        if children.count == 3 {
+            return children[0].convertToArguments() + [children[2].convertToArgument()]
         }
         
         fatalError()
@@ -361,7 +361,7 @@ public extension SLRNode {
 
 	func convertToMacro() -> Macro {
 		
-		if type == "Macro" && children.count == 4 && children[0].type == "macro" && children[1].type == "identifier" && children[2].type == "=" && children[3].type == "Expression" {
+		if type == "Macro" && children.count == 5 && children[0].type == "macro" && children[1].type == "identifier" && children[2].type == "=" && children[3].type == "Expression" && children[4].type == ";" {
 			let arg1 = children[1].convertToTerminal()
 			let arg3 = children[3].convertToExpression()
 			return .init(arg1, arg3)

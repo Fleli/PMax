@@ -14,7 +14,7 @@ public class Macro: CustomStringConvertible {
 	}
 
 	public var description: String {
-		"macro " + name.description + " " + "= " + expression.description + " "
+		"macro " + name.description + " " + "= " + expression.description + " " + "; "
 	}
 	
 }

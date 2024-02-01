@@ -27,7 +27,7 @@ Struct -> #struct #identifier #{ StructBodyStatements #}
 Type -> #identifier 
 Type -> Type #* 
 Call -> #call #identifier #( Arguments #) #; 
-Macro -> #macro #identifier #= Expression 
+Macro -> #macro #identifier #= Expression #; 
 TopLevelStatement -> Struct
 TopLevelStatement -> Function
 TopLevelStatement -> Import
@@ -86,18 +86,18 @@ Argument -> Expression
 Argument -> #identifier #: Expression 
 Declaration -> Type #identifier #; 
 Declaration -> Type #identifier #= Expression #; 
-TopLevelStatements -> TopLevelStatements TopLevelStatement
-TopLevelStatements -> TopLevelStatement
-TopLevelStatements ->
 Parameters -> Parameters #, Parameter
 Parameters -> Parameter
 Parameters ->
-Arguments -> Arguments #, Argument
-Arguments -> Argument
-Arguments ->
+TopLevelStatements -> TopLevelStatements TopLevelStatement
+TopLevelStatements -> TopLevelStatement
+TopLevelStatements ->
 StructBodyStatements -> StructBodyStatements Declaration
 StructBodyStatements -> Declaration
 StructBodyStatements ->
 FunctionBodyStatements -> FunctionBodyStatements FunctionBodyStatement
 FunctionBodyStatements -> FunctionBodyStatement
 FunctionBodyStatements ->
+Arguments -> Arguments #, Argument
+Arguments -> Argument
+Arguments ->
