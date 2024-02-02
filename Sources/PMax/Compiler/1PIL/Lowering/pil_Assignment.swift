@@ -1,6 +1,6 @@
 extension Assignment {
     
-    func lowerToPIL(_ lowerer: PILLowerer) -> PILStatement {
+    func lowerToPIL(_ lowerer: PILLowerer, _ inferLHSType: Bool = false) -> PILStatement {
         
         let lhs = self.lhs.lowerToPIL(lowerer)
         var rhs = self.rhs.lowerToPIL(lowerer)
@@ -16,6 +16,10 @@ extension Assignment {
                 lowerer.submitError(PMaxIssue.invalidSugaredAssignment(operator: rw))
             }
             
+        }
+        
+        if inferLHSType {
+            lhs.type = rhs.type
         }
         
         if !rhs.type.assignable(to: lhs.type) {
