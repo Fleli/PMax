@@ -88,7 +88,7 @@ extension Preprocessor {
             return nil
         }
         
-        return String(str.dropFirst().dropLast(1))
+        return String(str.dropFirst().dropLast())
         
     }
     
@@ -102,7 +102,7 @@ extension Preprocessor {
             return nil
         }
         
-        return String(str.dropFirst().dropLast(1))
+        return str
         
     }
     

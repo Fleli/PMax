@@ -89,7 +89,7 @@ extension Compiler {
         
         let libCode = tacLowerer.libraryAssembly.reduce("") { $0 + $1 + "\n" }
         
-        let code = libCode + asmLowerer.lower(asLibrary)
+        let code = asmLowerer.lower(asLibrary) + libCode
         
         let option: DebugOption = asLibrary ? .libraryCode : .assemblyCode
         write(option, code)

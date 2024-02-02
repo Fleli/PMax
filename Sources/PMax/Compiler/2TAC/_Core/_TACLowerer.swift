@@ -80,10 +80,14 @@ class TACLowerer: CustomStringConvertible {
             
             if case .external(let assembly, let entry) = function.body {
                 
+                print("External function with entry = \(entry)")
+                
                 libraryAssembly.append(assembly)
                 newLabel(entry, true, function, true)
                 
             } else {
+                
+                print("Internal function with entry = \(function.entryLabelName)")
                 
                 let entry = function.entryLabelName
                 newLabel(entry, true, function)
@@ -144,14 +148,19 @@ class TACLowerer: CustomStringConvertible {
         let newLabel: Label
         
         if isFunctionEntry {
-            newLabel = Label(context)
-            labels[function.name] = (pilFunction: function, entry: newLabel, all: [newLabel], imported)
+            
+            // The context for an imported library is the full label name, which already includes the leading '@' symbol
+            let prefix = imported ? "" : "@"
+            
+            newLabel = Label(name: prefix + context)
+            labels[function.name] = (pilFunction: function, entry: newLabel, all: [], imported)
         } else {
             labelCounter += 1
-            newLabel = Label("@l\(labelCounter)_\(context)")
+            newLabel = Label(name: "@l\(labelCounter)_\(context)")
         }
         
         labels[function.name]?.all.insert(newLabel)
+        
         return newLabel
         
     }
@@ -216,6 +225,8 @@ class TACLowerer: CustomStringConvertible {
         guard let labelGroup = labels[function] else {
             fatalError("Function: \(function). Labels: \(labels)")
         }
+        
+        print("Function entry point \(labelGroup.entry.name) for function \(function)")
         
         return labelGroup.entry.name
         

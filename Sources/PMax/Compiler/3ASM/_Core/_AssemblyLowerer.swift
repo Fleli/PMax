@@ -7,8 +7,10 @@ class AssemblyLowerer {
     
     
     init(_ lowerer: TACLowerer) {
+        
         self.lowerer = lowerer
         self.labels = lowerer.labels
+        
     }
     
     
@@ -51,7 +53,7 @@ class AssemblyLowerer {
         
         output = "@__main:\n\(String.includeCommentsInAssembly ? "\t; Jump to main entry point\n" : "")\tjimm @fn_main\n\n"
         
-        for labelGroup in labels.values {
+        for labelGroup in labels.values where !labelGroup.imported {
             
             for label in labelGroup.all {
                 output += label.lowerToBreadboardAssembly() + "\n"

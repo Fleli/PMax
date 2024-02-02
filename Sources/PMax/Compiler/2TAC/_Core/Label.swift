@@ -8,7 +8,7 @@ class Label: Hashable, CustomStringConvertible {
     
     private(set) var statements: [TACStatement]
     
-    init(_ name: String) {
+    init(name: String) {
         self.name = name
         self.statements = []
     }
