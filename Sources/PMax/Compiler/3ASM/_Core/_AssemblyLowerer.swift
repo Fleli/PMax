@@ -64,8 +64,8 @@ class AssemblyLowerer {
     
     private func buildLibraryFunction(_ signature: String, _ entryLabel: String, _ assembly: String) -> String {
         
-        let entryStatement = "\tLabel entry = \"\(entryLabel)\";\n"
-        let asmStatement = "\tCode asm = \"\(assembly)\";\n"
+        let entryStatement = "\tvar entry: Label = \"\(entryLabel)\";\n"
+        let asmStatement = "\tvar asm: Code = \"\(assembly)\";\n"
         
         let libraryFunction = signature + " {\n" + entryStatement + asmStatement + "}\n\n"
         

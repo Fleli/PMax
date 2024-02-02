@@ -26,7 +26,7 @@ class PILFunction: CustomStringConvertible {
     
     /// Reconstruct the function's signature on the form `T N ( Args )` for return type `T`, function name `N` and argument list `Args`.
     var signature: String {
-        type.description + " " + name + "(" + parameters.listForm(", ") + ")"
+        "func " + name + "(" + parameters.listForm(", ") + ")" + " -> " + type.description
     }
     
     /// The name of the function's entry label (in assembly code).
@@ -178,7 +178,7 @@ class PILFunction: CustomStringConvertible {
         let label: String
         
         var description: String {
-            type.description + " " + label
+            label + ": " + type.description
         }
         
         init(_ type: PILType, _ label: String) {
