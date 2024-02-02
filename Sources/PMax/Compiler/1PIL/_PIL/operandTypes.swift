@@ -13,6 +13,8 @@ extension PILType {
             return .pointer(pointee: p)
         case (.int, .pointer(let p)):
             return .pointer(pointee: p)
+        case (.pointer(let p1), .pointer(let p2)) where p1 == p2:
+            return .int
         default:
             return nil
             
