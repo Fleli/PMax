@@ -111,7 +111,14 @@ extension PILExpression {
                 return .integerLiteral(value: 0)
             }
             
-            return .integerLiteral(value: value)
+            let variableHoldingLiteralValue = lowerer.newInternalVariable("literal\(value)", .int)
+            
+            let lValue = LValue.stackAllocated(framePointerOffset: variableHoldingLiteralValue)
+            let rValue = RValue.integerLiteral(value: value)
+            
+            lowerer.activeLabel.newStatement(TACStatement.assign(lhs: lValue, rhs: rValue, words: 1))
+            
+            return lValue.treatAsRValue()
             
         case .dereference(let pILExpression):
             

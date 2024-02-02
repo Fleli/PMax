@@ -15,6 +15,8 @@ extension TACStatement {
             
         case "<":
             
+            // TODO: These operators should return either 0 or 1, not 0 or any x != 0, since bool results may be used together with operators such as '&'.
+            
             //      a < b
             // eq.  a - b < 0
             // eq.  (a - b) & (0b1000_0000_0000_0000) != 0  for 16-bit a, b
@@ -56,6 +58,16 @@ extension TACStatement {
             // Thus, a - b is nonzero if a != b.
             return ""
                 .sub(dst, srcA, srcB, "If a - b is nonzero, then a != b")
+            
+        case "&":
+            
+            return ""
+                .and(dst, srcA, srcB, "r\(dst) = r\(srcA) & r\(srcB)")
+            
+        case "|":
+            
+            return ""
+                .or(dst, srcA, srcB, "r\(dst) = r\(srcA) | r\(srcB)")
             
         default:
             

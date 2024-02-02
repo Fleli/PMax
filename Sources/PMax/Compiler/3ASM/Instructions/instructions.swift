@@ -100,8 +100,14 @@ extension String {
         build("sr r\(dst), r\(src)", comment)
     }
     
+    /// Bitwise AND
     func and(_ dst: Int, _ srcA: Int, _ srcB: Int, _ comment: String? = nil) -> String {
         build("and r\(dst), r\(srcA), r\(srcB)", comment)
+    }
+    
+    /// Bitwise OR
+    func or(_ dst: Int, _ srcA: Int, _ srcB: Int, _ comment: String? = nil) -> String {
+        build("or r\(dst), r\(srcA), r\(srcB)", comment)
     }
     
 }
