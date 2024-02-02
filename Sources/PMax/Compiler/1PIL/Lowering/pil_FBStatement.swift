@@ -48,7 +48,7 @@ extension FunctionBodyStatement {
             let type = `Type`.basic(Builtin.void)
             let anonymous = lowerer.newAnonymousVariable
             
-            let declaration = Declaration(type, anonymous)
+            let declaration = Declaration(anonymous, type)
             let loweredDeclaration = declaration.lowerToPIL(lowerer)
             
             let lhsExpression = Expression.identifier(anonymous)

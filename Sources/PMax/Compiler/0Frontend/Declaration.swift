@@ -5,24 +5,36 @@
 
 public class Declaration: CustomStringConvertible {
 	
-	let type: `Type`
 	let name: String
+	let type: `Type`?
 	let value: Expression?
 	
-	init(_ type: `Type`, _ name: String) {
-		self.type = type
+	init(_ name: String) {
 		self.name = name
+		self.type = nil
 		self.value = nil
 	}
 	
-	init(_ type: `Type`, _ name: String, _ value: Expression) {
-		self.type = type
+	init(_ name: String, _ type: `Type`, _ value: Expression) {
 		self.name = name
+		self.type = type
 		self.value = value
+	}
+	
+	init(_ name: String, _ value: Expression) {
+		self.name = name
+		self.type = nil
+		self.value = value
+	}
+	
+	init(_ name: String, _ type: `Type`) {
+		self.name = name
+		self.type = type
+		self.value = nil
 	}
 
 	public var description: String {
-		type.description + " " + name.description + " " + (value == nil ? "" : "= " + value!.description + " ") + "; "
+		"var " + name.description + " " + (type == nil ? "" : ": " + type!.description + " ") + (value == nil ? "" : "= " + value!.description + " ") + "; "
 	}
 	
 }

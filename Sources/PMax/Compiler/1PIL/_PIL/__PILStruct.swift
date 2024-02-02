@@ -10,9 +10,14 @@ class PILStruct: CustomStringConvertible {
         
         for stmt in underlyingStructDeclaration.statements {
             
+            guard let stmtType = stmt.type else {
+                lowerer.submitError(PMaxIssue.structMembersCannotHaveDefaultValues(structName: name, field: stmt.name))
+                continue
+            }
+            
             let fieldName = stmt.name
             sortedFields.append(fieldName)
-            let type = PILType(stmt.type, lowerer)
+            let type = PILType(stmtType, lowerer)
             
             if stmt.value != nil {
                 lowerer.submitError(PMaxIssue.structMembersCannotHaveDefaultValues(structName: self.name, field: fieldName))

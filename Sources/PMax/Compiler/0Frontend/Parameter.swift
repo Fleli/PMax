@@ -5,16 +5,16 @@
 
 public class Parameter: CustomStringConvertible {
 	
-	let type: `Type`
 	let name: String
+	let type: `Type`
 	
-	init(_ type: `Type`, _ name: String) {
-		self.type = type
+	init(_ name: String, _ type: `Type`) {
 		self.name = name
+		self.type = type
 	}
 
 	public var description: String {
-		type.description + " " + name.description + " "
+		name.description + " " + ": " + type.description + " "
 	}
 	
 }

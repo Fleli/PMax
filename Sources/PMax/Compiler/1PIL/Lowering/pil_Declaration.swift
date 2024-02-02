@@ -2,7 +2,13 @@ extension Declaration {
     
     func lowerToPIL(_ lowerer: PILLowerer) -> [PILStatement] {
         
-        let type = PILType(type, lowerer)
+        // TODO: Remove requirement to specify types later. This requires building the assigned expression (if present) and then inferring types.
+        guard let syntacticalType = self.type else {
+            lowerer.submitError(PMaxIssue.cannotInferType(variable: name))
+            return []
+        }
+        
+        let type = PILType(syntacticalType, lowerer)
         let name = name
         
         let declarationSucceeded = lowerer.local.declare(type, name)

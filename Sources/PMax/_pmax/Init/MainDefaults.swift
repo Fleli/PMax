@@ -44,7 +44,7 @@ struct MainDefaults {
         if !asLibrary {
             
             return """
-            int main() {
+            func main() -> \(Builtin.native) {
             \t
             \treturn 0;
             \t

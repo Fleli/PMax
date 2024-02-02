@@ -1,32 +1,48 @@
 enum PMaxIssue: PMaxError {
     
-    case cannotFindMemberOfNonStructType(member: String, type: PILType)
-    case typeDoesNotExist(typeName: String)
+    // Structs
+    case structMembersCannotHaveDefaultValues(structName: String, field: String)
+    case structIsRecursive(structName: String)
+    case invalidRedeclaratino(struct: String)
     case fieldDoesNotExist(structName: String, field: String)
     case redeclarationOfField(structName: String, field: String)
+    case cannotFindMemberOfNonStructType(member: String, type: PILType)
+    case invalidMember(invalid: PILExpression)
+    
+    // Types
+    case typeDoesNotExist(typeName: String)
+    case dereferenceNonPointerType(type: PILType)
     case assignmentTypeMismatch(lhs: PILExpression, actual: PILType)
-    case redeclarationOfVariable(varName: String, existing: PILType, new: PILType)
-    case variableIsNotDeclared(name: String)
+    case incorrectTypeInFunctionCall(functionName: String, expected: PILType, given: PILType, position: Int)
+    case incorrectReturnType(expected: PILType, given: PILType)
+    case cannotInferType(variable: String)
+    
+    // Operators
     case unaryOperatorNotDefined(op: String, argType: PILType)
     case binaryOperatorNotDefined(op: String, arg1Type: PILType, arg2Type: PILType)
-    case functionDoesNotExist(name: String)
-    case structMembersCannotHaveDefaultValues(structName: String, field: String)
-    case incorrectNumberOfArguments(functionName: String, expected: Int, given: Int)
-    case incorrectTypeInFunctionCall(functionName: String, expected: PILType, given: PILType, position: Int)
-    case dereferenceNonPointerType(type: PILType)
-    case cannotFindAddressOfNonReference
     case invalidSugaredAssignment(`operator`: String)
-    case incorrectReturnType(expected: PILType, given: PILType)
-    case doesNotReturnOnAllPaths(function: String)
-    case structIsRecursive(structName: String)
+    case cannotFindAddressOfNonReference
+    
+    // Variables
+    case redeclarationOfVariable(varName: String, existing: PILType, new: PILType)
+    case variableIsNotDeclared(name: String)
     case unassignableLHS(lhs: PILExpression)
+    
+    // Functions
+    case incorrectNumberOfArguments(functionName: String, expected: Int, given: Int)
+    case doesNotReturnOnAllPaths(function: String)
+    case invalidRedeclaration(function: String)
+    case functionDoesNotExist(name: String)
     case hasNoValidMain
-    case invalidMember(invalid: PILExpression)
+    
+    // Grammatical
     case grammaticalIssue(description: String)
+    
+    // Expressions
     case illegalIntegerLiteral(literal: String)
     case stringsAreNotSupported
-    case invalidRedeclaration(function: String)
-    case invalidRedeclaratino(struct: String)
+    
+    // Macros
     case invalidMacroRedeclaration(name: String)
     
     var allowed: Bool {
@@ -77,7 +93,7 @@ enum PMaxIssue: PMaxError {
             case .unassignableLHS(let lhs):
                 return "The expression \(lhs.readableDescription) is unassignable because it is not a local variable, pointer dereference or member access."
             case .hasNoValidMain:
-                return "The exectuable must contain a function whose signature is 'int main()'."
+                return "The exectuable must contain a function whose signature is 'main() -> \(Builtin.native)'."
             case .invalidMember(let invalid):
                 return "Members must be referred to by name. The expression '\(invalid.readableDescription)' is not a valid member."
             case .grammaticalIssue(let description):
@@ -92,6 +108,8 @@ enum PMaxIssue: PMaxError {
                 return "Invalid redeclaration of struct '\(`struct`)'."
             case .invalidMacroRedeclaration(let name):
                 return "Macro \(name) was declared more than once."
+            case .cannotInferType(let variable):
+                return "Cannot infer type of variable '\(variable)'."
             }
         }()
         

@@ -5,20 +5,27 @@
 
 public class Function: CustomStringConvertible {
 	
-	let returnType: `Type`
 	let name: String
 	let parameters: Parameters
+	let type: `Type`?
 	let body: FunctionBodyStatements
 	
-	init(_ returnType: `Type`, _ name: String, _ parameters: Parameters, _ body: FunctionBodyStatements) {
-		self.returnType = returnType
+	init(_ name: String, _ parameters: Parameters, _ body: FunctionBodyStatements) {
 		self.name = name
 		self.parameters = parameters
+		self.type = nil
+		self.body = body
+	}
+	
+	init(_ name: String, _ parameters: Parameters, _ type: `Type`, _ body: FunctionBodyStatements) {
+		self.name = name
+		self.parameters = parameters
+		self.type = type
 		self.body = body
 	}
 
 	public var description: String {
-		returnType.description + " " + name.description + " " + "( " + parameters.description + " " + ") " + "{ " + body.description + " " + "} "
+		"func " + name.description + " " + "( " + parameters.description + " " + ") " + (type == nil ? "" : "-> " + type!.description + " ") + "{ " + body.description + " " + "} "
 	}
 	
 }
