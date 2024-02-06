@@ -104,7 +104,7 @@ class TACLowerer: CustomStringConvertible {
             
             push()
             
-            if function.name == "main" && function.type == .int && function.parameters.count == 0 {
+            if function.name == "main" && function.returnType == .int && function.parameters.count == 0 {
                 containsValidMain = true
             }
             

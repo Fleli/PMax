@@ -22,7 +22,7 @@ extension Types {
             declarations.append(declaration)
         }
         
-        let structType = Struct("tuple<\(self.listForm())>", declarations)
+        let structType = Struct("(\(self.listForm()))", declarations)
         
         return structType
         

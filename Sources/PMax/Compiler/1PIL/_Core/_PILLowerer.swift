@@ -200,7 +200,7 @@ class PILLowerer {
     /// Find the return type of a function whose name is `functionName`.
     /// Returns `PILType.error` if no such function exists.
     func functionType(_ functionName: String) -> PILType {
-        return functions[functionName]?.type ?? .error
+        return functions[functionName]?.returnType ?? .error
     }
     
     /// Submit an error.

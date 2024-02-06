@@ -44,6 +44,8 @@ class PILScope {
             return local
         } else if let parent {
             return parent.getVariable(name)
+        } else if let lowerer, let funcType = lowerer.functions[name] {
+            return funcType.type(with: lowerer)
         }
         
         return nil

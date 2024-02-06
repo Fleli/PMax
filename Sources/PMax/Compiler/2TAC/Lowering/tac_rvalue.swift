@@ -71,7 +71,7 @@ extension PILExpression {
             let returnValueOffset = lowerer.newInternalVariable("call_\(pilCall.name)_retvalue", self.type)
             
             // We keep track of the next argument's position relative to the frame pointer.
-            let returnSize = lowerer.sizeOf(lowerer.functions[pilCall.name]!.type)
+            let returnSize = lowerer.sizeOf(lowerer.functions[pilCall.name]!.returnType)
             var argumentOffsetToOldFramePointer = returnValueOffset + returnSize + 2
             
             // Then, since the return value's offset is known, we can push each argument with the correct offset.
@@ -85,7 +85,7 @@ extension PILExpression {
             
             let callLabel = lowerer.getFunctionEntryPoint(pilCall.name)
             
-            let retType = lowerer.functions[pilCall.name]!.type
+            let retType = lowerer.functions[pilCall.name]!.returnType
             let retSize = lowerer.sizeOf(retType)
             
             let callStatement = TACStatement.call(returnValueFramePointerOffset: returnValueOffset, functionLabel: callLabel, returnLabel: returnLabel.name, words: retSize)

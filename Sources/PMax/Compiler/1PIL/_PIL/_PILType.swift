@@ -52,16 +52,30 @@ indirect enum PILType: CustomStringConvertible, Hashable {
             
         case .tuple(_, let types, _):
             
-            let structType = types.convertToStruct()
-            lowerer.notfiyTuple(structType)
-            self = .struct(name: structType.name)
+            switch types.count {
+                
+            case 0:
+                
+                self = .void
+                
+            case 1:
+                
+                self = PILType(types[0], lowerer)
+                
+            default:
+                
+                let structType = types.convertToStruct()
+                lowerer.notfiyTuple(structType)
+                self = .struct(name: structType.name)
+                
+            }
             
         case .function(let input, _, let output):
             
             let inType = PILType(input, lowerer)
             let outType = PILType(output, lowerer)
             
-            if (inType != .error) || (outType != .error) {
+            if (inType == .error) || (outType == .error) {
                 self = .error
                 return
             }
@@ -77,6 +91,8 @@ indirect enum PILType: CustomStringConvertible, Hashable {
         
         switch (self, other) {
             
+        case (.function(let inA, let outA), .function(let inB, let outB)):
+            return (inA.assignable(to: inB)) && (outA.assignable(to: outB))
         case (.void, .void):
             return true
         case (_, .void), (.void, _):                // void cannot be assigned to anything and is not assignable itself

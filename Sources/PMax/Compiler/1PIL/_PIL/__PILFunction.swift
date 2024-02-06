@@ -1,11 +1,15 @@
 class PILFunction: CustomStringConvertible {
     
+    // TODO: Stored Variables
+    
     /// The name of the function.
     let name: String
     
-    // TODO: A function's type might also be seen as A -> B for parameters A and return type B, so type just being B might be confusing.
+    /// The type of the function's parameter list, either `void`, `A` or `(A1, ..., An)`
+    var parameterType: PILType!
+    
     /// The return type of the function.
-    let type: PILType
+    let returnType: PILType
     
     /// An array of the function's parameters.
     /// Each parameter is a `PILParameter`, holding type and name.
@@ -19,14 +23,16 @@ class PILFunction: CustomStringConvertible {
     /// A function body is expressed either in terms of `.pmax` source code with an underlying syntactical `Function`, or as an `.external` case for imported libraries, in which case only the function's assembly code and entry point is available.
     var body: PILFunctionBody
     
+    // MARK: Computed Variables
+    
     /// A description of the function on the form `N: P -> R` for name `N`, parameters `P` and return type `R`.
     var description: String {
-        "\(name): \(parameters.map {$0.type}) -> \(type)"
+        "\(name): \(parameters.map {$0.type}) -> \(returnType)"
     }
     
     /// Reconstruct the function's signature on the form `T N ( Args )` for return type `T`, function name `N` and argument list `Args`.
     var signature: String {
-        "func " + name + "(" + parameters.listForm(", ") + ")" + " -> " + type.description
+        "func " + name + "(" + parameters.listForm(", ") + ")" + " -> " + returnType.description
     }
     
     /// The name of the function's entry label (in assembly code).
@@ -52,7 +58,7 @@ class PILFunction: CustomStringConvertible {
             
         case .pmax(_, let body):
             return
-                "\(type) \(name) (\(parameters.description.dropFirst().dropLast())) {\n"
+                "\(returnType) \(name) (\(parameters.description.dropFirst().dropLast())) {\n"
             +   body.reduce("") { $0 + $1.printableDescription(1) }
             +   "}\n"
         case .external(_, let entry):
@@ -79,7 +85,7 @@ class PILFunction: CustomStringConvertible {
         
         // Set the name and return type of the function.
         self.name = underlyingFunction.name
-        self.type = PILType(underlyingFunction.returnType, lowerer)
+        self.returnType = PILType(underlyingFunction.returnType, lowerer)
         
         // Initialize the body and underlying function
         self.body = body
@@ -94,19 +100,13 @@ class PILFunction: CustomStringConvertible {
     /// This function makes sure all the function's parameters are set appropriately.
     private func initializeParameters(_ underlyingFunction: Function, _ lowerer: PILLowerer) {
         
-        // Go through each parameter of the underlying function.
-        for parameter in underlyingFunction.parameters {
-            
-            // Convert the parameter's type to a PILType
-            let type = PILType(parameter.type, lowerer)
-            
-            // Create a PILParameter instance
-            let newParameter = PILParameter(type, parameter.name)
-            
-            // Append the parameter to the PILFunction's parameter list.
-            self.parameters.append(newParameter)
-            
-        }
+        // Map each underlying function parameter to the corresponding PIL parameter.
+        self.parameters = underlyingFunction.parameters
+            .map { PILParameter( PILType($0.type, lowerer), $0.name) }
+        
+        // Register the parameter tuple in the associated `PILLowerer`
+        let tuple = `Type`.tuple("(", underlyingFunction.parameters.map { $0.type }, ")")
+        self.parameterType = PILType(tuple, lowerer)
         
     }
     
@@ -151,13 +151,13 @@ class PILFunction: CustomStringConvertible {
             return
         }
         
-        let returnsOnAllPaths = lowered.reduce(false, {$0 || $1.returnsOnAllPaths(type, lowerer)})
+        let returnsOnAllPaths = lowered.reduce(false, {$0 || $1.returnsOnAllPaths(returnType, lowerer)})
         
         if returnsOnAllPaths {
             return
         }
         
-        if type == .void {
+        if returnType == .void {
             
             let insertedReturn = PILStatement.return(expression: nil)
             lowered.append(insertedReturn)
@@ -170,6 +170,11 @@ class PILFunction: CustomStringConvertible {
         
         self.body = .pmax(underlyingFunction: underlyingFunction, lowered: lowered)
         
+    }
+    
+    /// The (function) type of this function, `params -> ret`
+    func type(with lowerer: PILLowerer) -> PILType {
+        return PILType.function(input: parameterType, output: returnType)
     }
     
     struct PILParameter: CustomStringConvertible {
