@@ -27,6 +27,7 @@ UnconditionalElse -> #{ FunctionBodyStatements #}
 Struct -> #struct #identifier #{ StructBodyStatements #} 
 Type -> #identifier 
 Type -> Type #* 
+Type -> #( Types #) 
 Call -> #identifier #( Arguments #) #; 
 Macro -> #macro #identifier #= Expression #; 
 TopLevelStatement -> Struct
@@ -88,18 +89,21 @@ Declaration -> #var #identifier #;
 Declaration -> #var #identifier #= Expression #; 
 Declaration -> #var #identifier #: Type #; 
 Declaration -> #var #identifier #: Type #= Expression #; 
+StructBodyStatements -> StructBodyStatements Declaration
+StructBodyStatements -> Declaration
+StructBodyStatements ->
+Arguments -> Arguments #, Argument
+Arguments -> Argument
+Arguments ->
 TopLevelStatements -> TopLevelStatements TopLevelStatement
 TopLevelStatements -> TopLevelStatement
 TopLevelStatements ->
 FunctionBodyStatements -> FunctionBodyStatements FunctionBodyStatement
 FunctionBodyStatements -> FunctionBodyStatement
 FunctionBodyStatements ->
-Arguments -> Arguments #, Argument
-Arguments -> Argument
-Arguments ->
-StructBodyStatements -> StructBodyStatements Declaration
-StructBodyStatements -> Declaration
-StructBodyStatements ->
+Types -> Types #, Type
+Types -> Type
+Types ->
 Parameters -> Parameters #, Parameter
 Parameters -> Parameter
 Parameters ->

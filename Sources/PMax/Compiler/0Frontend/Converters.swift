@@ -5,6 +5,56 @@
 
 public extension SLRNode {
     
+    func convertToStructBodyStatements() -> StructBodyStatements {
+        
+        if children.count == 0 {
+            return []
+        }
+        
+        if children.count == 1 {
+            return [children[0].convertToDeclaration()]
+        }
+        
+        if children.count == 2 {
+            return children[0].convertToStructBodyStatements() + [children[1].convertToDeclaration()]
+        }
+        
+        if children.count == 3 {
+            return children[0].convertToStructBodyStatements() + [children[2].convertToDeclaration()]
+        }
+        
+        fatalError()
+        
+    }
+    
+}
+public extension SLRNode {
+    
+    func convertToArguments() -> Arguments {
+        
+        if children.count == 0 {
+            return []
+        }
+        
+        if children.count == 1 {
+            return [children[0].convertToArgument()]
+        }
+        
+        if children.count == 2 {
+            return children[0].convertToArguments() + [children[1].convertToArgument()]
+        }
+        
+        if children.count == 3 {
+            return children[0].convertToArguments() + [children[2].convertToArgument()]
+        }
+        
+        fatalError()
+        
+    }
+    
+}
+public extension SLRNode {
+    
     func convertToTopLevelStatements() -> TopLevelStatements {
         
         if children.count == 0 {
@@ -55,47 +105,22 @@ public extension SLRNode {
 }
 public extension SLRNode {
     
-    func convertToArguments() -> Arguments {
+    func convertToTypes() -> Types {
         
         if children.count == 0 {
             return []
         }
         
         if children.count == 1 {
-            return [children[0].convertToArgument()]
+            return [children[0].convertToType()]
         }
         
         if children.count == 2 {
-            return children[0].convertToArguments() + [children[1].convertToArgument()]
+            return children[0].convertToTypes() + [children[1].convertToType()]
         }
         
         if children.count == 3 {
-            return children[0].convertToArguments() + [children[2].convertToArgument()]
-        }
-        
-        fatalError()
-        
-    }
-    
-}
-public extension SLRNode {
-    
-    func convertToStructBodyStatements() -> StructBodyStatements {
-        
-        if children.count == 0 {
-            return []
-        }
-        
-        if children.count == 1 {
-            return [children[0].convertToDeclaration()]
-        }
-        
-        if children.count == 2 {
-            return children[0].convertToStructBodyStatements() + [children[1].convertToDeclaration()]
-        }
-        
-        if children.count == 3 {
-            return children[0].convertToStructBodyStatements() + [children[2].convertToDeclaration()]
+            return children[0].convertToTypes() + [children[2].convertToType()]
         }
         
         fatalError()
@@ -340,6 +365,13 @@ public extension SLRNode {
 			let arg0 = children[0].convertToType()
 			let arg1 = children[1].convertToTerminal()
 			return `Type`.pointer(arg0, arg1)
+		}
+	
+		if type == "Type" && children.count == 3 && children[0].type == "(" && children[1].type == "Types" && children[2].type == ")" {
+			let arg0 = children[0].convertToTerminal()
+			let arg1 = children[1].convertToTypes()
+			let arg2 = children[2].convertToTerminal()
+			return `Type`.tuple(arg0, arg1, arg2)
 		}
 	
 		fatalError()

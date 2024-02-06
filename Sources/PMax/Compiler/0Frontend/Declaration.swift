@@ -9,18 +9,6 @@ public class Declaration: CustomStringConvertible {
 	let type: `Type`?
 	let value: Expression?
 	
-	init(_ name: String, _ type: `Type`) {
-		self.name = name
-		self.type = type
-		self.value = nil
-	}
-	
-	init(_ name: String, _ type: `Type`, _ value: Expression) {
-		self.name = name
-		self.type = type
-		self.value = value
-	}
-	
 	init(_ name: String, _ value: Expression) {
 		self.name = name
 		self.type = nil
@@ -30,6 +18,18 @@ public class Declaration: CustomStringConvertible {
 	init(_ name: String) {
 		self.name = name
 		self.type = nil
+		self.value = nil
+	}
+	
+	init(_ name: String, _ type: `Type`, _ value: Expression) {
+		self.name = name
+		self.type = type
+		self.value = value
+	}
+	
+	init(_ name: String, _ type: `Type`) {
+		self.name = name
+		self.type = type
 		self.value = nil
 	}
 

@@ -37,6 +37,10 @@ indirect enum PILType: CustomStringConvertible, Hashable {
         case .pointer(let wrapped, _):
             let pilWrapped = PILType(wrapped, lowerer)
             self = .pointer(pointee: pilWrapped)
+        case .tuple(_, let types, _):
+            let structType = types.convertToStruct()
+            lowerer.notfiyTuple(structType)
+            self = .struct(name: structType.name)
         }
         
     }

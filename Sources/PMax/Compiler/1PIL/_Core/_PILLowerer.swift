@@ -35,6 +35,9 @@ class PILLowerer {
     /// All structs declared, including those that are imported.
     private(set) var structs: [String : PILStruct] = [:]
     
+    /// Maps tuples (lists of types) to the struct representing that tuple.
+    private(set) var tuples: [ [PILType] : String ] = [:]
+    
     /// All functions declared, including those that are imported.
     private(set) var functions: [String : PILFunction] = [:]
     
@@ -205,7 +208,7 @@ class PILLowerer {
         errors.append(newError)
     }
     
-    /// Take a syntactical `Struct` object, verify that it does not name clash with any existing types,
+    /// Take a syntactical `Struct` object, verify that it does not name clash with any existing types.
     func newStruct(_ `struct`: Struct) {
         
         // The struct's name is now considered a new type.
@@ -248,6 +251,23 @@ class PILLowerer {
         }
         
         return functions[name] == nil && structs[name] == nil
+        
+    }
+    
+    /// Notify the PILLowerer that a tuple was encountered. A new tuple instance is registered if necessary. Otherwise, the PILLowerer just ignores it (so that tuples aren't registered more than once).
+    func notfiyTuple(_ structType: Struct) {
+        
+        let types = structType
+            .statements
+            .map { $0.type! }               // All struct fields are compiler-generated, therefore non-`nil`
+            .map { PILType($0, self) }      // Convert all fields to PILTypes
+        
+        if tuples.keys.contains(types) {
+            return
+        }
+        
+        newStruct(structType)
+        tuples[types] = structType.name
         
     }
     

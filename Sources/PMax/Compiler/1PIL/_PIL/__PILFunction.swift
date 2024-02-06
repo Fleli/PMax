@@ -190,7 +190,7 @@ class PILFunction: CustomStringConvertible {
     
 }
 
-private extension Array where Element: CustomStringConvertible {
+extension Array where Element: CustomStringConvertible {
     
     func listForm(_ separator: String = ", ") -> String {
         
