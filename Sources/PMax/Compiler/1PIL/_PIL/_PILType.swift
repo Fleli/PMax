@@ -5,6 +5,7 @@ indirect enum PILType: CustomStringConvertible, Hashable {
     case void
     case `struct`(name: String)
     case pointer(pointee: PILType)
+    case function(input: PILType, output: PILType)
     case error
     
     var description: String {
@@ -17,6 +18,8 @@ indirect enum PILType: CustomStringConvertible, Hashable {
             return name
         case .pointer(let pointee):
             return pointee.description + "*"
+        case .function(let input, let output):
+            return input.description + " -> " + output.description
         case .error:
             return "<error>"
         }
@@ -26,21 +29,45 @@ indirect enum PILType: CustomStringConvertible, Hashable {
         
         switch underlyingType {
         case .basic(Builtin.native):
+            
             self = .int
+            
         case .basic(Builtin.void):
+            
             self = .void
+            
         case .basic(let id) where lowerer.structs[id] != nil:
+            
             self = .struct(name: id)
+            
         case .basic(let undefined):
+            
             lowerer.submitError(PMaxIssue.typeDoesNotExist(typeName: undefined))
             self = .error
+            
         case .pointer(let wrapped, _):
+            
             let pilWrapped = PILType(wrapped, lowerer)
             self = .pointer(pointee: pilWrapped)
+            
         case .tuple(_, let types, _):
+            
             let structType = types.convertToStruct()
             lowerer.notfiyTuple(structType)
             self = .struct(name: structType.name)
+            
+        case .function(let input, _, let output):
+            
+            let inType = PILType(input, lowerer)
+            let outType = PILType(output, lowerer)
+            
+            if (inType != .error) || (outType != .error) {
+                self = .error
+                return
+            }
+            
+            self = .function(input: inType, output: outType)
+            
         }
         
     }

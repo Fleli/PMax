@@ -28,7 +28,7 @@ extension PILType {
         switch t {
         case .int, .pointer(_):
             return t
-        case .void, .error, .struct(_):
+        case .void, .error, .struct(_), .function(_, _):
             return .error
         }
         

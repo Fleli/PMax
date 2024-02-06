@@ -183,7 +183,7 @@ class TACLowerer: CustomStringConvertible {
         
         switch type {
             
-        case .int, .pointer(_):
+        case .int, .pointer(_), .function(_, _):
             
             return 1
             

@@ -53,7 +53,7 @@ extension PILOperation {
             case .int:
                 return .int
                 
-            case .void, .struct(_):
+            case .void, .struct(_), .function(_, _):
                 lowerer.submitError(PMaxIssue.dereferenceNonPointerType(type: expression.type))
                 fallthrough
                 

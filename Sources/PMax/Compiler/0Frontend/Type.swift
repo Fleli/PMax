@@ -8,12 +8,14 @@ public indirect enum `Type`: CustomStringConvertible {
 	case basic(_ identifier: String)
 	case pointer(_ type: `Type`, _ _asteriskunderscore_: String)
 	case tuple(_ _leftParenthesisunderscore_: String, _ types: Types, _ _rightParenthesisunderscore_: String)
+	case function(_ type: `Type`, _ _hyphenunderscore_greaterThanunderscore_: String, _ type1: `Type`)
 	
 	public var description: String {
 		switch self {
 		case .basic(let identifier): return identifier 
 		case .pointer(let type, let _asteriskunderscore_): return type.description + _asteriskunderscore_ 
 		case .tuple(let _leftParenthesisunderscore_, let types, let _rightParenthesisunderscore_): return _leftParenthesisunderscore_ + types.description + _rightParenthesisunderscore_ 
+		case .function(let type, let _hyphenunderscore_greaterThanunderscore_, let type1): return type.description + _hyphenunderscore_greaterThanunderscore_ + type1.description 
 		}
 	}
 	

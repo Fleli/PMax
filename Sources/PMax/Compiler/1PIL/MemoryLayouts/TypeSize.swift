@@ -7,7 +7,7 @@ extension PILType {
             
         case .error, .void:
             return 0
-        case .int, .pointer(_):
+        case .int, .pointer(_), .function(_, _):
             return 1
         case .struct(let name):
             return lowerer.structs[name]?.memoryLayout(lowerer, structSearchHistory)?.size
