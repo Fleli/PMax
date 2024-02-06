@@ -80,14 +80,10 @@ class TACLowerer: CustomStringConvertible {
             
             if case .external(let assembly, let entry) = function.body {
                 
-                print("External function with entry = \(entry)")
-                
                 libraryAssembly.append(assembly)
                 newLabel(entry, true, function, true)
                 
             } else {
-                
-                print("Internal function with entry = \(function.entryLabelName)")
                 
                 let entry = function.entryLabelName
                 newLabel(entry, true, function)
@@ -225,8 +221,6 @@ class TACLowerer: CustomStringConvertible {
         guard let labelGroup = labels[function] else {
             fatalError("Function: \(function). Labels: \(labels)")
         }
-        
-        print("Function entry point \(labelGroup.entry.name) for function \(function)")
         
         return labelGroup.entry.name
         

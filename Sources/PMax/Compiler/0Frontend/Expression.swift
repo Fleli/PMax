@@ -37,8 +37,8 @@ public indirect enum Expression: CustomStringConvertible {
 	case singleArgumentOperator(SingleArgumentOperator, Expression)
 	
 	case leftParenthesis_ExpressionrightParenthesis_(String, Expression, String)
-	case TypeCastleftParenthesis_ExpressionrightParenthesis_(TypeCast, String, Expression, String)
 	case integer(String)
+	case leftSquareBracket_TyperightSquareBracket_Expression(String, Type, String, Expression)
 	case string(String)
 	case identifier(String)
 	case identifierleftParenthesis_ArgumentsrightParenthesis_(String, String, Arguments, String)
@@ -51,8 +51,8 @@ public indirect enum Expression: CustomStringConvertible {
 		case .infixOperator(let op, let a, let b): return "(\(a.description) \(op.rawValue) \(b.description))"
 		case .singleArgumentOperator(let op, let a): return "(\(op.rawValue) \(a.description))"
 		case .leftParenthesis_ExpressionrightParenthesis_(_, let expression, _): return "(" + expression.description + ")"
-		case .TypeCastleftParenthesis_ExpressionrightParenthesis_(let typeCast, _, let expression, _): return typeCast.description + "(" + expression.description + ")"
 		case .integer(_): return "integer"
+		case .leftSquareBracket_TyperightSquareBracket_Expression(_, let type, _, let expression): return "[" + type.description + "]" + expression.description
 		case .string(_): return "string"
 		case .identifier(_): return "identifier"
 		case .identifierleftParenthesis_ArgumentsrightParenthesis_(_, _, let arguments, _): return "identifier" + "(" + arguments.description + ")"

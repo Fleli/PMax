@@ -27,7 +27,7 @@ UnconditionalElse -> #{ FunctionBodyStatements #}
 Struct -> #struct #identifier #{ StructBodyStatements #} 
 Type -> #identifier 
 Type -> Type #* 
-Call -> #call #identifier #( Arguments #) #; 
+Call -> #identifier #( Arguments #) #; 
 Macro -> #macro #identifier #= Expression #; 
 TopLevelStatement -> Struct
 TopLevelStatement -> Function
@@ -71,15 +71,14 @@ CASEJExpression -> CASEJExpression #-> CASEKExpression
 CASEJExpression -> CASEJExpression #. CASEKExpression
 CASEJExpression -> CASEKExpression
 CASEKExpression -> #( Expression #) 
-CASEKExpression -> TypeCast #( Expression #) 
 CASEKExpression -> #integer 
+CASEKExpression -> #[ Type #] Expression 
 CASEKExpression -> #string 
 CASEKExpression -> #identifier 
 CASEKExpression -> #identifier #( Arguments #) 
 CASEKExpression -> #& Expression 
 CASEKExpression -> #* Expression 
 CASEKExpression -> Sizeof 
-TypeCast -> #( #as Type #) 
 Sizeof -> #sizeof #( Type #) 
 Import -> #import #identifier #; 
 While -> #while Expression #{ FunctionBodyStatements #} 
@@ -89,18 +88,18 @@ Declaration -> #var #identifier #;
 Declaration -> #var #identifier #= Expression #; 
 Declaration -> #var #identifier #: Type #; 
 Declaration -> #var #identifier #: Type #= Expression #; 
-Parameters -> Parameters #, Parameter
-Parameters -> Parameter
-Parameters ->
+TopLevelStatements -> TopLevelStatements TopLevelStatement
+TopLevelStatements -> TopLevelStatement
+TopLevelStatements ->
 FunctionBodyStatements -> FunctionBodyStatements FunctionBodyStatement
 FunctionBodyStatements -> FunctionBodyStatement
 FunctionBodyStatements ->
 Arguments -> Arguments #, Argument
 Arguments -> Argument
 Arguments ->
-TopLevelStatements -> TopLevelStatements TopLevelStatement
-TopLevelStatements -> TopLevelStatement
-TopLevelStatements ->
 StructBodyStatements -> StructBodyStatements Declaration
 StructBodyStatements -> Declaration
 StructBodyStatements ->
+Parameters -> Parameters #, Parameter
+Parameters -> Parameter
+Parameters ->

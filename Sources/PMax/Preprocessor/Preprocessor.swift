@@ -40,8 +40,6 @@ class Preprocessor {
             
             let path = libraryPaths[pathIndex]
             
-            print("Searching path '\(path)'.")
-            
             content = deepSearch(path, .one(match: fileName))
             
             pathIndex += 1
@@ -50,11 +48,13 @@ class Preprocessor {
         
         guard content.count > 0 else {
             // TODO: Submit an issue: The library (file) wasn't found.
-            print("No file '\(fileName)' in the current directory or any of its children.")
+            print("Did not find '\(fileName)' in any of the listed 'import' directories: {")
+            for dir in libraryPaths {
+                print("\t\(dir)")
+            }
+            print("}")
             return
         }
-        
-        print("Successfully found file '\(fileName)'.")
         
         parseImport(fileName, content[0])
         

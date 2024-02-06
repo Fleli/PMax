@@ -42,13 +42,12 @@ extension Expression {
             let operation = PILOperation.integerLiteral(literal)
             return PILExpression(operation, lowerer)
             
-        case .TypeCastleftParenthesis_ExpressionrightParenthesis_(let typeCast, _, let expression, _):
+        case .leftSquareBracket_TyperightSquareBracket_Expression(_, let castedType, _, let expression):
             
-            // A type cast is like all other expressions, but we modify the type of it to whatever the programmer specified.
-            let lowered = expression.lowerToPIL(lowerer)
-            lowered.type = PILType(typeCast.type, lowerer)
+            let loweredExpression = expression.lowerToPIL(lowerer)
+            loweredExpression.type = PILType(castedType, lowerer)
             
-            return lowered
+            return loweredExpression
             
         case .asterisk_Expression(_, let expression):
             

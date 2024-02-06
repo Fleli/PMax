@@ -1,7 +1,6 @@
 
 import Foundation
 
-
 enum SearchMode {
     
     /// Collect all results matching the given condition
