@@ -15,10 +15,6 @@ class PILFunction: CustomStringConvertible {
     /// Each parameter is a `PILParameter`, holding type and name.
     var parameters: [PILParameter] = []
     
-    // TODO: Is it necessary to explicitly store this?
-    /// The underlying syntactical `Function` object.
-    let underlyingFunction: Function
-    
     /// The function's body of type `PILFunctionBody`.
     /// A function body is expressed either in terms of `.pmax` source code with an underlying syntactical `Function`, or as an `.external` case for imported libraries, in which case only the function's assembly code and entry point is available.
     var body: PILFunctionBody
@@ -40,7 +36,6 @@ class PILFunction: CustomStringConvertible {
     var entryLabelName: String {
         
         switch self.body {
-            
         case .pmax(_, _):
             return "fn_\(name)"
         case .external(_, let entry):
@@ -55,7 +50,6 @@ class PILFunction: CustomStringConvertible {
     var fullDescription: String {
         
         switch self.body {
-            
         case .pmax(_, let body):
             return
                 "\(returnType) \(name) (\(parameters.description.dropFirst().dropLast())) {\n"
@@ -87,9 +81,8 @@ class PILFunction: CustomStringConvertible {
         self.name = underlyingFunction.name
         self.returnType = PILType(underlyingFunction.returnType, lowerer)
         
-        // Initialize the body and underlying function
+        // Initialize the body
         self.body = body
-        self.underlyingFunction = underlyingFunction
         
         // Set all the function's parameters.
         initializeParameters(underlyingFunction, lowerer)

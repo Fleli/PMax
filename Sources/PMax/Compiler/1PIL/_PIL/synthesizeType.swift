@@ -24,7 +24,7 @@ extension PILOperation {
             
         case .call(let pILCall):
             
-            let funcType = lowerer.functionType(pILCall.name)
+            let funcType = lowerer.functionReturnType(pILCall.name)
             
             if funcType == .error {
                 lowerer.submitError(PMaxIssue.functionDoesNotExist(name: pILCall.name))

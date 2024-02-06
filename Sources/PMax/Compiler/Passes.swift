@@ -87,7 +87,7 @@ extension Compiler {
         
         let asmLowerer = AssemblyLowerer(tacLowerer)
         
-        let libCode = tacLowerer.libraryAssembly.reduce("") { $0 + $1 + "\n" }
+        let libCode = tacLowerer.libraryAssembly
         
         let code = asmLowerer.lower(asLibrary) + libCode
         

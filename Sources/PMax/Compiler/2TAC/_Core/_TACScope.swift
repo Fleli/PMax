@@ -62,21 +62,6 @@ class TACScope {
         
     }
     
-    /// Recursively search all scopes to check if a variable with a given name exists. Used when declaring new literals.
-    func variableExists(_ name: String) -> Bool {
-        
-        if variables[name] != nil {
-            return true
-        }
-        
-        if let parent {
-            return parent.variableExists(name)
-        }
-        
-        return false
-        
-    }
-    
     func getVariableAsLValue(_ name: String) -> LValue {
         
         guard let local = variables[name] else {

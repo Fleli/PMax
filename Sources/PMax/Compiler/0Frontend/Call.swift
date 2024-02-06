@@ -14,7 +14,7 @@ public class Call: CustomStringConvertible {
 	}
 
 	public var description: String {
-		function.description + " " + "( " + args.description + " " + ") " + "; "
+		"call " + function.description + " " + "( " + args.description + " " + ") " + "; "
 	}
 	
 }

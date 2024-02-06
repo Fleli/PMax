@@ -9,15 +9,15 @@ public class Assignment: CustomStringConvertible {
 	let `operator`: SugarOperator?
 	let rhs: Expression
 	
-	init(_ lhs: Expression, _ rhs: Expression) {
-		self.lhs = lhs
-		self.`operator` = nil
-		self.rhs = rhs
-	}
-	
 	init(_ lhs: Expression, _ `operator`: SugarOperator, _ rhs: Expression) {
 		self.lhs = lhs
 		self.`operator` = `operator`
+		self.rhs = rhs
+	}
+	
+	init(_ lhs: Expression, _ rhs: Expression) {
+		self.lhs = lhs
+		self.`operator` = nil
 		self.rhs = rhs
 	}
 

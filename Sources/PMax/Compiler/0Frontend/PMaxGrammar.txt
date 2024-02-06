@@ -29,7 +29,7 @@ Type -> #identifier
 Type -> Type #* 
 Type -> #( Types #) 
 Type -> Type #-> Type 
-Call -> #identifier #( Arguments #) #; 
+Call -> #call #identifier #( Arguments #) #; 
 Macro -> #macro #identifier #= Expression #; 
 TopLevelStatement -> Struct
 TopLevelStatement -> Function
@@ -90,21 +90,21 @@ Declaration -> #var #identifier #;
 Declaration -> #var #identifier #= Expression #; 
 Declaration -> #var #identifier #: Type #; 
 Declaration -> #var #identifier #: Type #= Expression #; 
-FunctionBodyStatements -> FunctionBodyStatements FunctionBodyStatement
-FunctionBodyStatements -> FunctionBodyStatement
-FunctionBodyStatements ->
-Arguments -> Arguments #, Argument
-Arguments -> Argument
-Arguments ->
-Types -> Types #, Type
-Types -> Type
-Types ->
-Parameters -> Parameters #, Parameter
-Parameters -> Parameter
-Parameters ->
 TopLevelStatements -> TopLevelStatements TopLevelStatement
 TopLevelStatements -> TopLevelStatement
 TopLevelStatements ->
+Types -> Types #, Type
+Types -> Type
+Types ->
+Arguments -> Arguments #, Argument
+Arguments -> Argument
+Arguments ->
+Parameters -> Parameters #, Parameter
+Parameters -> Parameter
+Parameters ->
 StructBodyStatements -> StructBodyStatements Declaration
 StructBodyStatements -> Declaration
 StructBodyStatements ->
+FunctionBodyStatements -> FunctionBodyStatements FunctionBodyStatement
+FunctionBodyStatements -> FunctionBodyStatement
+FunctionBodyStatements ->

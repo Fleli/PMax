@@ -26,9 +26,6 @@ class PILLowerer {
     /// The preprocessor object responsible for handling imports.
     private let preprocessor: Preprocessor
     
-    /// The `TopLevelStatements` object, which is an array of top-level statements (imports, functions and structs).
-    private let topLevelStatements: TopLevelStatements
-    
     /// All errors (issues and warnings) found in the PIL stage.
     private(set) var errors: [PMaxError] = []
     
@@ -51,9 +48,10 @@ class PILLowerer {
     /// Initialize a `PILLowerer` object from a number of top-level statements (the whole program) and a preprocessor that handles imports.
     init(_ topLevelStatements: TopLevelStatements, _ preprocessor: Preprocessor) {
         
-        self.topLevelStatements = topLevelStatements
         self.preprocessor = preprocessor
         self.local = PILScope(self)
+        
+        self.prepare(topLevelStatements)
         
     }
     
@@ -63,7 +61,6 @@ class PILLowerer {
     /// If the `noIssues` property on this `TACLowerer` is `false` after running `lower()`, an issue is found, so compilation should be aborted.
     func lower() {
         
-        prepare()
         lowerFunctionBodies()
         findMemoryLayouts()
         
@@ -77,7 +74,7 @@ class PILLowerer {
     /// Preparation means _declaring_ all structs, which is essential to do so that functions anytwhere can use a struct type, regardless of whether it was declared before or after the struct.
     /// Preparation also means importing libraries and adding structs & functions declared there to the relevant dictionaries, making them available to the code written by the user.
     /// After imports are resolved and structs are declared, all functions are also declared. This is done afterwards because any function must be able to refer to any type, so they can't be declared until all structs are found.
-    private func prepare() {
+    private func prepare(_ topLevelStatements: TopLevelStatements) {
         
         // Go through each top-level statement.
         for syntacticStatement in topLevelStatements {
@@ -199,8 +196,16 @@ class PILLowerer {
     
     /// Find the return type of a function whose name is `functionName`.
     /// Returns `PILType.error` if no such function exists.
-    func functionType(_ functionName: String) -> PILType {
-        return functions[functionName]?.returnType ?? .error
+    func functionReturnType(_ functionName: String) -> PILType {
+        
+        if let localFunctionType = local.getVariable(functionName), case .function(_, let ret) = localFunctionType {
+            return ret
+        } else if let topLevel = functions[functionName] {
+            return topLevel.returnType
+        }
+        
+        return .error
+        
     }
     
     /// Submit an error.

@@ -35,33 +35,24 @@ class TACLowerer: CustomStringConvertible {
     /// Maps a function name (`String`) to data associated with that function. This data includes the corresponding `PILFunction` instance, function entry label, and a set of _all_ labels that are part of the function.. This is useful when compiling a library.
     private(set) var labels: [String : AssociatedFunctionData] = [:]
     
-    /// `libraryAssembly` stores a list of assembly code snippets fetched from imported libraries. They are `reduce`d to a single `String` and pasted in with the rest of the assembly when compiling executables.
-    private(set) var libraryAssembly: [String] = []
+    /// `libraryAssembly` stores all code snippets fetched from imported libraries, concatenated.
+    private(set) var libraryAssembly: String = ""
     
     /// The ordered list of errors (issues and warnings) found by the `TACLowerer` instance.
     private(set) var errors: [PMaxError] = []
     
     // MARK: Private Properties
     
-    // TODO: Replace the PILLowerer, which as a whole isn't really interesting, with just the struct layouts dictionary. However, first verify that we really don't need more than that.
-    /// The `PILLowerer` instance that supplied this `TACLowerer` with data.
-    /// The `PILLowerer` is used to find struct layouts.
-    private let pilLowerer: PILLowerer
-    
     /// Map a struct name to that struct's corresponding `MemoryLayout`.
     private let structLayouts: [String : MemoryLayout]
     
-    /// Counts the number of labels generated. Used to make sure all label names are unique.
-    private var labelCounter = 0
-    
-    /// Counts the number of internal variables generated. Used to make sure all internal variable names are unique.
-    private var variableCounter = 0
+    /// Counts the number of labels and internal variables generated.
+    private var uniquenessCounter = 0
     
     // MARK: Initializer
     
     init(_ pilLowerer: PILLowerer, _ emitOffsets: Bool) {
         
-        self.pilLowerer = pilLowerer
         self.structs = pilLowerer.structs
         self.functions = pilLowerer.functions
         self.structLayouts = pilLowerer.structLayouts
@@ -80,7 +71,7 @@ class TACLowerer: CustomStringConvertible {
             
             if case .external(let assembly, let entry) = function.body {
                 
-                libraryAssembly.append(assembly)
+                libraryAssembly.append(assembly + "\n")
                 newLabel(entry, true, function, true)
                 
             } else {
@@ -151,8 +142,8 @@ class TACLowerer: CustomStringConvertible {
             newLabel = Label(name: prefix + context)
             labels[function.name] = (pilFunction: function, entry: newLabel, all: [], imported)
         } else {
-            labelCounter += 1
-            newLabel = Label(name: "@l\(labelCounter)_\(context)")
+            uniquenessCounter += 1
+            newLabel = Label(name: "@l\(uniquenessCounter)_\(context)")
         }
         
         labels[function.name]?.all.insert(newLabel)
@@ -172,8 +163,8 @@ class TACLowerer: CustomStringConvertible {
     /// It uses a `context` parameter to give a _somewhat_ informative name.
     /// Returns the frame pointer offset of the newly declared variable.
     func newInternalVariable(_ context: String, _ type: PILType) -> Int {
-        variableCounter += 1
-        let name = "$\(variableCounter)_\(context)"
+        uniquenessCounter += 1
+        let name = "$\(uniquenessCounter)_\(context)"
         return local.declare(type, name)
     }
     
@@ -193,7 +184,7 @@ class TACLowerer: CustomStringConvertible {
             
         case .struct(let name):
             
-            guard let structLayout = pilLowerer.structLayouts[name] else {
+            guard let structLayout = structLayouts[name] else {
                 submitError(PMaxIssue.typeDoesNotExist(typeName: type.description))
                 return 0
             }
