@@ -1,12 +1,7 @@
-class PILLowerer {
+class PILLowerer: CompilerPass {
     
     /// The `local` scope is used to notify the `PILLowerer`'s environment of declarations, and to verify the existence of variables when they are referenced.
     var local: PILScope!
-    
-    /// Returns `true` if no issues (i.e. errors that cannot be ignored) are found in PIL.
-    var noIssues: Bool {
-        return errors.reduce(true, {$0 && $1.allowed})
-    }
     
     /// Returns a readable description of the whole PIL environment. This includes all functions and structs declared.
     var readableDescription: String {
@@ -14,20 +9,8 @@ class PILLowerer {
         + structs.reduce("") { $0 + $1.value.description + "\n" }
     }
     
-    /// Returns a new anonymous variable (i.e. `%n` for an integer `n`). Its name is guaranteed to not collide with any other variables.
-    var newAnonymousVariable: String {
-        self.anonymousVariableCounter += 1
-        return "%\(anonymousVariableCounter)"
-    }
-    
-    /// The number of anonymous variables introduced. Used to avoid name collisions.
-    private var anonymousVariableCounter = 0
-    
     /// The preprocessor object responsible for handling imports.
     private let preprocessor: Preprocessor
-    
-    /// All errors (issues and warnings) found in the PIL stage.
-    private(set) var errors: [PMaxError] = []
     
     /// All structs declared, including those that are imported.
     private(set) var structs: [String : PILStruct] = [:]
@@ -46,9 +29,12 @@ class PILLowerer {
     private(set) var macros: [String : Expression] = [:]
     
     /// Initialize a `PILLowerer` object from a number of top-level statements (the whole program) and a preprocessor that handles imports.
-    init(_ topLevelStatements: TopLevelStatements, _ preprocessor: Preprocessor) {
+    init(_ topLevelStatements: TopLevelStatements, _ preprocessor: Preprocessor, _ compiler: Compiler) {
         
         self.preprocessor = preprocessor
+        
+        super.init(compiler)
+        
         self.local = PILScope(self)
         
         self.prepare(topLevelStatements)
@@ -60,14 +46,8 @@ class PILLowerer {
     /// After `lower` is finished, `structs` and `functions` can be used for further lowering to TAC.
     /// If the `noIssues` property on this `TACLowerer` is `false` after running `lower()`, an issue is found, so compilation should be aborted.
     func lower() {
-        
         lowerFunctionBodies()
         findMemoryLayouts()
-        
-        for error in errors {
-            Compiler.print(error.description)
-        }
-        
     }
     
     /// Prepare the `PILLowerer` to lower each function body.
@@ -208,11 +188,6 @@ class PILLowerer {
         
     }
     
-    /// Submit an error.
-    func submitError(_ newError: PMaxError) {
-        errors.append(newError)
-    }
-    
     /// Take a syntactical `Struct` object, verify that it does not name clash with any existing types.
     func newStruct(_ `struct`: Struct) {
         
@@ -262,8 +237,7 @@ class PILLowerer {
     /// Notify the PILLowerer that a tuple was encountered. A new tuple instance is registered if necessary. Otherwise, the PILLowerer just ignores it (so that tuples aren't registered more than once).
     func notfiyTuple(_ structType: Struct) {
         
-        let types = structType
-            .statements
+        let types = structType.statements
             .map { $0.type! }               // All struct fields are compiler-generated, therefore non-`nil`
             .map { PILType($0, self) }      // Convert all fields to PILTypes
         

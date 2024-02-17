@@ -46,7 +46,7 @@ extension FunctionBodyStatement {
             // FIXME: This might introduce some hard-to-understand bugs in cases where the called function returns non-void types. Find a way around this.
             
             let type = `Type`.basic(Builtin.void)
-            let anonymous = lowerer.newAnonymousVariable
+            let anonymous = lowerer.autoVariableName("%")
             
             let declaration = Declaration(anonymous, type)
             let loweredDeclaration = declaration.lowerToPIL(lowerer)

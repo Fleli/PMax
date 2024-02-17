@@ -6,23 +6,37 @@ import Foundation
 
 final class Compiler {
     
-    static var allowMeta = false
-    static var allowPrinting = false
+    var allowMeta = false
+    var allowPrinting = false
+    
+    private var autoIDCounter = 0
+    private var errors: [PMaxError] = []
     
     var preprocessor: Preprocessor!
     
     var fileOptions: [FileOption] = []
     var profiler: CompilerProfiler!
     
-    var encounteredErrors: [PMaxError] = []
-    
     let libraryPaths: [String]
     
-    let emitOffsets: Bool
+    
+    func hasNoIssues() -> Bool {
+        errors.filter { !$0.allowed }.count == 0
+    }
+    
+    
+    func autoVariableName(_ prefix: String) -> String {
+        self.autoIDCounter += 1
+        return "\(prefix)\(autoIDCounter)"
+    }
+    
+    
+    func submitError(_ newError: PMaxError) {
+        errors.append(newError)
+    }
     
     /// Initialize a `Compiler` instance with certain `libraryPaths`. These are the paths, in order, that the preprocessor searches in when attempting to import libraries. Using as "exact" paths as possible is recommended, since the preprocessor will literally expand the entire tree in its attempt to find the file that is referred to.
-    public init(_ emitOffsets: Bool, _ libraryPaths: [String]) {
-        self.emitOffsets = emitOffsets
+    public init(_ libraryPaths: [String]) {
         self.libraryPaths = libraryPaths
     }
     
@@ -33,55 +47,39 @@ final class Compiler {
         fileOptions.append(fileOption)
     }
     
-    
-    public func printErrors() throws {
+    public func compile(_ sourceCode: [String], _ asLibrary: Bool, _ emitOffsets: Bool) throws {
         
-        if !encounteredErrors.readableFormat.isEmpty {
-            
-            Swift.print(encounteredErrors.readableFormat)
-            
-            for error in encounteredErrors {
-                if !error.allowed {
-                    throw error
-                }
-            }
-            
-        }
-        
-    }
-    
-    
-    public func compile(_ sourceCode: [String], _ asLibrary: Bool) throws {
-        
-        self.encounteredErrors.removeAll()
         self.profiler = CompilerProfiler()
         self.preprocessor = Preprocessor(self)
         
         do {
             
-            try lex(sourceCode, asLibrary)
-            
-        } catch let error as ParseError {
-            
-            encounteredErrors.append(PMaxIssue.grammaticalIssue(description: error.description))
+            try runCompilationPasses(sourceCode, asLibrary, emitOffsets)
             
         } catch {
             
-            encounteredErrors.append(PMaxIssue.grammaticalIssue(description: "Unknown grammatical issue: \(error.localizedDescription)"))
+            submitError(PMaxIssue.grammaticalIssue(description: "Grammatical issue: \(error.localizedDescription)"))
             
         }
         
-        write(.errors, encounteredErrors.readableFormat)
+        write(.errors, errors.readableFormat)
         
         let profileDescription = profiler.description
+        
         write(.profile, profileDescription)
         
+        guard hasNoIssues() else {
+            
+            print(errors.count)
+            
+            for error in errors {
+                print(error.description)
+            }
+            
+            exit(2)
+            
+        }
+        
     }
-    
-    
-    static func print(_ string: String) {
-        (Self.allowPrinting ? {Swift.print(string)} : {})()
-    }
-    
     
 }

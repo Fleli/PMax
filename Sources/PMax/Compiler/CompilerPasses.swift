@@ -1,32 +1,33 @@
+
 extension Compiler {
     
-    
-    // TODO: The lexer should contain file information, since tokens should be tied to a specific file (important for highlighting etc.)
-    func lex(_ sourceCode: [String], _ asLibrary: Bool) throws {
+    func runCompilationPasses(_ sourceCode: [String], _ asLibrary: Bool, _ emitOffsets: Bool) throws {
         
-        var tokens: [[Token]] = []
+        
+        // LEXICAL ANALYSIS
+        
+        
+        var fileSeparatedTokens: [[Token]] = []
         
         for sourceCodeFile in sourceCode {
             
             let rawTokens = try Lexer().lex(sourceCodeFile)
             let fileTokens = filterTokens(rawTokens)
             
-            tokens.append(fileTokens)
+            fileSeparatedTokens.append(fileTokens)
             
         }
         
-        let tokensFileContent = tokens.map {$0.description}.reduce("", {$0 + $1 + "\n"})
+        let tokens = fileSeparatedTokens.reduce([]) {$0 + $1}
+        
+        let tokensFileContent = tokens.reduce("") { $0 + $1.description + "\n" }
         write(.tokens, tokensFileContent)
+        
         profiler.register(.tokens)
         
-        try parse(tokens, asLibrary)
         
-    }
-    
-    
-    func parse(_ tokens: [[Token]], _ asLibrary: Bool) throws {
+        // PARSING
         
-        let tokens: [Token] = tokens.reduce([]) { $0 + $1 }
         
         let slrNodeTree = try SLRParser().parse(tokens)
         
@@ -40,50 +41,37 @@ extension Compiler {
         let converted = slrNodeTree.convertToTopLevelStatements()
         profiler.register(.parseTree)
         
-        lowerToPIL(converted, asLibrary)
         
-    }
-    
-    
-    func lowerToPIL(_ converted: TopLevelStatements, _ asLibrary: Bool) {
+        // PMAX INTERMEDIATE LANGUAGE
         
-        let pilLowerer = PILLowerer(converted, preprocessor)
+        
+        let pilLowerer = PILLowerer(converted, preprocessor, self)
         pilLowerer.lower()
         
-        encounteredErrors += pilLowerer.errors
-        
-        guard pilLowerer.noIssues else {
+        guard hasNoIssues() else {
             return
         }
         
         write(.pmaxIntermediateLanguage, pilLowerer.readableDescription)
         profiler.register(.pmaxIntermediateLanguage)
         
-        lowerToTAC(pilLowerer, asLibrary)
         
-    }
-    
-    
-    func lowerToTAC(_ pilLowerer: PILLowerer, _ asLibrary: Bool) {
+        // THREE-ADDRESS CODE
         
-        let tacLowerer = TACLowerer(pilLowerer, self.emitOffsets)
+        
+        let tacLowerer = TACLowerer(pilLowerer, emitOffsets, self)
         tacLowerer.lower(asLibrary)
         
-        encounteredErrors += tacLowerer.errors
-        
-        guard tacLowerer.noIssues else {
+        guard hasNoIssues() else {
             return
         }
         
         write(.threeAddressCode, tacLowerer.description)
         profiler.register(.threeAddressCode)
         
-        generateAssembly(tacLowerer, asLibrary)
         
-    }
-    
-    
-    func generateAssembly(_ tacLowerer: TACLowerer, _ asLibrary: Bool) {
+        // ASSEMBLY CODE GENERATION
+        
         
         let asmLowerer = AssemblyLowerer(tacLowerer)
         
@@ -96,6 +84,5 @@ extension Compiler {
         profiler.register(option)
         
     }
-    
     
 }

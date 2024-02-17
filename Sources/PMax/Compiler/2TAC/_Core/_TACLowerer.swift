@@ -1,4 +1,4 @@
-class TACLowerer: CustomStringConvertible {
+class TACLowerer: CompilerPass, CustomStringConvertible {
     
     
     /// The typealias `(PILFunction, Label, Set<Label>)` groups together information about a function, including all its labels, its entry label (used for calling), and its corresponding complete `PILFunction` instance.
@@ -12,11 +12,6 @@ class TACLowerer: CustomStringConvertible {
     
     /// The currently active label. The next statement is appended to the current label.
     var activeLabel: Label!
-    
-    /// Returns `true` if no issues were found, i.e. if it is safe to generate code. Warnings are allowed, so this returns `true` even if warnings were generated.
-    var noIssues: Bool {
-        return errors.reduce(true, {$0 && $1.allowed})
-    }
     
     /// Build a description of the `TACLowerer` instance.
     /// This description contains includes all functions and their related labels and entry points.
@@ -38,24 +33,20 @@ class TACLowerer: CustomStringConvertible {
     /// `libraryAssembly` stores all code snippets fetched from imported libraries, concatenated.
     private(set) var libraryAssembly: String = ""
     
-    /// The ordered list of errors (issues and warnings) found by the `TACLowerer` instance.
-    private(set) var errors: [PMaxError] = []
-    
     // MARK: Private Properties
     
     /// Map a struct name to that struct's corresponding `MemoryLayout`.
     private let structLayouts: [String : MemoryLayout]
     
-    /// Counts the number of labels and internal variables generated.
-    private var uniquenessCounter = 0
-    
     // MARK: Initializer
     
-    init(_ pilLowerer: PILLowerer, _ emitOffsets: Bool) {
+    init(_ pilLowerer: PILLowerer, _ emitOffsets: Bool, _ compiler: Compiler) {
         
         self.structs = pilLowerer.structs
         self.functions = pilLowerer.functions
         self.structLayouts = pilLowerer.structLayouts
+        
+        super.init(compiler)
         
         self.local = TACScope(self, emitOffsets)
         
@@ -114,16 +105,10 @@ class TACLowerer: CustomStringConvertible {
         }
         
         guard containsValidMain || compileAsLibrary else {
-            submitError(.hasNoValidMain)
+            submitError(PMaxIssue.hasNoValidMain)
             return
         }
         
-    }
-    
-    // MARK: Error Submission
-    
-    func submitError(_ newError: PMaxIssue) {
-        errors.append(newError)
     }
     
     // MARK: Label Generator
@@ -142,8 +127,7 @@ class TACLowerer: CustomStringConvertible {
             newLabel = Label(name: prefix + context)
             labels[function.name] = (pilFunction: function, entry: newLabel, all: [], imported)
         } else {
-            uniquenessCounter += 1
-            newLabel = Label(name: "@l\(uniquenessCounter)_\(context)")
+            newLabel = Label(name: "\(autoVariableName("@l"))_\(context)")
         }
         
         labels[function.name]?.all.insert(newLabel)
@@ -163,8 +147,7 @@ class TACLowerer: CustomStringConvertible {
     /// It uses a `context` parameter to give a _somewhat_ informative name.
     /// Returns the frame pointer offset of the newly declared variable.
     func newInternalVariable(_ context: String, _ type: PILType) -> Int {
-        uniquenessCounter += 1
-        let name = "$\(uniquenessCounter)_\(context)"
+        let name = "\(autoVariableName("%"))_\(context)"
         return local.declare(type, name)
     }
     

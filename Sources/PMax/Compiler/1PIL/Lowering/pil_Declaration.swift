@@ -65,7 +65,7 @@ extension Declaration {
         type = inferredType
         
         // Declare a new, intermediate variable that will hold the result of evaluating the initial expression.
-        let intermediateVariable = lowerer.newAnonymousVariable
+        let intermediateVariable = lowerer.autoVariableName("%")
         let intermediateDeclaration = PILStatement.declaration(type: inferredType, name: intermediateVariable)
         lowerer.local.declare(inferredType, intermediateVariable)
         

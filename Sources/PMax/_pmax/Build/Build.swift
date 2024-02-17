@@ -46,7 +46,7 @@ struct Build: ParsableCommand {
         
         String.includeCommentsInAssembly = self.includeComments
         
-        let compiler = Compiler(emitOffsets, libPaths)
+        let compiler = Compiler(libPaths)
         
         handleFlags(compiler)
         setOutputInformation(compiler)
@@ -101,8 +101,7 @@ struct Build: ParsableCommand {
     private func compile(with compiler: Compiler) throws {
         
         let sourceCode = try assembleSourceCode()
-        try compiler.compile(sourceCode, asLibrary)
-        try compiler.printErrors()
+        try compiler.compile(sourceCode, asLibrary, emitOffsets)
         
     }
     

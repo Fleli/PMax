@@ -72,15 +72,4 @@ class TACScope {
         
     }
     
-    private func printIfAllowed(_ left: String, _ beginRight: Int, _ right: String) {
-        
-        guard Compiler.allowPrinting else {
-            return
-        }
-        
-        let message = left + String(repeating: " ", count: beginRight - left.count) + right
-        print(message)
-        
-    }
-    
 }

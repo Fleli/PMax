@@ -25,11 +25,9 @@ extension PILExpression {
             
             return lowerToTACAsMemberLValue(main, member, lowerer, function)
             
-        // TODO: Produce specialized error messages for each case.
-        // Avoid default cases. Explicitly state which cases submit an error.
         case .integerLiteral(_), .addressOf(_), .unary(_, _), .binary(_, _, _), .call(_), .sizeof(_):
             
-            lowerer.submitError(.unassignableLHS(lhs: self))
+            lowerer.submitError(PMaxIssue.unassignableLHS(lhs: self))
             return .stackAllocated(framePointerOffset: 0)
             
         }
