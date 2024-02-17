@@ -41,7 +41,7 @@ public indirect enum Expression: CustomStringConvertible {
 	case leftSquareBracket_TyperightSquareBracket_Expression(String, Type, String, Expression)
 	case string(String)
 	case identifier(String)
-	case ExpressionleftParenthesis_ArgumentsrightParenthesis_(Expression, String, Arguments, String)
+	case identifierleftParenthesis_ArgumentsrightParenthesis_(String, String, Arguments, String)
 	case ampersand_Expression(String, Expression)
 	case asterisk_Expression(String, Expression)
 	case Sizeof(Sizeof)
@@ -55,7 +55,7 @@ public indirect enum Expression: CustomStringConvertible {
 		case .leftSquareBracket_TyperightSquareBracket_Expression(_, let type, _, let expression): return "[" + type.description + "]" + expression.description
 		case .string(_): return "string"
 		case .identifier(_): return "identifier"
-		case .ExpressionleftParenthesis_ArgumentsrightParenthesis_(let expression, _, let arguments, _): return expression.description + "(" + arguments.description + ")"
+		case .identifierleftParenthesis_ArgumentsrightParenthesis_(_, _, let arguments, _): return "identifier" + "(" + arguments.description + ")"
 		case .ampersand_Expression(_, let expression): return "&" + expression.description
 		case .asterisk_Expression(_, let expression): return "*" + expression.description
 		case .Sizeof(let sizeof): return sizeof.description

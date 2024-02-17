@@ -15,16 +15,16 @@ public class Declaration: CustomStringConvertible {
 		self.value = nil
 	}
 	
-	init(_ name: String, _ value: Expression) {
-		self.name = name
-		self.type = nil
-		self.value = value
-	}
-	
 	init(_ name: String, _ type: `Type`) {
 		self.name = name
 		self.type = type
 		self.value = nil
+	}
+	
+	init(_ name: String, _ value: Expression) {
+		self.name = name
+		self.type = nil
+		self.value = value
 	}
 	
 	init(_ name: String, _ type: `Type`, _ value: Expression) {
