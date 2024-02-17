@@ -9,6 +9,8 @@ extension TACStatement {
             fatalError("Register index cannot be \(index).")
         }
         
+        print("load_reg_with_val = \(value), reg = \(index), extra = \(extraOffset)")
+        
         switch value {
             
         case .stackAllocated(let offset):

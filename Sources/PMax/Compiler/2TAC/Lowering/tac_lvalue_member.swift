@@ -37,6 +37,7 @@ extension PILExpression {
             /// If a member `m` has an offset `k` within a struct instance `x` which itself is found at frame pointer offset `l`, then `m`'s frame pointer offset is `l + k`.
             /// When lowering as an LValue, we view this member as a variable allocated on the stack, since structs are really just groups of data packaged together.
             let memberOffset = framePointerOffset + memberOffsetInStructInstance
+            
             return .stackAllocated(framePointerOffset: memberOffset)
             
         case .dereference(let framePointerOffset):

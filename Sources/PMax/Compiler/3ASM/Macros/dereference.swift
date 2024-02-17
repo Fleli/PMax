@@ -1,7 +1,8 @@
 extension TACStatement {
     
+    /*
     
-    func dereference(_ lhs: LValue, _ arg: RValue, _ words: Int) -> String {
+    func _dereference(_ lhs: LValue, _ arg: RValue, _ words: Int) -> String {
         
         // Say our statement is:  assign b = *a;
         
@@ -9,6 +10,10 @@ extension TACStatement {
         // r0:  The value of a
         // r1:  The value a + i for each i in 0 ..< words
         // r2:  Scratch register for assignments
+        
+        
+        
+        print("--dereference: lhs=\(lhs), arg=\(arg), words=\(words)")
         
         // First, we find the value of a
         var assembly = load_register_with_value(arg, register: 0, 0)
@@ -31,6 +36,32 @@ extension TACStatement {
         
     }
     
+    */
+    
+    func dereference(_ lhs: LValue, _ arg: RValue, _ words: Int) -> String {
+        
+        let basePointer = 0
+        let pointer = 1
+        let scratch = 2
+        let tempStorage = 3
+        
+        // Fetch the pointer
+        var assembly = load_register_with_value(arg, register: basePointer, 0)
+        
+        // We need to copy the whole underlying (pointed-to) object
+        for i in 0 ..< words {
+            
+            assembly = assembly.addi(pointer, basePointer, i, "a[\(i)]")
+            assembly = assembly.ldind(tempStorage, pointer, "r\(tempStorage) = a[\(i)]")
+            
+            assembly += assign_to_location(lhs, tempStorage, scratch, i)
+            
+        }
+        
+        // Return the generated assembly code
+        return assembly
+        
+    }
     
 }
 
