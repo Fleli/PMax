@@ -38,5 +38,30 @@ class GlobalPool {
         
     }
     
+    /// Build the assembly code that corresponds to the constant values held by this `GlobalPool` instance.
+    func buildDataSegment() -> String {
+        
+        // If there are no globals, don't bother
+        if globals.count == 0 {
+            return ""
+        }
+        
+        
+        var dataSegment = ".DATA {"
+        
+        let sortedGlobals = globals.sorted { $0.value < $1.value }
+        
+        for pair in sortedGlobals {
+            for word in pair.key.storedWords() {
+                dataSegment += "\n\t\(word)"
+            }
+        }
+        
+        dataSegment += "\n}\n\n"
+        
+        return dataSegment
+        
+    }
+    
     
 }

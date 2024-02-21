@@ -10,6 +10,7 @@ extension String {
         build("li r\(register), \(immediate)", comment)
     }
     
+    // TODO: Take into consideration that libraries may also define string literals. In that case, some offsets may be referred to mmultiple times. Find a mechanism to fix this issue.
     /// Load value at a given offset within the data segment.
     func lidata(_ register: Int, _ dataSegmentOffset: Int, _ comment: String? = nil) -> String {
         build("lidata r\(register), \(dataSegmentOffset)", comment)

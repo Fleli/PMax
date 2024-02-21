@@ -18,7 +18,10 @@ class AssemblyLowerer {
         
         var output = ""
         
+        insertDataSegment(&output)
+        
         if compileAsLibrary {
+            // TODO: Check that transitive imports are handled correctly.
             lowerAsLibrary(&output)
         } else {
             lowerAsExecutable(&output)
@@ -72,6 +75,13 @@ class AssemblyLowerer {
         let libraryFunction = signature + " {\n" + entryStatement + asmStatement + "}\n\n"
         
         return libraryFunction
+        
+    }
+    
+    private func insertDataSegment(_ output: inout String) {
+        
+        // Request the full data segment, converted to a string, from the TACLowerer's GlobalPool instance.
+        output += lowerer.globalPool.buildDataSegment()
         
     }
     
