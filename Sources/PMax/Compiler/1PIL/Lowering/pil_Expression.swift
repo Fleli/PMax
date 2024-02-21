@@ -77,10 +77,9 @@ extension Expression {
                 
             }
             
-        case .string(_):
+        case .string(let literal):
             
-            lowerer.submitError(PMaxIssue.stringsAreNotSupported)
-            return PILExpression.init(.integerLiteral("0"), cast: .error)
+            return PILExpression(PILOperation.stringLiteral(literal), lowerer)
             
         case .Sizeof(let sizeof):
             

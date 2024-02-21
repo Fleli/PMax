@@ -54,7 +54,7 @@ class AssemblyLowerer {
     
     private func lowerAsExecutable(_ output: inout String) {
         
-        output = "@__main:\n\(String.includeCommentsInAssembly ? "\t; Jump to main entry point\n" : "")\tjimm @fn_main\n\n"
+        output += "@__main:\n\(String.includeCommentsInAssembly ? "\t; Jump to main entry point\n" : "")\tjimm @fn_main\n\n"
         
         for labelGroup in labels.values where !labelGroup.imported {
             

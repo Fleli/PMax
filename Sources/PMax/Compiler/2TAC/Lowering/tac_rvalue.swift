@@ -122,7 +122,7 @@ extension PILExpression {
             
         case .stringLiteral(let literal):
             
-            let variableHoldingLiteralValue = lowerer.newInternalVariable("string{\(literal)}", .int)
+            let variableHoldingLiteralValue = lowerer.newInternalVariable("string{\(literal)}", .pointer(pointee: .char))
             
             let lValue = LValue.stackAllocated(framePointerOffset: variableHoldingLiteralValue)
             let rValue = lowerer.getStringLiteralAsRValue(literal)

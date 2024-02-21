@@ -46,17 +46,26 @@ class GlobalPool {
             return ""
         }
         
-        
+        // Start the data segment with `.DATA {`
         var dataSegment = ".DATA {"
         
+        // Sort all globals by offset
         let sortedGlobals = globals.sorted { $0.value < $1.value }
         
-        for pair in sortedGlobals {
-            for word in pair.key.storedWords() {
+        // Go through each key-value pair
+        for (key, value) in sortedGlobals {
+            
+            // Go through each word of the key (the actual data)
+            for word in key.storedWords() {
+                
+                // ... and add a line containing that data
                 dataSegment += "\n\t\(word)"
+                
             }
+            
         }
         
+        // End the data segment with some newlines and `}`
         dataSegment += "\n}\n\n"
         
         return dataSegment
