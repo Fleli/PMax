@@ -9,15 +9,15 @@ public class Declaration: CustomStringConvertible {
 	let type: `Type`?
 	let value: Expression?
 	
-	init(_ name: String) {
-		self.name = name
-		self.type = nil
-		self.value = nil
-	}
-	
 	init(_ name: String, _ type: `Type`) {
 		self.name = name
 		self.type = type
+		self.value = nil
+	}
+	
+	init(_ name: String) {
+		self.name = name
+		self.type = nil
 		self.value = nil
 	}
 	

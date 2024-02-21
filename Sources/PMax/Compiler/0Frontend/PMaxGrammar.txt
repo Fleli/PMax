@@ -90,21 +90,21 @@ Declaration -> #var #identifier #;
 Declaration -> #var #identifier #= Expression #; 
 Declaration -> #var #identifier #: Type #; 
 Declaration -> #var #identifier #: Type #= Expression #; 
-Types -> Types #, Type
-Types -> Type
-Types ->
+FunctionBodyStatements -> FunctionBodyStatements FunctionBodyStatement
+FunctionBodyStatements -> FunctionBodyStatement
+FunctionBodyStatements ->
 Parameters -> Parameters #, Parameter
 Parameters -> Parameter
 Parameters ->
 TopLevelStatements -> TopLevelStatements TopLevelStatement
 TopLevelStatements -> TopLevelStatement
 TopLevelStatements ->
-StructBodyStatements -> StructBodyStatements Declaration
-StructBodyStatements -> Declaration
-StructBodyStatements ->
-FunctionBodyStatements -> FunctionBodyStatements FunctionBodyStatement
-FunctionBodyStatements -> FunctionBodyStatement
-FunctionBodyStatements ->
 Arguments -> Arguments #, Argument
 Arguments -> Argument
 Arguments ->
+Types -> Types #, Type
+Types -> Type
+Types ->
+StructBodyStatements -> StructBodyStatements Declaration
+StructBodyStatements -> Declaration
+StructBodyStatements ->
