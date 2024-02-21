@@ -45,6 +45,10 @@ extension PILOperation {
             
             return .int
             
+        case .stringLiteral(_):
+            
+            return .pointer(pointee: .char)
+            
         case .dereference(let expression):
             
             switch expression.type {
@@ -53,7 +57,7 @@ extension PILOperation {
             case .int:
                 return .int
                 
-            case .void, .struct(_), .function(_, _):
+            case .void, .char, .struct(_), .function(_, _):
                 lowerer.submitError(PMaxIssue.dereferenceNonPointerType(type: expression.type))
                 fallthrough
                 

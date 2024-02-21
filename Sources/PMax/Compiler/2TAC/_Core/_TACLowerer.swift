@@ -4,7 +4,6 @@ class TACLowerer: CompilerPass, CustomStringConvertible {
     /// The typealias `(PILFunction, Label, Set<Label>)` groups together information about a function, including all its labels, its entry label (used for calling), and its corresponding complete `PILFunction` instance.
     typealias AssociatedFunctionData = (pilFunction: PILFunction, entry: Label, all: Set<Label>, imported: Bool)
     
-    
     // MARK: Internal Properties
     
     /// The current local scope.
@@ -32,6 +31,9 @@ class TACLowerer: CompilerPass, CustomStringConvertible {
     
     /// `libraryAssembly` stores all code snippets fetched from imported libraries, concatenated.
     private(set) var libraryAssembly: String = ""
+    
+    /// This variable contains all declared global constants.
+    private(set) var globalPool = GlobalPool()
     
     // MARK: Private Properties
     
@@ -157,7 +159,7 @@ class TACLowerer: CompilerPass, CustomStringConvertible {
         
         switch type {
             
-        case .int, .pointer(_), .function(_, _):
+        case .int, .char, .pointer(_), .function(_, _):
             
             return 1
             
@@ -210,6 +212,11 @@ class TACLowerer: CompilerPass, CustomStringConvertible {
     /// Return the internal member offset of `member` in a given struct. Assumes that the struct and member both exist (otherwise, `fatalError`).
     func structMemberOffset(_ structName: String, _ member: String) -> Int {
         return structLayout(structName).fields[member]!.start
+    }
+    
+    // MARK: Global Variable/Constant Handling
+    func getStringLiteralAsRValue(_ literal: String) -> RValue {
+        return .stringLiteral(globalPoolOffset: globalPool.getStringLiteralOffsetInGlobalPool(literal))
     }
     
 }

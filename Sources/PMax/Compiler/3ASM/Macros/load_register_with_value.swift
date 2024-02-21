@@ -19,6 +19,10 @@ extension TACStatement {
             
             return "".li(index, value, "r\(index) = \(value)")
             
+        case .stringLiteral(let globalPoolOffset):
+            
+            return "".li(index, globalPoolOffset, "Load the global pool offset for string @ \(globalPoolOffset)")
+            
         case .dereference(let framePointerOffset):
             
             // TODO: Apparently unreachable. Double-check this.

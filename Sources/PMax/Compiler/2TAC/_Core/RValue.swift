@@ -10,6 +10,9 @@ enum RValue: CustomStringConvertible {
     /// An integer literal.
     case integerLiteral(value: Int)
     
+    /// A string literal
+    case stringLiteral(globalPoolOffset: Int)
+    
     /// Dereference a pointer. The pointer being dereferenced must be stack-allocated at a certain `framePointerOffset`.
     /// For example, using `framePointerOffset = 3` means finding the variable at `fp + 3`, interpreting its value as an address, and dereferencing that address.
     /// Dereferencing literal values (e.g. `*30`) is allowed, but the compiler will generate some internal variable and set it equal to `30`, and then use its offset as the `framePointerOffset`.
@@ -25,6 +28,8 @@ enum RValue: CustomStringConvertible {
             return .stackAllocated(framePointerOffset: framePointerOffset)
         case .integerLiteral(let value):
             fatalError("Cannot convert RValue '\(self.description)' to LValue (integer literal \(value)).")
+        case .stringLiteral(let globalPoolOffset):
+            fatalError("String literal at global pool offset \(globalPoolOffset) cannot be treated as an LValue.")
         case .dereference(let framePointerOffset):
             return .dereference(framePointerOffset: framePointerOffset)
         }
@@ -39,6 +44,8 @@ enum RValue: CustomStringConvertible {
             return "rvalue[fp + \(framePointerOffset)]"
         case .integerLiteral(let value):
             return "rvalue(\(value))"
+        case .stringLiteral(let globalPoolOffset):
+            return "rvalue(string @ \(globalPoolOffset))"
         case .dereference(let framePointerOffset):
             return "rvalue(*[fp + \(framePointerOffset)])"
         }

@@ -46,6 +46,20 @@ extension PILStatement {
                     lowerer.activeLabel.newStatement(TACStatement.assign(lhs: .stackAllocated(framePointerOffset: literalVariable), rhs: value, words: 1))
                     fOffset = literalVariable
                     
+                case .stringLiteral(let globalPoolOffset):
+                    
+                    // The type of a string literal is `char*`.
+                    let type = PILType.pointer(pointee: .char)
+                    
+                    // Declare a new `char*` variable
+                    let literalVariable = lowerer.newInternalVariable("string-at-\(globalPoolOffset)", type)
+                    
+                    // Insert an assignment statement from the string literal to the `char*` temp variable.
+                    lowerer.activeLabel.newStatement(TACStatement.assign(lhs: .stackAllocated(framePointerOffset: literalVariable), rhs: value, words: 1))
+                    
+                    // Notify the lowerer of where to find the initial RHS
+                    fOffset = literalVariable
+                    
                 case .dereference(let framePointerOffset):
                     
                     // TODO: Should avoid cases like these.

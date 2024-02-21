@@ -10,6 +10,11 @@ extension String {
         build("li r\(register), \(immediate)", comment)
     }
     
+    /// Load value at a given offset within the data segment.
+    func lidata(_ register: Int, _ dataSegmentOffset: Int, _ comment: String? = nil) -> String {
+        build("lidata r\(register), \(dataSegmentOffset)", comment)
+    }
+    
     /// Copy (move) the value in `src` to `dst`.
     func mv(_ dst: Int, _ src: Int, _ comment: String? = nil) -> String {
         if dst == src {

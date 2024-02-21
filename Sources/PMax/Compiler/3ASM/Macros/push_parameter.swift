@@ -31,6 +31,11 @@ extension TACStatement {
             assembly += "".li(0, value)
             assembly += self.assign_to_location(availableForCallee.treatAsLValue(), 0, 1, 0)
             
+        case .stringLiteral(let str):
+            
+            // TODO: Go over this.
+            fatalError("Parameters should never be strings. \(str).")
+            
         case .dereference(let offset):
             
             // TODO: Go over this.

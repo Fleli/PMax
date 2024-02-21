@@ -1,11 +1,17 @@
 
 indirect enum PILType: CustomStringConvertible, Hashable {
     
+    // Built-ins
     case int
     case void
+    case char
+    
+    // Derived
     case `struct`(name: String)
     case pointer(pointee: PILType)
     case function(input: PILType, output: PILType)
+    
+    // Error
     case error
     
     var description: String {
@@ -14,6 +20,8 @@ indirect enum PILType: CustomStringConvertible, Hashable {
             return Builtin.native
         case .void:
             return Builtin.void
+        case .char:
+            return Builtin.char
         case .struct(let name):
             return name
         case .pointer(let pointee):
