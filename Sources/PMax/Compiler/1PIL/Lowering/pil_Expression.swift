@@ -79,7 +79,10 @@ extension Expression {
             
         case .string(let literal):
             
-            return PILExpression(PILOperation.stringLiteral(literal), lowerer)
+            let strippedLiteral = String(literal.dropFirst().dropLast())
+            let pilOperation = PILOperation.stringLiteral(strippedLiteral)
+            
+            return PILExpression(pilOperation, lowerer)
             
         case .Sizeof(let sizeof):
             

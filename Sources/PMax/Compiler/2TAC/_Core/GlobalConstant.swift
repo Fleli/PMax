@@ -27,6 +27,9 @@ enum GlobalConstant: Equatable, Hashable {
                 
             }
             
+            // Finally, add the terminating null character.
+            words.append(0)
+            
         }
         
         return words

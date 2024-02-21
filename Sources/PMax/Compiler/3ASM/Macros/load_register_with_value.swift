@@ -21,7 +21,7 @@ extension TACStatement {
             
         case .stringLiteral(let globalPoolOffset):
             
-            return "".li(index, globalPoolOffset, "Load the global pool offset for string @ \(globalPoolOffset)")
+            return "".lidata(index, globalPoolOffset, "Load the global pool offset for string @ \(globalPoolOffset)")
             
         case .dereference(let framePointerOffset):
             

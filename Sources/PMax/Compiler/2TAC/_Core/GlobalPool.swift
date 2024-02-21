@@ -50,10 +50,10 @@ class GlobalPool {
         var dataSegment = ".DATA {"
         
         // Sort all globals by offset
-        let sortedGlobals = globals.sorted { $0.value < $1.value }
+        let sortedGlobals = globals.sorted { $0.value < $1.value } .map { $0.key }
         
         // Go through each key-value pair
-        for (key, value) in sortedGlobals {
+        for key in sortedGlobals {
             
             // Go through each word of the key (the actual data)
             for word in key.storedWords() {
