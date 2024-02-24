@@ -25,7 +25,7 @@ extension PILExpression {
             
             return lowerToTACAsMemberLValue(main, member, lowerer, function)
             
-        case .integerLiteral(_), .stringLiteral(_), .addressOf(_), .unary(_, _), .binary(_, _, _), .call(_), .sizeof(_):
+        case .integerLiteral(_), .stringLiteral(_), .charLiteral(_), .addressOf(_), .unary(_, _), .binary(_, _, _), .call(_), .sizeof(_):
             
             lowerer.submitError(PMaxIssue.unassignableLHS(lhs: self))
             return .stackAllocated(framePointerOffset: 0)

@@ -49,6 +49,10 @@ extension PILOperation {
             
             return .pointer(pointee: .char)
             
+        case .charLiteral(_):
+            
+            return .char
+            
         case .dereference(let expression):
             
             switch expression.type {

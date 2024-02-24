@@ -40,7 +40,7 @@ enum PMaxIssue: PMaxError {
     
     // Expressions
     case illegalIntegerLiteral(literal: String)
-    case stringsAreNotSupported
+    case invalidCharLiteral(literal: String)
     
     // Macros
     case invalidMacroRedeclaration(name: String)
@@ -54,6 +54,8 @@ enum PMaxIssue: PMaxError {
             switch self {
             case .cannotFindMemberOfNonStructType(let member, let type):
                 return "Cannot find member '\(member)' of non-struct type '\(type)'."
+            case .invalidCharLiteral(let literal):
+                return "Invalid char literal '\(literal)'."
             case .typeDoesNotExist(let typeName):
                 return "The type '\(typeName)' does not exist."
             case .fieldDoesNotExist(let structName, let field):
@@ -100,8 +102,6 @@ enum PMaxIssue: PMaxError {
                 return description
             case .illegalIntegerLiteral(let literal):
                 return "Illegal integer literal \(literal)."
-            case .stringsAreNotSupported:
-                return "String literals are not supported by PMax yet."
             case .invalidRedeclaration(let function):
                 return "Invalid redeclaration of function '\(function)'."
             case .invalidRedeclaratino(let `struct`):

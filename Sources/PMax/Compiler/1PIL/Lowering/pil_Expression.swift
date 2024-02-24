@@ -84,6 +84,13 @@ extension Expression {
             
             return PILExpression(pilOperation, lowerer)
             
+        case .char(let literal):
+            
+            let strippedLiteral = String(literal.dropFirst().dropLast())
+            let pilOperation = PILOperation.charLiteral(strippedLiteral)
+            
+            return PILExpression(pilOperation, lowerer)
+            
         case .Sizeof(let sizeof):
             
             let pilType = PILType(sizeof.type, lowerer)

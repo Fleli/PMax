@@ -101,6 +101,8 @@ indirect enum PILType: CustomStringConvertible, Hashable {
             
         case (.function(let inA, let outA), .function(let inB, let outB)):
             return (inA.assignable(to: inB)) && (outA.assignable(to: outB))
+        case (.char, .char):
+            return true
         case (.void, .void):
             return true
         case (_, .void), (.void, _):                // void cannot be assigned to anything and is not assignable itself

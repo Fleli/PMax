@@ -131,6 +131,26 @@ extension PILExpression {
             
             return lValue.treatAsRValue()
             
+        case .charLiteral(let literal):
+            
+            let unicodeScalar: String = {
+                switch literal {
+                case "\\n": return "\n"
+                case "\\t": return "\t"
+                case "\\r": return "\r"
+                case "\\0": return "\0"
+                case "\\\\": return "\\"
+                default: return literal
+                }
+            }()
+            
+            guard let value = UnicodeScalar(unicodeScalar)?.value else {
+                lowerer.submitError(PMaxIssue.invalidCharLiteral(literal: literal))
+                return .integerLiteral(value: 0)
+            }
+            
+            return .integerLiteral(value: Int(value))
+            
         case .dereference(let pILExpression):
             
             /// The expression to dereference, lowered to TAC as an `RValue`.

@@ -14,6 +14,8 @@ enum PILOperation: CustomStringConvertible {
     
     case stringLiteral(String)
     
+    case charLiteral(String)
+    
     case dereference(PILExpression)
     
     case addressOf(PILExpression)
@@ -39,6 +41,8 @@ enum PILOperation: CustomStringConvertible {
             return literal
         case .stringLiteral(let str):
             return "\"\(str)\""
+        case .charLiteral(let str):
+            return "'\(str)'"
         case .dereference(let arg):
             return "(*\(arg))"
         case .addressOf(let arg):
@@ -72,6 +76,8 @@ enum PILOperation: CustomStringConvertible {
         case .integerLiteral(let literal):
             return literal
         case .stringLiteral(_):
+            return description
+        case .charLiteral(_):
             return description
         case .dereference(let pILExpression):
             return "*\(pILExpression.readableDescription)"
