@@ -44,6 +44,10 @@ indirect enum PILType: CustomStringConvertible, Hashable {
             
             self = .void
             
+        case .basic(Builtin.char):
+            
+            self = .char
+            
         case .basic(let id) where lowerer.structs[id] != nil:
             
             self = .struct(name: id)
