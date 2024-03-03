@@ -16,6 +16,16 @@ class GlobalPool {
     /// Get a string as an RValue. Declare the string if it's not seen yet, or return an existing instance of it if it's already declared.
     func getStringLiteralOffsetInGlobalPool(_ literal: String) -> Int {
         
+        guard #available(macOS 13.0, *) else {
+            fatalError("Need macOS 13.0 or newer.")
+        }
+        
+        let literal = literal
+            .replacing("\\n", with: "\n")
+            .replacing("\\t", with: "\t")
+            .replacing("\\0", with: "\0")
+            .replacing("\\r", with: "\r")
+        
         // Create a `GlobalConstant` instance from the string literal.
         let stringLiteralGlobalConstant = GlobalConstant.stringLiteral(literal)
         

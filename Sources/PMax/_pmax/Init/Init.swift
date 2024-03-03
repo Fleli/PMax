@@ -30,7 +30,6 @@ struct Init: ParsableCommand {
     
     func run() throws {
         
-        try newFolder("_libraries")
         try newFolder("_targets")
         try newFolder(MainDefaults.sourceSubPath)
         

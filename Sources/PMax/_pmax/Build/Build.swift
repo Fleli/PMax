@@ -15,8 +15,8 @@ struct Build: ParsableCommand {
     // MARK: Command-line
     
     
-    @ArgumentParser.Option(help: "Specify the paths for the compiler to search for libraries in.")
-    private var libPaths: [String] = []
+    @ArgumentParser.Option(help: "Specify a path that the compiler should search for libraries in.")
+    private var include: [String] = []
     
     @ArgumentParser.Option(help: "Specify the name of the output file. Do not include file extensions - only provide the actual name.")
     private var targetName: String?
@@ -46,7 +46,7 @@ struct Build: ParsableCommand {
         
         String.includeCommentsInAssembly = self.includeComments
         
-        let compiler = Compiler(libPaths)
+        let compiler = Compiler(include)
         
         handleFlags(compiler)
         setOutputInformation(compiler)

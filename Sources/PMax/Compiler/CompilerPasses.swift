@@ -4,6 +4,9 @@ extension Compiler {
     func runCompilationPasses(_ sourceCode: [String], _ asLibrary: Bool, _ emitOffsets: Bool) throws {
         
         
+        print("Start lex")
+        
+        
         // LEXICAL ANALYSIS
         
         
@@ -24,6 +27,9 @@ extension Compiler {
         write(.tokens, tokensFileContent)
         
         profiler.register(.tokens)
+        
+        
+        print("Start parse")
         
         
         // PARSING

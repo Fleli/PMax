@@ -2,7 +2,7 @@
 struct MakefileDefault {
     
     
-    private static let libPaths = "_libraries"
+    private static let libPaths = "/opt/cpm/libraries/pmax-packages"
     
     
     static func text(_ targetName: String, _ asLibrary: Bool) -> String {
@@ -13,7 +13,7 @@ struct MakefileDefault {
         
         return """
             
-            LIBRARYPATHS = "\(Self.libPaths)"
+            INCLUDE = "\(Self.libPaths)"
             ASMFILE = "\(targetName)"
             PROFILECOMPILER = #--profile
             EMITINTERMEDIATE = #--emit-offsets --emit-tac --emit-pil
@@ -21,8 +21,7 @@ struct MakefileDefault {
             INCLUDECOMMENTS = #--include-comments
             
             all:
-            \t@clear
-            \tpmax build --target-name $(ASMFILE) --lib-paths $(LIBRARYPATHS) $(PROFILECOMPILER) $(EMITINTERMEDIATE) $(INCLUDECOMMENTS) --as-library
+            \tpmax build --target-name $(ASMFILE) --include $(INCLUDE) $(PROFILECOMPILER) $(EMITINTERMEDIATE) $(INCLUDECOMMENTS) --as-library
             
             """
         
@@ -33,7 +32,7 @@ struct MakefileDefault {
         
         return """
             
-            LIBRARYPATHS = "\(Self.libPaths)"
+            INCLUDE = "\(Self.libPaths)"
             ASMFILE = "\(targetName)"
             MACHINEFILE = "\(targetName).bbx"
             PROFILECOMPILER = #--profile
@@ -45,10 +44,9 @@ struct MakefileDefault {
             INCLUDECOMMENTS = #--include-comments
             
             all:
-            \t@clear
-            \tpmax build --target-name $(ASMFILE) --lib-paths $(LIBRARYPATHS) $(PROFILECOMPILER) $(EMITINTERMEDIATE) $(INCLUDECOMMENTS)
-            \tbbasm assemble _targets/$(ASMFILE).bba _targets/$(MACHINEFILE) $(EMITINDICES) $(PRINTASSEMBLERSTATS)
-            \tbbvm run _targets/$(MACHINEFILE) $(VIEWEXECUTION) --max-instructions $(MAXINSTRUCTIONS)
+            \t@pmax build --target-name $(ASMFILE) --include $(INCLUDE) $(PROFILECOMPILER) $(EMITINTERMEDIATE) $(INCLUDECOMMENTS)
+            \t@bbasm assemble _targets/$(ASMFILE).bba _targets/$(MACHINEFILE) $(EMITINDICES) $(PRINTASSEMBLERSTATS)
+            \t@bbvm run _targets/$(MACHINEFILE) $(VIEWEXECUTION) --max-instructions $(MAXINSTRUCTIONS)
             
             """
             
