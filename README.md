@@ -4,7 +4,7 @@ Welcome to the PMax repository. PMax is a programming language that draws inspir
 
 ## Installation
 
-Please refer to the [PMax Development Kit](https://github.com/Fleli/PDK-Installer) to install the compiler (this repository), an assembler and a virtual machine to develop and run PMax code.
+It is recommended to use the [Chad Package manager](https://github.com/Fleli/cpm) and run the command `cpm i pdk` to install PDK (PMax Development Kit), which includes the compiler, assembler, virtual machine and standard library.
 
 ## Documentation
 
