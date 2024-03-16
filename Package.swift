@@ -17,7 +17,8 @@ let package = Package(
             name: "pmax",
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser")
-            ]
+            ],
+            exclude: ["PMax/Compiler/0Frontend/PMaxGrammar.txt"]
         )
     ]
 )
