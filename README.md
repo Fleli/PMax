@@ -10,6 +10,10 @@ It is recommended to use the [Chad Package manager](https://github.com/Fleli/cpm
 
 The `Documentation` folder contains detailed information about each part of the compiler. A quick overview is found in `Documentation/Compiler.md`.
 
+## Language
+
+For syntax and semantics of PMax, please read the documentation found in [Language](/Language).
+
 ## Contact
 
 I would love to hear from you if you have
