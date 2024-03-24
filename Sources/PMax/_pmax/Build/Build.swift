@@ -44,7 +44,7 @@ struct Build: ParsableCommand {
     
     func run() throws {
         
-        String.includeCommentsInAssembly = self.includeComments
+        // String.includeCommentsInAssembly = self.includeComments
         
         let compiler = Compiler(include)
         
