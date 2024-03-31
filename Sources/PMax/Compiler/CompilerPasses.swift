@@ -13,10 +13,14 @@ extension Compiler {
         
         for sourceCodeFile in sourceCode {
             
-            let rawTokens = try Lexer().lex(sourceCodeFile)
-            let fileTokens = filterTokens(rawTokens)
+            let tokens = try FastLexer().lex(sourceCodeFile)
             
-            fileSeparatedTokens.append(fileTokens)
+            print("File tokens:")
+            for tok in tokens {
+                print(tok)
+            }
+            
+            fileSeparatedTokens.append(tokens)
             
         }
         

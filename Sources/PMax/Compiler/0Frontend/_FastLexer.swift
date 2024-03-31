@@ -52,10 +52,36 @@ class FastLexer {
         
         if char.isLetter || char == "_" {
             lexIdentifier()
+        } else if let arrow = matchExact("->", "->") {
+            tokens.append(arrow)
+        } else if char.isNumber || char == "-" {
+            lexNumber()
+        } else if char == "\"" {
+            try lexString()
+        } else if char == "'" {
+            try lexChar()
+        } else if let _ = matchExact("--", "//") {
+            lexComment()
         }
         
         else {
-            throw LexError.invalidCharacter(char, self.tokens)
+            
+        switchLabel: switch input[index] {
+            case " ", " ", "\n", "\t":
+                index += 1
+            default:
+                
+                for typ in ["<<", ">>", "<=", ">=", "@", "==", "!=", "[", "]", "(", ")", "{", "}", "+", "-", "*", "/", "%", "&", "|", "!", "?", ".", ",", ":", ";", "_", "=", "<", ">", "~"] {
+                    if let token = matchExact(typ, typ) {
+                        tokens.append(token)
+                        break switchLabel
+                    }
+                }
+                
+                throw LexError.invalidCharacter(char, self.tokens)
+                
+            }
+            
         }
         
     }
@@ -97,6 +123,78 @@ class FastLexer {
         let type = (String.keywords.contains(content)) ? content : "identifier"
         
         tokens.append( Token(type, content, .null) )
+        
+    }
+    
+    private func lexNumber() {
+        
+        let isNegative = (input[index] == "-")
+        index = isNegative ? index + 1 : index
+        
+        let content = (isNegative ? "-" : "") + matchWhileSatisfied {
+            $0.isNumber
+        }
+        
+        tokens.append( Token("integer", content, .null) )
+        
+    }
+    
+    private func lexString() throws {
+        
+        index += 1
+        
+        // TODO: Allow escape sequences within the string
+        let content = matchWhileSatisfied {
+            $0 != "\""
+        }
+        
+        guard input[index] == "\"" else {
+            throw LexError.invalidCharacter("\"", tokens)
+        }
+        
+        index += 1
+        
+        tokens.append( Token("string", "\"" + content + "\"", .null) )
+        
+    }
+    
+    private func lexChar() throws {
+        
+        index += 1
+        
+        let char: String
+        
+        if input[index] == "\\" {
+            
+            index += 1
+            
+            guard "rnt0".contains(input[index]) else {
+                throw LexError.invalidCharacter(input[index], tokens)
+            }
+            
+            char = "\\\(input[index])"
+            
+        } else {
+            
+            char = String(input[index])
+            
+        }
+        
+        index += 1
+        
+        guard let _ = matchExact("--", "'") else {
+            throw LexError.invalidCharacter("'", tokens)
+        }
+        
+        tokens.append( Token("char", char, .null) )
+        
+    }
+    
+    private func lexComment() {
+        
+        let _ = matchWhileSatisfied {
+            $0 != "\n"
+        }
         
     }
     
