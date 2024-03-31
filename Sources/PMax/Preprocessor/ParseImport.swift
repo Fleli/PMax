@@ -7,7 +7,11 @@ extension Preprocessor {
         
         do {
             
+            print(". begin lex")
+            
             let tokens = try lexer.lex(hmaxFile).filter { $0.type != "newline" && $0.type != "space" }
+            
+            print(". begin parse")
             
             guard let slrTree = try parser.parse(tokens) else {
                 // TODO: Submit an error.
@@ -16,6 +20,8 @@ extension Preprocessor {
             }
             
             let statements = slrTree.convertToTopLevelStatements()
+            
+            print(". will go through statements")
             
             for statement in statements {
                 

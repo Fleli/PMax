@@ -50,7 +50,12 @@ final class Compiler {
     public func compile(_ sourceCode: [String], _ asLibrary: Bool, _ emitOffsets: Bool) throws {
         
         self.profiler = CompilerProfiler()
+        
+        print("Init preprocessor")
+        
         self.preprocessor = Preprocessor(self)
+        
+        print("--")
         
         do {
             

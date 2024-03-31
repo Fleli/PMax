@@ -100,7 +100,12 @@ struct Build: ParsableCommand {
     
     private func compile(with compiler: Compiler) throws {
         
+        print("Finding source code")
+        
         let sourceCode = try assembleSourceCode()
+        
+        print("--")
+        
         try compiler.compile(sourceCode, asLibrary, emitOffsets)
         
     }

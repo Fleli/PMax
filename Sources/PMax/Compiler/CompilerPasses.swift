@@ -4,10 +4,9 @@ extension Compiler {
     func runCompilationPasses(_ sourceCode: [String], _ asLibrary: Bool, _ emitOffsets: Bool) throws {
         
         
-        print("Start lex")
-        
-        
         // LEXICAL ANALYSIS
+        
+        print("lex")
         
         
         var fileSeparatedTokens: [[Token]] = []
@@ -29,10 +28,13 @@ extension Compiler {
         profiler.register(.tokens)
         
         
-        print("Start parse")
+        print("--")
         
         
         // PARSING
+        
+        
+        print("parse")
         
         
         let slrNodeTree = try SLRParser().parse(tokens)
@@ -47,9 +49,13 @@ extension Compiler {
         let converted = slrNodeTree.convertToTopLevelStatements()
         profiler.register(.parseTree)
         
+        print("--")
+        
         
         // PMAX INTERMEDIATE LANGUAGE
         
+        
+        print("pil")
         
         let pilLowerer = PILLowerer(converted, preprocessor, self)
         pilLowerer.lower()
@@ -61,10 +67,12 @@ extension Compiler {
         write(.pmaxIntermediateLanguage, pilLowerer.readableDescription)
         profiler.register(.pmaxIntermediateLanguage)
         
+        print("--")
         
         // THREE-ADDRESS CODE
         
         
+        print("tac")
         let tacLowerer = TACLowerer(pilLowerer, emitOffsets, self)
         tacLowerer.lower(asLibrary)
         
@@ -75,10 +83,12 @@ extension Compiler {
         write(.threeAddressCode, tacLowerer.description)
         profiler.register(.threeAddressCode)
         
+        print("--")
         
         // ASSEMBLY CODE GENERATION
         
         
+        print("asm")
         let asmLowerer = AssemblyLowerer(tacLowerer)
         
         let libCode = tacLowerer.libraryAssembly
@@ -88,6 +98,8 @@ extension Compiler {
         let option: DebugOption = asLibrary ? .libraryCode : .assemblyCode
         write(option, code)
         profiler.register(option)
+        
+        print("--")
         
     }
     
