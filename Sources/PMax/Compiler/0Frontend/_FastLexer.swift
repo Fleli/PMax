@@ -54,6 +54,8 @@ class FastLexer {
             lexIdentifier()
         } else if let arrow = matchExact("->", "->") {
             tokens.append(arrow)
+        } else if let minus = matchExact("-", "-") {
+            tokens.append(minus)
         } else if char.isNumber || char == "-" {
             lexNumber()
         } else if char == "\"" {
@@ -71,7 +73,7 @@ class FastLexer {
                 index += 1
             default:
                 
-                for typ in ["<<", ">>", "<=", ">=", "@", "==", "!=", "[", "]", "(", ")", "{", "}", "+", "-", "*", "/", "%", "&", "|", "!", "?", ".", ",", ":", ";", "_", "=", "<", ">", "~"] {
+                for typ in ["<<", ">>", "<=", ">=", "@", "==", "!=", "[", "]", "(", ")", "{", "}", "+", "*", "/", "%", "&", "|", "!", "?", ".", ",", ":", ";", "_", "=", "<", ">", "~"] {
                     if let token = matchExact(typ, typ) {
                         tokens.append(token)
                         break switchLabel

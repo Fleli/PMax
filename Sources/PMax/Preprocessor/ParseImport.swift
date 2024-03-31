@@ -2,16 +2,12 @@ extension Preprocessor {
     
     func parseImport(_ library: String, _ hmaxFile: String) {
         
-        let lexer = Lexer()
+        let lexer = FastLexer()
         let parser = SLRParser()
         
         do {
             
-            print(". begin lex")
-            
             let tokens = try lexer.lex(hmaxFile).filter { $0.type != "newline" && $0.type != "space" }
-            
-            print(". begin parse")
             
             guard let slrTree = try parser.parse(tokens) else {
                 // TODO: Submit an error.
@@ -20,8 +16,6 @@ extension Preprocessor {
             }
             
             let statements = slrTree.convertToTopLevelStatements()
-            
-            print(". will go through statements")
             
             for statement in statements {
                 

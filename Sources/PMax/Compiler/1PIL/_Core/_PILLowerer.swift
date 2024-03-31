@@ -31,8 +31,6 @@ class PILLowerer: CompilerPass {
     /// Initialize a `PILLowerer` object from a number of top-level statements (the whole program) and a preprocessor that handles imports.
     init(_ topLevelStatements: TopLevelStatements, _ preprocessor: Preprocessor, _ compiler: Compiler) {
         
-        print("--> init begin")
-        
         self.preprocessor = preprocessor
         
         super.init(compiler)
@@ -40,8 +38,6 @@ class PILLowerer: CompilerPass {
         self.local = PILScope(self)
         
         self.prepare(topLevelStatements)
-        
-        print("--> init done")
         
     }
     
@@ -59,10 +55,6 @@ class PILLowerer: CompilerPass {
     /// Preparation also means importing libraries and adding structs & functions declared there to the relevant dictionaries, making them available to the code written by the user.
     /// After imports are resolved and structs are declared, all functions are also declared. This is done afterwards because any function must be able to refer to any type, so they can't be declared until all structs are found.
     private func prepare(_ topLevelStatements: TopLevelStatements) {
-        
-        print("----> prepare begin")
-        
-        print("begin structs, macros, imports")
         
         // Go through each top-level statement.
         for syntacticStatement in topLevelStatements {
@@ -100,8 +92,6 @@ class PILLowerer: CompilerPass {
             
         }
         
-        print("begin functions")
-        
         // Now that every struct is declared, we can start defining functions.
         // We had to wait since a function F might depend on a struct type T declared afterwards in the source code.
         for syntacticStatement in topLevelStatements {
@@ -117,8 +107,6 @@ class PILLowerer: CompilerPass {
             
         }
         
-        print("----> prepare done")
-        
     }
     
     /// Lowering function bodies is the second step in lowering to PIL.
@@ -126,21 +114,15 @@ class PILLowerer: CompilerPass {
     /// This function simply asks each function to lower itself to `PIL`. See the `lowerToPIL(_:)` method on `PILFunction` for more on how this is done.
     private func lowerFunctionBodies() {
         
-        print("--> lowering function bodies")
-        
         for function in functions.values {
             function.lowerToPIL(self)
         }
-        
-        print("--> done")
         
     }
     
     /// We also need to find the memory layouts of each struct type.
     /// A memory layout contains information on how the struct members are organized within the struct instance.
     private func findMemoryLayouts() {
-        
-        print("--> Finding memory layouts")
         
         // We go through each struct type
         for `struct` in structs.values {
@@ -150,8 +132,6 @@ class PILLowerer: CompilerPass {
             structLayouts[`struct`.name] = layout
             
         }
-        
-        print("--> done")
         
     }
     

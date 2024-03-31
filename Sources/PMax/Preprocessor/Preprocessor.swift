@@ -23,8 +23,6 @@ class Preprocessor {
     
     func importLibrary(_ fileName: String, _ lowerer: PILLowerer) {
         
-        print("@@ import library")
-        
         self.lowerer = lowerer
         
         let fileName = fileName + ".hmax"
@@ -40,8 +38,6 @@ class Preprocessor {
         
         while (pathIndex < libraryPaths.count) && (content.isEmpty) {
             
-            print("--in-while")
-            
             let path = libraryPaths[pathIndex]
             
             content = deepSearch(path, .one(match: fileName))
@@ -49,8 +45,6 @@ class Preprocessor {
             pathIndex += 1
             
         }
-        
-        print("finished while")
         
         guard content.count > 0 else {
             // TODO: Submit an issue: The library (file) wasn't found.

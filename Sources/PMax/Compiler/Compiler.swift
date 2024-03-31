@@ -51,11 +51,7 @@ final class Compiler {
         
         self.profiler = CompilerProfiler()
         
-        print("Init preprocessor")
-        
         self.preprocessor = Preprocessor(self)
-        
-        print("--")
         
         do {
             

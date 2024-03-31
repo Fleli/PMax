@@ -6,20 +6,12 @@ extension Compiler {
         
         // LEXICAL ANALYSIS
         
-        print("lex")
-        
         
         var fileSeparatedTokens: [[Token]] = []
         
         for sourceCodeFile in sourceCode {
             
             let tokens = try FastLexer().lex(sourceCodeFile)
-            
-            print("File tokens:")
-            for tok in tokens {
-                print(tok)
-            }
-            
             fileSeparatedTokens.append(tokens)
             
         }
@@ -32,13 +24,7 @@ extension Compiler {
         profiler.register(.tokens)
         
         
-        print("--")
-        
-        
         // PARSING
-        
-        
-        print("parse")
         
         
         let slrNodeTree = try SLRParser().parse(tokens)
@@ -53,13 +39,9 @@ extension Compiler {
         let converted = slrNodeTree.convertToTopLevelStatements()
         profiler.register(.parseTree)
         
-        print("--")
-        
         
         // PMAX INTERMEDIATE LANGUAGE
         
-        
-        print("pil")
         
         let pilLowerer = PILLowerer(converted, preprocessor, self)
         pilLowerer.lower()
@@ -71,12 +53,10 @@ extension Compiler {
         write(.pmaxIntermediateLanguage, pilLowerer.readableDescription)
         profiler.register(.pmaxIntermediateLanguage)
         
-        print("--")
         
         // THREE-ADDRESS CODE
         
         
-        print("tac")
         let tacLowerer = TACLowerer(pilLowerer, emitOffsets, self)
         tacLowerer.lower(asLibrary)
         
@@ -87,12 +67,10 @@ extension Compiler {
         write(.threeAddressCode, tacLowerer.description)
         profiler.register(.threeAddressCode)
         
-        print("--")
         
         // ASSEMBLY CODE GENERATION
         
         
-        print("asm")
         let asmLowerer = AssemblyLowerer(tacLowerer)
         
         let libCode = tacLowerer.libraryAssembly
@@ -103,7 +81,6 @@ extension Compiler {
         write(option, code)
         profiler.register(option)
         
-        print("--")
         
     }
     

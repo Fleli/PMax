@@ -45,10 +45,12 @@ struct MakefileDefault {
             INCLUDECOMMENTS = #--include-comments
             
             all:
-            \t@echo "Building ..."
+            \t@echo "Compiling ..."
             \t@pmax build --target-name $(ASMFILE) --include $(INCLUDE) $(PROFILECOMPILER) $(EMITINTERMEDIATE) $(INCLUDECOMMENTS)
+            \t@tput cuu1 && tput el
+            \t@echo "Assembling ..."
             \t@bbasm assemble _targets/$(ASMFILE).bba _targets/$(MACHINEFILE) $(EMITINDICES) $(PRINTASSEMBLERSTATS)
-            \t@echo "Running ..."
+            \t@tput cuu1 && tput el
             \t@bbvm run _targets/$(MACHINEFILE) $(VIEWEXECUTION) --max-instructions $(MAXINSTRUCTIONS)
             
             """

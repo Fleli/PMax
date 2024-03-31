@@ -128,8 +128,11 @@ class TACLowerer: CompilerPass, CustomStringConvertible {
             
             newLabel = Label(name: prefix + context)
             labels[function.name] = (pilFunction: function, entry: newLabel, all: [], imported)
+            
         } else {
-            newLabel = Label(name: "\(autoVariableName("@l"))_\(context)")
+            
+            newLabel = Label(name: "\(autoVariableName("@l"))_\(context)_\(Int.random(in: 1_000_000 ..< 10_000_000))")
+            
         }
         
         labels[function.name]?.all.insert(newLabel)
