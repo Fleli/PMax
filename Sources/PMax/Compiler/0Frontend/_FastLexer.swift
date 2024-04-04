@@ -164,31 +164,18 @@ class FastLexer {
         
         index += 1
         
-        let char: String
+        // TODO: Allow escape sequences within the string
+        let content = matchWhileSatisfied {
+            $0 != "'"
+        }
         
-        if input[index] == "\\" {
-            
-            index += 1
-            
-            guard "rnt0".contains(input[index]) else {
-                throw LexError.invalidCharacter(input[index], tokens)
-            }
-            
-            char = "\\\(input[index])"
-            
-        } else {
-            
-            char = String(input[index])
-            
+        guard input[index] == "'" else {
+            throw LexError.invalidCharacter("'", tokens)
         }
         
         index += 1
         
-        guard let _ = matchExact("--", "'") else {
-            throw LexError.invalidCharacter("'", tokens)
-        }
-        
-        tokens.append( Token("char", char, .null) )
+        tokens.append( Token("char", "'" + content + "'", .null) )
         
     }
     
