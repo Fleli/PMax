@@ -1,5 +1,11 @@
 extension Expression {
     
+    private static let stdlibImplementedOperators = [
+        "*": "mul",
+        "/": "div",
+        "%": "mod"
+    ]
+    
     func lowerToPIL(_ lowerer: PILLowerer) -> PILExpression {
         
         switch self {
@@ -7,9 +13,20 @@ extension Expression {
         case .infixOperator(let binary, let a, let b):
             
             if binary.rawValue == "->" {
+                
                 return lowerToPILAsMemberThroughPointer(lowerer, a, b)
+                
             } else if binary.rawValue == "." {
+                
                 return lowerToPILAsMember(lowerer, a, b)
+                
+            } else if let name = Expression.stdlibImplementedOperators[binary.rawValue] {
+                
+                let call = PILCall("__stdlib_" + name, [Argument(a), Argument(b)], lowerer)
+                let operation = PILOperation.call(call)
+                
+                return PILExpression(operation, lowerer)
+                
             }
             
             let lowered_a = a.lowerToPIL(lowerer)

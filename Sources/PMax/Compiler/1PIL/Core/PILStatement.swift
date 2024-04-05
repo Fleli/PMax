@@ -28,10 +28,6 @@ enum PILStatement {
             
             let returnedType: PILType = expression?.type ?? .void
             
-            if returnedType == .void  &&  expectedType == .void {
-                return true
-            }
-            
             if !returnedType.assignable(to: expectedType) {
                 lowerer.submitError(PMaxIssue.incorrectReturnType(expected: expectedType, given: returnedType))
             }

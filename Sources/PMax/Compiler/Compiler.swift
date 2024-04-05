@@ -59,7 +59,7 @@ final class Compiler {
             
         } catch {
             
-            submitError(PMaxIssue.grammaticalIssue(description: "Grammatical issue: \(error.localizedDescription)"))
+            submitError(PMaxIssue.grammaticalIssue(description: "Grammatical issue: \(error)"))
             
         }
         

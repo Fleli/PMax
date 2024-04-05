@@ -10,17 +10,17 @@ public class Function: CustomStringConvertible {
 	let type: `Type`?
 	let body: FunctionBodyStatements
 	
-	init(_ name: String, _ parameters: Parameters, _ body: FunctionBodyStatements) {
-		self.name = name
-		self.parameters = parameters
-		self.type = nil
-		self.body = body
-	}
-	
 	init(_ name: String, _ parameters: Parameters, _ type: `Type`, _ body: FunctionBodyStatements) {
 		self.name = name
 		self.parameters = parameters
 		self.type = type
+		self.body = body
+	}
+	
+	init(_ name: String, _ parameters: Parameters, _ body: FunctionBodyStatements) {
+		self.name = name
+		self.parameters = parameters
+		self.type = nil
 		self.body = body
 	}
 
